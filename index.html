@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ScortIQ - Classroom Learning</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' stroke='%23646ee4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cpath d='M12 13V12C12 10.3431 13.3431 9 15 9C16.6569 9 18 10.3431 18 12C18 13.6569 16.6569 15 15 15C13.3431 15 12 13.6569 12 12ZM12 13H11C9.34315 13 8 11.6569 8 10C8 8.34315 9.34315 7 11 7C12.6569 7 14 8.34315 14 10V10.5M12 13V15.5M12 18.5V18.51'/%3E%3Cpath d='M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z'/%3E%3C/svg%3E">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Custom Tailwind theme for classroom feel
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'chalkboard': '#2a3b2f',
+              'chalk-text': '#f0f6f0',
+              'paper': '#f5f2e1',
+              'paper-border': '#d6d0b8',
+              'primary': {
+                DEFAULT: '#646ee4',
+                50: '#f0f3ff',
+                100: '#e0e7ff',
+                200: '#c7d2fe',
+                300: '#a5b4fc',
+                400: '#818cf8',
+                500: '#646ee4',
+                600: '#514cc8',
+                700: '#42389f',
+                800: '#362e7c',
+                900: '#2f2b63',
+              },
+              'accent-yellow': '#ffd166',
+              'accent-red': '#ef476f',
+              'accent-green': '#06d6a0',
+            },
+            fontFamily: {
+              'chalk': ['"Architects Daughter"', 'cursive'],
+              'handwriting': ['"Gochi Hand"', 'cursive'],
+            },
+            backgroundImage: {
+              'paper-texture': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmNWYyZTEiPjxyZWN0IHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIvPjwvZz48cGF0aCBzdHJva2U9IiNkNmQwYjgiIHN0cm9rZS13aWR0aD0iMC41IiBkPSJNMzAgMTB2NDBNMTAgMzBoNDBNMTUgMTV2MzBNNDUgMTV2MzBNMTUgMTVoMzBNMTUgNDVoMzBNNSA1aDUwTTUgNTVoNTAiLz48L2c+PC9zdmc+')",
+              'chalk-texture': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48cmVjdCB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIGZpbGw9IiMyYTNiMmYiLz48cGF0aCBkPSJNMzAgMTB2NDBNMTAgMzBoNDBNMTUgMTV2MzBNNDUgMTV2MzBNMTUgMTVoMzBNMTUgNDVoMzBNNSA1aDUwTTUgNTVoNTAiIHN0cm9rZT0iIzNlNGIzZCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMiIvPjwvc3ZnPg==')",
+            },
+            boxShadow: {
+              'chalk': '0 4px 14px 0 rgba(0, 0, 0, 0.3)',
+              'paper': '0 4px 20px 0 rgba(0, 0, 0, 0.1)',
+            },
+          },
+        },
+      }
+    </script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
+    </script>
+    <script type="text/javascript">
+       (function(){
+           emailjs.init("KnIGVvTmQf-DNiNgS"); // Your Public Key
+       })();
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Gochi+Hand&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for classroom theme */
+        body {
+            background-color: #f5f2e1;
+            background-image: 
+                radial-gradient(#d6d0b8 1px, transparent 1px),
+                radial-gradient(#d6d0b8 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+        }
+        
+        /* Floating stationery animation */
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        
+        .floating {
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .floating-1 { animation-delay: 0s; }
+        .floating-2 { animation-delay: 2s; }
+        .floating-3 { animation-delay: 4s; }
+        .floating-4 { animation-delay: 6s; }
+        
+        /* Chalkboard text effect */
+        .chalk-text {
+            color: #f0f6f0;
+            text-shadow: 0 0 2px rgba(255, 255, 255, 0.3),
+                         1px 1px 1px rgba(0, 0, 0, 0.5),
+                         -1px -1px 1px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Paper effect */
+        .paper {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmNWYyZTEiPjxyZWN0IHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIvPjwvZz48cGF0aCBzdHJva2U9IiNkNmQwYjgiIHN0cm9rZS13aWR0aD0iMC41IiBkPSJNMzAgMTB2NDBNMTAgMzBoNDBNMTUgMTV2MzBNNDUgMTV2MzBNMTUgMTVoMzBNMTUgNDVoMzBNNSA1aDUwTTUgNTVoNTAiLz48L2c+PC9zdmc+');
+            border: 1px solid #d6d0b8;
+            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Chalkboard effect */
+        .chalkboard {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48cmVjdCB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIGZpbGw9IiMyYTNiMmYiLz48cGF0aCBkPSJNMzAgMTB2NDBNMTAgMzBoNDBNMTUgMTV2MzBNNDUgMTV2MzBNMTUgMTVoMzBNMTUgNDVoMzBNNSA1aDUwTTUgNWhlNTAiIHN0cm9rZT0iIzNlNGIzZCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMiIvPjwvc3ZnPg==');
+            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.3);
+            border: 3px solid #3e4b3d;
+        }
+        
+        /* Custom scrollbar for chat messages */
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #9ca3af; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        
+        /* Handwritten style */
+        .handwritten {
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        /* Chalk button effect */
+        .chalk-btn {
+            background-color: #3e4b3d;
+            color: #f0f6f0;
+            border: 1px solid #4d5c4b;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-family: 'Architects Daughter', cursive;
+            text-shadow: 0 0 2px rgba(255, 255, 255, 0.3),
+                         1px 1px 1px rgba(0, 0, 0, 0.5);
+        }
+        
+        .chalk-btn:hover {
+            background-color: #4d5c4b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Paper button effect */
+        .paper-btn {
+            background-color: #f5f2e1;
+            border: 1px solid #d6d0b8;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .paper-btn:hover {
+            background-color: #e8e2c7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Transition for fade effect */
+        .fade-enter { opacity: 0; transform: translateY(10px); }
+        .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 300ms ease-in, transform 300ms ease-in; }
+        .fade-exit { opacity: 1; }
+        .fade-exit-active { opacity: 0; transition: opacity 300ms ease-out; }
+        
+        /* Custom typing indicator animation */
+        .dot-pulse > div { animation: dot-pulse-anim 1s infinite linear; }
+        .dot-pulse > div:nth-child(1) { animation-delay: 0s; }
+        .dot-pulse > div:nth-child(2) { animation-delay: 0.2s; }
+        .dot-pulse > div:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dot-pulse-anim {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <!-- Floating Stationery Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-1/4 left-1/12 text-4xl text-accent-red opacity-20 floating floating-1">📏</div>
+        <div class="absolute top-1/3 right-1/12 text-5xl text-accent-yellow opacity-20 floating floating-2">📐</div>
+        <div class="absolute top-2/3 left-1/6 text-4xl text-primary opacity-20 floating floating-3">✏️</div>
+        <div class="absolute top-1/2 right-1/6 text-3xl text-accent-green opacity-20 floating floating-4">📎</div>
+        <div class="absolute top-3/4 right-1/4 text-4xl text-gray-600 opacity-20 floating floating-1">📌</div>
+        <div class="absolute top-1/5 right-1/3 text-5xl text-gray-500 opacity-20 floating floating-3">✂️</div>
+    </div>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // --- All the React code goes inside this script tag ---
+
+        const { useState, useEffect, useMemo, useRef } = React;
+
+        // --- ICONS (Updated with classroom theme) ---
+        const Logo = () => (
+            <svg width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <defs>
+                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#514cc8" />
+                        <stop offset="100%" stopColor="#646ee4" />
+                    </linearGradient>
+                </defs>
+                <path d="M12 13V12C12 10.3431 13.3431 9 15 9C16.6569 9 18 10.3431 18 12C18 13.6569 16.6569 15 15 15C13.3431 15 12 13.6569 12 12ZM12 13H11C9.34315 13 8 11.6569 8 10C8 8.34315 9.34315 7 11 7C12.6569 7 14 8.34315 14 10V10.5M12 13V15.5M12 18.5V18.51" stroke="url(#logoGradient)" fill="none"/>
+                <path d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z" stroke="url(#logoGradient)" fill="none"/>
+            </svg>
+        );
+        const PhysicsIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>);
+        const ChemistryIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>);
+        const BiologyIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>);
+        const CheckCircleIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" {...props}><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>);
+        const InProgressIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.415L11 9.586V6z" clipRule="evenodd" /></svg>);
+        const ReviewIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.898 2.186A7.002 7.002 0 0112 15.25V17a1 1 0 11-2 0v-1.25a7.002 7.002 0 01-5.898-2.186A7.002 7.002 0 014 6.75V5a1 1 0 01-2 0V3a1 1 0 011-1zm4 8a1 1 0 01.707.293l2.5 2.5a1 1 0 01-1.414 1.414L8 12.414l-1.793 1.793a1 1 0 11-1.414-1.414l2.5-2.5A1 1 0 018 10z" clipRule="evenodd" /></svg>);
+        const SendIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>);
+        const BrainIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.443V21a1 1 0 11-2 0v-2.557a3.374 3.374 0 00-.79-.208l-.547-.547z" /></svg>);
+        const BookIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>);
+        const ChalkboardIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>);
+
+        // --- NCERT CURRICULUM DATA (UPDATED) ---
+               const ncertCurriculum = {
+            '9': {
+                subjects: [
+                    { id: 'phy', name: 'Physics', icon: PhysicsIcon, class: 9, chapters: [
+                        { id: 'phy9-ch1', title: 'Motion', topics: [
+                            { id: 'phy9-ch1-t1', title: 'Describing Motion' }, { id: 'phy9-ch1-t2', title: 'Measuring the Rate of Motion' }, { id: 'phy9-ch1-t3', title: 'Rate of Change of Velocity' }, { id: 'phy9-ch1-t4', title: 'Graphical Representation' }, { id: 'phy9-ch1-t5', title: 'Equations of Motion' }, { id: 'phy9-ch1-t6', title: 'Uniform Circular Motion' }
+                        ], equations: [
+                            { id: 'eq-phy9-1', title: 'Velocity-Time Relation', formula: 'v = u + at' }, { id: 'eq-phy9-2', title: 'Position-Time Relation', formula: 's = ut + (1/2)at²' }, { id: 'eq-phy9-3', title: 'Position-Velocity Relation', formula: 'v² = u² + 2as' }, { id: 'eq-phy9-4', title: 'Average Velocity', formula: 'v_avg = (u + v)/2' }, { id: 'eq-phy9-5', title: 'Velocity', formula: 'v = s/t' }
+                        ]},
+                        { id: 'phy9-ch2', title: 'Force & Laws of Motion', topics: [
+                            { id: 'phy9-ch2-t1', title: 'Balanced & Unbalanced Forces' }, { id: 'phy9-ch2-t2', title: 'Newton\'s Laws' }, { id: 'phy9-ch2-t3', title: 'Inertia' }, { id: 'phy9-ch2-t4', title: 'Conservation of Momentum' }
+                        ], equations: [
+                            { id: 'eq-phy9-6', title: 'Force', formula: 'F = ma' }, { id: 'eq-phy9-7', title: 'Momentum', formula: 'p = mv' }, { id: 'eq-phy9-8', title: 'Impulse', formula: 'J = F·t = Δp' }, { id: 'eq-phy9-9', title: 'Conservation of Momentum', formula: 'm₁u₁ + m₂u₂ = m₁v₁ + m₂v₂' }
+                        ]},
+                        { id: 'phy9-ch3', title: 'Gravitation', topics: [
+                            { id: 'phy9-ch3-t1', title: 'Universal Law' }, { id: 'phy9-ch3-t2', title: 'Free Fall' }, { id: 'phy9-ch3-t3', title: 'Mass & Weight' }, { id: 'phy9-ch3-t4', title: 'Pressure' }, { id: 'phy9-ch3-t5', title: 'Archimedes’ Principle' }, { id: 'phy9-ch3-t6', title: 'Relative Density' }
+                        ], equations: [
+                            { id: 'eq-phy9-10', title: 'Gravitational Force', formula: 'F = G(m₁m₂)/r²' }, { id: 'eq-phy9-11', title: 'Weight', formula: 'W = mg' }, { id: 'eq-phy9-12', title: 'Pressure', formula: 'P = F/A' }, { id: 'eq-phy9-13', title: 'Density', formula: 'ρ = m/V' }, { id: 'eq-phy9-14', title: 'Relative Density', formula: 'RD = ρ_substance/ρ_water' }
+                        ]},
+                        { id: 'phy9-ch4', title: 'Work & Energy', topics: [
+                            { id: 'phy9-ch4-t1', title: 'Work' }, { id: 'phy9-ch4-t2', title: 'Energy' }, { id: 'phy9-ch4-t3', title: 'Kinetic & Potential Energy' }, { id: 'phy9-ch4-t4', title: 'Power' }, { id: 'phy9-ch4-t5', title: 'Conservation Law' }
+                        ], equations: [
+                            { id: 'eq-phy9-15', title: 'Work', formula: 'W = F·s' }, { id: 'eq-phy9-16', title: 'Kinetic Energy', formula: 'KE = (1/2)mv²' }, { id: 'eq-phy9-17', title: 'Potential Energy', formula: 'PE = mgh' }, { id: 'eq-phy9-18', title: 'Power', formula: 'P = W/t = Fv' }, { id: 'eq-phy9-19', title: 'Efficiency', formula: 'Efficiency = (out/in)x100%' }
+                        ]},
+                        { id: 'phy9-ch5', title: 'Sound', topics: [
+                            { id: 'phy9-ch5-t1', title: 'Production & Propagation' }, { id: 'phy9-ch5-t2', title: 'Characteristics' }, { id: 'phy9-ch5-t3', title: 'Reflection' }, { id: 'phy9-ch5-t4', title: 'Range & Ultrasound' }, { id: 'phy9-ch5-t5', title: 'Human Ear' }, { id: 'phy9-ch5-t6', title: 'Applications' }
+                        ], equations: [
+                            { id: 'eq-phy9-20', title: 'Wave Speed', formula: 'v = λf' }, { id: 'eq-phy9-21', title: 'Echo Time', formula: 't = 2d/v' }, { id: 'eq-phy9-22', title: 'Echo Distance', formula: 'd = (v·t)/2' }
+                        ]}
+                    ]},
+                    { id: 'chem', name: 'Chemistry', icon: ChemistryIcon, class: 9, chapters: [
+                        { id: 'chem9-ch1', title: 'Matter in Our Surroundings', topics: [
+                            { id: 'chem9-ch1-t1', title: 'Physical Nature' }, { id: 'chem9-ch1-t2', title: 'States' }, { id: 'chem9-ch1-t3', title: 'State Changes' }, { id: 'chem9-ch1-t4', title: 'Evaporation' }
+                        ], equations: [
+                            { id: 'eq-chem9-1', title: 'Kelvin Conversion', formula: 'K = °C + 273.15' }, { id: 'eq-chem9-2', title: 'Celsius Conversion', formula: '°C = K - 273.15' }
+                        ]},
+                        { id: 'chem9-ch2', title: 'Is Matter Around Us Pure', topics: [
+                            { id: 'chem9-ch2-t1', title: 'Mixtures & Solutions' }, { id: 'chem9-ch2-t2', title: 'Separation' }, { id: 'chem9-ch2-t3', title: 'Changes' }, { id: 'chem9-ch2-t4', title: 'Types of Pure Substances' }
+                        ], equations: [
+                            { id: 'eq-chem9-3', title: 'Mass Percentage', formula: 'Mass% = (solute/solution)×100' }, { id: 'eq-chem9-4', title: 'Volume Percentage', formula: 'Vol% = (vol/solution)×100' }
+                        ]},
+                        { id: 'chem9-ch3', title: 'Atoms and Molecules', topics: [
+                            { id: 'chem9-ch3-t1', title: 'Laws of Combination' }, { id: 'chem9-ch3-t2', title: 'Atoms' }, { id: 'chem9-ch3-t3', title: 'Formulae' }, { id: 'chem9-ch3-t4', title: 'Mole Concept' }, { id: 'chem9-ch3-t5', title: 'Formula Mass' }
+                        ], equations: [
+                            { id: 'eq-chem9-5', title: 'Moles', formula: 'n = m/M' }, { id: 'eq-chem9-6', title: 'Number of Particles', formula: 'Particles = n×NA' }, { id: 'eq-chem9-7', title: 'Atomic Mass Unit', formula: '1 amu = 1.66×10⁻²⁷ kg' }
+                        ]},
+                        { id: 'chem9-ch4', title: 'Structure of Atom', topics: [
+                            { id: 'chem9-ch4-t1', title: 'Charged Particles' }, { id: 'chem9-ch4-t2', title: 'Models' }, { id: 'chem9-ch4-t3', title: 'Distribution' }, { id: 'chem9-ch4-t4', title: 'Valency' }, { id: 'chem9-ch4-t5', title: 'Isotopes & Isobars' }
+                        ], equations: [
+                            { id: 'eq-chem9-8', title: 'Mass Number', formula: 'A = Z + N' }
+                        ]}
+                    ]},
+                    { id: 'bio', name: 'Biology', icon: BiologyIcon, class: 9, chapters: [
+                        { id: 'bio9-ch1', title: 'The Fundamental Unit of Life', topics: [
+                            { id: 'bio9-ch1-t1', title: 'Living Organisms Structure' }, { id: 'bio9-ch1-t2', title: 'Organisation' }, { id: 'bio9-ch1-t3', title: 'Organelles' }, { id: 'bio9-ch1-t4', title: 'Cell Division' }, { id: 'bio9-ch1-t5', title: 'Cell Types' }
+                        ], equations: []},
+                        { id: 'bio9-ch2', title: 'Tissues', topics: [
+                            { id: 'bio9-ch2-t1', title: 'Plant/Animal Tissues' }, { id: 'bio9-ch2-t2', title: 'Types' }, { id: 'bio9-ch2-t3', title: 'Structure' }
+                        ], equations: []},
+                        { id: 'bio9-ch3', title: 'Improvement in Food Resources', topics: [
+                            { id: 'bio9-ch3-t1', title: 'Crop Yields' }, { id: 'bio9-ch3-t2', title: 'Animal Husbandry' }, { id: 'bio9-ch3-t3', title: 'Plant Breeding' }, { id: 'bio9-ch3-t4', title: 'Fertilizers' }
+                        ], equations: []}
+                    ]}
+                ]
+            },
+            '10': {
+                subjects: [
+                    { id: 'phy', name: 'Physics', icon: PhysicsIcon, class: 10, chapters: [
+                        { id: 'phy10-ch1', title: 'Light – Reflection and Refraction', topics: [
+                            { id: 'phy10-ch1-t1', title: 'Reflection' }, { id: 'phy10-ch1-t2', title: 'Spherical Mirrors' }, { id: 'phy10-ch1-t3', title: 'Refraction' }, { id: 'phy10-ch1-t4', title: 'Glass Slab' }, { id: 'phy10-ch1-t5', title: 'Lenses' }, { id: 'phy10-ch1-t6', title: 'Image Formation by Lenses' }
+                        ], equations: [
+                            { id: 'eq-phy10-1', title: 'Mirror Formula', formula: '1/f = 1/v + 1/u' }, { id: 'eq-phy10-2', title: 'Magnification', formula: 'm = -v/u = hi/ho' }, { id: 'eq-phy10-3', title: 'Snell\'s Law', formula: 'n₁ sin i = n₂ sin r' }, { id: 'eq-phy10-4', title: 'Lens Formula', formula: '1/f = 1/v - 1/u' }, { id: 'eq-phy10-5', title: 'Refractive Index', formula: 'n = c/v' }
+                        ]},
+                        { id: 'phy10-ch2', title: 'The Human Eye and The Colourful World', topics: [
+                            { id: 'phy10-ch2-t1', title: 'Human Eye' }, { id: 'phy10-ch2-t2', title: 'Vision Defects' }, { id: 'phy10-ch2-t3', title: 'Prism Refraction' }, { id: 'phy10-ch2-t4', title: 'Dispersion' }, { id: 'phy10-ch2-t5', title: 'Atmospheric Refraction' }, { id: 'phy10-ch2-t6', title: 'Scattering' }
+                        ], equations: [
+                            { id: 'eq-phy10-6', title: 'Power of Lens', formula: 'P = 1/f (Dioptres)' }, { id: 'eq-phy10-7', title: 'Combination of Lenses', formula: 'P = P₁ + P₂' }
+                        ]},
+                        { id: 'phy10-ch3', title: 'Electricity', topics: [
+                            { id: 'phy10-ch3-t1', title: 'Electric Current' }, { id: 'phy10-ch3-t2', title: 'Circuits' }, { id: 'phy10-ch3-t3', title: 'Ohm\'s Law' }, { id: 'phy10-ch3-t4', title: 'Resistance' }, { id: 'phy10-ch3-t5', title: 'Power' }, { id: 'phy10-ch3-t6', title: 'Kirchhoff\'s Laws' }
+                        ], equations: [
+                            { id: 'eq-phy10-8', title: 'Ohm\'s Law', formula: 'V = IR' }, { id: 'eq-phy10-9', title: 'Resistance', formula: 'R = ρ(L/A)' }, { id: 'eq-phy10-10', title: 'Power', formula: 'P = VI = I²R = V²/R' }, { id: 'eq-phy10-11', title: 'Heating Effect', formula: 'H = I²Rt' }
+                        ]},
+                        { id: 'phy10-ch4', title: 'Magnetic Effects of Electric Current', topics: [
+                            { id: 'phy10-ch4-t1', title: 'Magnetic Fields' }, { id: 'phy10-ch4-t2', title: 'Force on Current' }, { id: 'phy10-ch4-t3', title: 'Electric Motor' }, { id: 'phy10-ch4-t4', title: 'Electromagnetic Induction' }, { id: 'phy10-ch4-t5', title: 'Generator' }
+                        ], equations: [
+                            { id: 'eq-phy10-12', title: 'Magnetic Force', formula: 'F = BIL sin θ' }
+                        ]}
+                    ]},
+                    { id: 'chem', name: 'Chemistry', icon: ChemistryIcon, class: 10, chapters: [
+                        { id: 'chem10-ch1', title: 'Chemical Reactions and Equations', topics: [
+                            { id: 'chem10-ch1-t1', title: 'Chemical Equations' }, { id: 'chem10-ch1-t2', title: 'Reaction Types' }, { id: 'chem10-ch1-t3', title: 'Oxidation' }, { id: 'chem10-ch1-t4', title: 'Reduction' }
+                        ], equations: [
+                            { id: 'eq-chem10-1', title: 'Combination', formula: 'A+B → AB' }, { id: 'eq-chem10-2', title: 'Decomposition', formula: 'AB → A+B' }, { id: 'eq-chem10-3', title: 'Displacement', formula: 'A + BC → AC + B' }, { id: 'eq-chem10-4', title: 'Double Displacement', formula: 'AB + CD → AD + CB' }
+                        ]},
+                        { id: 'chem10-ch2', title: 'Acids, Bases and Salts', topics: [
+                            { id: 'chem10-ch2-t1', title: 'Properties' }, { id: 'chem10-ch2-t2', title: 'pH Scale' }, { id: 'chem10-ch2-t3', title: 'Neutralization' }, { id: 'chem10-ch2-t4', title: 'Salts' }
+                        ], equations: [
+                            { id: 'eq-chem10-5', title: 'Neutralization', formula: 'Acid + Base → Salt + Water' }, { id: 'eq-chem10-6', title: 'pH', formula: 'pH = -log[H⁺]' }, { id: 'eq-chem10-7', title: 'pOH', formula: 'pH + pOH = 14' }
+                        ]},
+                        { id: 'chem10-ch3', title: 'Metals and Non-metals', topics: [
+                            { id: 'chem10-ch3-t1', title: 'Physical & Chemical Properties' }, { id: 'chem10-ch3-t2', title: 'Extraction' }, { id: 'chem10-ch3-t3', title: 'Corrosion' }
+                        ], equations: [
+                            { id: 'eq-chem10-8', title: 'Metal Reaction', formula: 'Metal + Acid → Salt + Hydrogen Gas' }
+                        ]},
+                        { id: 'chem10-ch4', title: 'Carbon and its Compounds', topics: [
+                            { id: 'chem10-ch4-t1', title: 'Covalent Bonding' }, { id: 'chem10-ch4-t2', title: 'Properties' }, { id: 'chem10-ch4-t3', title: 'Soaps and Detergents' }
+                        ], equations: [
+                            { id: 'eq-chem10-9', title: 'Combustion', formula: 'CH₄ + 2O₂ → CO₂ + 2H₂O' }
+                        ]},
+                        { id: 'chem10-ch5', title: 'Periodic Classification of Elements', topics: [
+                            { id: 'chem10-ch5-t1', title: 'Mendeleev\'s Table' }, { id: 'chem10-ch5-t2', title: 'Modern Periodic Table' }, { id: 'chem10-ch5-t3', title: 'Trends' }
+                        ], equations: []}
+                    ]},
+                    { id: 'bio', name: 'Biology', icon: BiologyIcon, class: 10, chapters: [
+                        { id: 'bio10-ch1', title: 'Life Processes', topics: [
+                            { id: 'bio10-ch1-t1', title: 'Nutrition' }, { id: 'bio10-ch1-t2', title: 'Respiration' }, { id: 'bio10-ch1-t3', title: 'Transportation' }, { id: 'bio10-ch1-t4', title: 'Excretion' }
+                        ], equations: [
+                            { id: 'eq-bio10-1', title: 'Photosynthesis', formula: '6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂' }, { id: 'eq-bio10-2', title: 'Respiration', formula: 'C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + Energy' }
+                        ]},
+                        { id: 'bio10-ch2', title: 'Control and Coordination', topics: [
+                            { id: 'bio10-ch2-t1', title: 'Nervous System' }, { id: 'bio10-ch2-t2', title: 'Plant Coordination' }, { id: 'bio10-ch2-t3', title: 'Hormones' }
+                        ], equations: []},
+                        { id: 'bio10-ch3', title: 'How do Organisms Reproduce?', topics: [
+                            { id: 'bio10-ch3-t1', title: 'Asexual and Sexual Reproduction' }
+                        ], equations: []},
+                        { id: 'bio10-ch4', title: 'Heredity and Evolution', topics: [
+                            { id: 'bio10-ch4-t1', title: 'Genetic Variation' }, { id: 'bio10-ch4-t2', title: 'Inheritance' }, { id: 'bio10-ch4-t3', title: 'Evolution' }
+                        ], equations: []},
+                        { id: 'bio10-ch5', title: 'Our Environment', topics: [
+                            { id: 'bio10-ch5-t1', title: 'Ecosystems' }, { id: 'bio10-ch5-t2', title: 'Food Chains' }, { id: 'bio10-ch5-t3', title: 'Human Impact' }
+                        ], equations: []}
+                    ]}
+                ]
+            },
+            '11': {
+                subjects: [
+                    { id: 'phy', name: 'Physics', icon: PhysicsIcon, class: 11, chapters: [
+                        { id: 'phy11-ch1', title: 'Units and Measurements', topics: [ { id: 'phy11-ch1-t1', title: 'SI Units' }, { id: 'phy11-ch1-t2', title: 'Errors' }, { id: 'phy11-ch1-t3', title: 'Dimensional Analysis' } ], equations: []},
+                        { id: 'phy11-ch2', title: 'Motion in a Straight Line', topics: [ { id: 'phy11-ch2-t1', title: 'Average Velocity' }, { id: 'phy11-ch2-t2', title: 'Instantaneous Velocity' }, { id: 'phy11-ch2-t3', title: 'Acceleration' } ], equations: [ { id: 'eq-phy11-1', title: 'Average Velocity', formula: 'v_avg = Δx/Δt' }, { id: 'eq-phy11-2', title: 'Instantaneous Velocity', formula: 'v = dx/dt' }, { id: 'eq-phy11-3', title: 'Acceleration', formula: 'a = dv/dt' } ]},
+                        { id: 'phy11-ch3', title: 'Motion in a Plane', topics: [ { id: 'phy11-ch3-t1', title: 'Vectors' }, { id: 'phy11-ch3-t2', title: 'Projectile Motion' }, { id: 'phy11-ch3-t3', title: 'Circular Motion' } ], equations: [ { id: 'eq-phy11-4', title: 'Vector Resultant', formula: 'R = √(A² + B² + 2ABcosθ)' }, { id: 'eq-phy11-5', title: 'Projectile Range', formula: 'Range = u²sin2θ/g' } ]},
+                        { id: 'phy11-ch4', title: 'Laws of Motion', topics: [ { id: 'phy11-ch4-t1', title: 'Newton\'s Laws' }, { id: 'phy11-ch4-t2', title: 'Friction' }, { id: 'phy11-ch4-t3', title: 'Momentum Conservation' } ], equations: [ { id: 'eq-phy11-6', title: 'Force', formula: 'F = ma = dp/dt' }, { id: 'eq-phy11-7', title: 'Momentum', formula: 'p = mv' }, { id: 'eq-phy11-8', title: 'Impulse', formula: 'J = FΔt' } ]},
+                        { id: 'phy11-ch5', title: 'Work, Energy and Power', topics: [ { id: 'phy11-ch5-t1', title: 'Work-Energy Theorem' }, { id: 'phy11-ch5-t2', title: 'KE, PE' }, { id: 'phy11-ch5-t3', title: 'Power' } ], equations: [ { id: 'eq-phy11-9', title: 'Work Done', formula: 'W = F·s cosθ' }, { id: 'eq-phy11-10', title: 'Kinetic Energy', formula: 'KE = ½mv²' }, { id: 'eq-phy11-11', title: 'Potential Energy', formula: 'PE = mgh' } ]},
+                        { id: 'phy11-ch6', title: 'System of Particles & Rotational Motion', topics: [ { id: 'phy11-ch6-t1', title: 'Centre of Mass' }, { id: 'phy11-ch6-t2', title: 'Torque' }, { id: 'phy11-ch6-t3', title: 'Angular Momentum' } ], equations: [ { id: 'eq-phy11-12', title: 'Center of Mass', formula: 'r_cm = Σm_ir_i/M' }, { id: 'eq-phy11-13', title: 'Torque', formula: 'τ = Iα' }, { id: 'eq-phy11-14', title: 'Angular Momentum', formula: 'L = Iω' } ]},
+                        { id: 'phy11-ch7', title: 'Gravitation', topics: [ { id: 'phy11-ch7-t1', title: 'Kepler\'s Laws' }, { id: 'phy11-ch7-t2', title: 'Satellites' }, { id: 'phy11-ch7-t3', title: 'Escape Velocity' } ], equations: [ { id: 'eq-phy11-15', title: 'Gravitational Force', formula: 'F = G(m₁m₂)/r²' }, { id: 'eq-phy11-16', title: 'Escape Velocity', formula: 'v_e = √(2GM/R)' } ]},
+                        { id: 'phy11-ch8', title: 'Mechanical Properties of Solids', topics: [ { id: 'phy11-ch8-t1', title: 'Stress' }, { id: 'phy11-ch8-t2', title: 'Strain' }, { id: 'phy11-ch8-t3', title: 'Elastic Moduli' } ], equations: [ { id: 'eq-phy11-17', title: 'Stress', formula: 'Stress = F/A' }, { id: 'eq-phy11-18', title: 'Strain', formula: 'Strain = ΔL/L' }, { id: 'eq-phy11-19', title: 'Young\'s Modulus', formula: 'Y = Stress/Strain' } ]},
+                        { id: 'phy11-ch9', title: 'Mechanical Properties of Fluids', topics: [ { id: 'phy11-ch9-t1', title: 'Pressure' }, { id: 'phy11-ch9-t2', title: 'Bernoulli\'s Theorem' }, { id: 'phy11-ch9-t3', title: 'Viscosity' } ], equations: [ { id: 'eq-phy11-20', title: 'Pressure in Fluid', formula: 'P = ρgh' }, { id: 'eq-phy11-21', title: 'Bernoulli\'s Equation', formula: 'P + ½ρv² + ρgh = constant' } ]},
+                        { id: 'phy11-ch10', title: 'Thermal Properties of Matter', topics: [ { id: 'phy11-ch10-t1', title: 'Heat Transfer' }, { id: 'phy11-ch10-t2', title: 'Gas Laws' }, { id: 'phy11-ch10-t3', title: 'Expansion' } ], equations: [ { id: 'eq-phy11-22', title: 'Ideal Gas Law', formula: 'PV = nRT' }, { id: 'eq-phy11-23', title: 'Linear Expansion', formula: 'ΔL = L₀αΔT' }, { id: 'eq-phy11-24', title: 'Heat Capacity', formula: 'Q = mcΔT' } ]},
+                        { id: 'phy11-ch11', title: 'Thermodynamics', topics: [ { id: 'phy11-ch11-t1', title: 'Laws' }, { id: 'phy11-ch11-t2', title: 'Heat Engines' }, { id: 'phy11-ch11-t3', title: 'Entropy' } ], equations: [ { id: 'eq-phy11-25', title: 'First Law', formula: 'ΔU = Q - W' }, { id: 'eq-phy11-26', title: 'Engine Efficiency', formula: 'η = 1 - Q_c/Q_h' } ]},
+                        { id: 'phy11-ch12', title: 'Kinetic Theory', topics: [ { id: 'phy11-ch12-t1', title: 'Gas Behavior' }, { id: 'phy11-ch12-t2', title: 'Equipartition of Energy' } ], equations: [ { id: 'eq-phy11-27', title: 'Pressure of Gas', formula: 'P = ⅓ρ ⟨ v² ⟩' }, { id: 'eq-phy11-28', title: 'RMS Velocity', formula: 'v_rms = √(3RT/M)' } ]},
+                        { id: 'phy11-ch13', title: 'Oscillations', topics: [ { id: 'phy11-ch13-t1', title: 'SHM' }, { id: 'phy11-ch13-t2', title: 'Pendulum' }, { id: 'phy11-ch13-t3', title: 'Energy in Oscillations' } ], equations: [ { id: 'eq-phy11-29', title: 'SHM Equation', formula: 'x = A sin(ωt + φ)' }, { id: 'eq-phy11-30', title: 'Time Period (Spring)', formula: 'T = 2π√(m/k)' } ]},
+                        { id: 'phy11-ch14', title: 'Waves', topics: [ { id: 'phy11-ch14-t1', title: 'Wave Equation' }, { id: 'phy11-ch14-t2', title: 'Doppler Effect' }, { id: 'phy11-ch14-t3', title: 'Beats' } ], equations: [ { id: 'eq-phy11-31', title: 'Wave Equation', formula: 'y = A sin(kx - ωt + φ)' }, { id: 'eq-phy11-32', title: 'Doppler Effect', formula: 'f\' = f(v±v_r)/(v±v_s)' } ]}
+                    ]},
+                    { id: 'chem', name: 'Chemistry', icon: ChemistryIcon, class: 11, chapters: [
+                        { id: 'chem11-ch1', title: 'Some Basic Concepts of Chemistry', topics: [ { id: 'chem11-ch1-t1', title: 'Mole Concept' }, { id: 'chem11-ch1-t2', title: 'Stoichiometry' }, { id: 'chem11-ch1-t3', title: 'Molarity' } ], equations: [ { id: 'eq-chem11-1', title: 'Moles', formula: 'n = m/M' }, { id: 'eq-chem11-2', title: 'Molarity', formula: 'M = n/V' } ]},
+                        { id: 'chem11-ch2', title: 'Structure of Atom', topics: [ { id: 'chem11-ch2-t1', title: 'Quantum Numbers' }, { id: 'chem11-ch2-t2', title: 'Atomic Models' } ], equations: [ { id: 'eq-chem11-3', title: 'Energy Levels', formula: 'E_n = -13.6/n² eV' }, { id: 'eq-chem11-4', title: 'Rydberg Formula', formula: '1/λ = R(1/n₁² - 1/n₂²)' } ]},
+                        { id: 'chem11-ch3', title: 'Classification & Periodicity', topics: [ { id: 'chem11-ch3-t1', title: 'Periodic Table' }, { id: 'chem11-ch3-t2', title: 'Electronic Configuration' }, { id: 'chem11-ch3-t3', title: 'Trends' } ], equations: []},
+                        { id: 'chem11-ch4', title: 'Chemical Bonding', topics: [ { id: 'chem11-ch4-t1', title: 'VSEPR' }, { id: 'chem11-ch4-t2', title: 'Hybridization' }, { id: 'chem11-ch4-t3', title: 'Molecular Orbital Theory' } ], equations: [ { id: 'eq-chem11-5', title: 'Bond Order', formula: 'Bond Order = (N_b - N_a)/2' }, { id: 'eq-chem11-6', title: 'Formal Charge', formula: 'Formal Charge = V - N - B/2' } ]},
+                        { id: 'chem11-ch5', title: 'Thermodynamics', topics: [ { id: 'chem11-ch5-t1', title: 'Enthalpy' }, { id: 'chem11-ch5-t2', title: 'Entropy' }, { id: 'chem11-ch5-t3', title: 'Gibbs Energy' } ], equations: [ { id: 'eq-chem11-7', title: 'Enthalpy Change', formula: 'ΔH = ΔU + ΔnRT' }, { id: 'eq-chem11-8', title: 'Gibbs Free Energy', formula: 'ΔG = ΔH - TΔS' } ]},
+                        { id: 'chem11-ch6', title: 'Equilibrium', topics: [ { id: 'chem11-ch6-t1', title: 'Le Chatelier\'s Principle' }, { id: 'chem11-ch6-t2', title: 'Acid-Base Equilibrium' } ], equations: [ { id: 'eq-chem11-9', title: 'Equilibrium Constant', formula: 'K = [products]/[reactants]' }, { id: 'eq-chem11-10', title: 'pH', formula: 'pH = -log[H⁺]' } ]},
+                        { id: 'chem11-ch7', title: 'Redox Reactions', topics: [ { id: 'chem11-ch7-t1', title: 'Oxidation Numbers' }, { id: 'chem11-ch7-t2', title: 'Electron Transfer' } ], equations: []},
+                        { id: 'chem11-ch8', title: 'Organic Chemistry: Basic Principles', topics: [ { id: 'chem11-ch8-t1', title: 'Hydrocarbon Classification' }, { id: 'chem11-ch8-t2', title: 'Nomenclature' }, { id: 'chem11-ch8-t3', title: 'Isomerism' } ], equations: []},
+                        { id: 'chem11-ch9', title: 'Hydrocarbons', topics: [ { id: 'chem11-ch9-t1', title: 'Alkanes, Alkenes, Alkynes' }, { id: 'chem11-ch9-t2', title: 'Aromatic Compounds' } ], equations: []}
+                    ]},
+                    { id: 'bio', name: 'Biology', icon: BiologyIcon, class: 11, chapters: [
+                        { id: 'bio11-ch1', title: 'The Living World', topics: [ { id: 'bio11-ch1-t1', title: 'Diversity' }, { id: 'bio11-ch1-t2', title: 'Taxonomy' }, { id: 'bio11-ch1-t3', title: 'Nomenclature' } ], equations: []},
+                        { id: 'bio11-ch2', title: 'Biological Classification', topics: [ { id: 'bio11-ch2-t1', title: 'Five Kingdoms' }, { id: 'bio11-ch2-t2', title: 'Viruses' }, { id: 'bio11-ch2-t3', title: 'Lichens' } ], equations: []},
+                        { id: 'bio11-ch3', title: 'Plant Kingdom', topics: [ { id: 'bio11-ch3-t1', title: 'Algae' }, { id: 'bio11-ch3-t2', title: 'Bryophytes' }, { id: 'bio11-ch3-t3', title: 'Pteridophytes' }, { id: 'bio11-ch3-t4', title: 'Gymnosperms' }, { id: 'bio11-ch3-t5', title: 'Angiosperms' } ], equations: []},
+                        { id: 'bio11-ch4', title: 'Animal Kingdom', topics: [ { id: 'bio11-ch4-t1', title: 'Classification' }, { id: 'bio11-ch4-t2', title: 'Phyla from Porifera to Chordata' } ], equations: []},
+                        { id: 'bio11-ch5', title: 'Morphology of Flowering Plants', topics: [ { id: 'bio11-ch5-t1', title: 'Root, Stem, Leaf' }, { id: 'bio11-ch5-t2', title: 'Flower, Fruit, Seed Structure' } ], equations: []},
+                        { id: 'bio11-ch6', title: 'Anatomy of Flowering Plants', topics: [ { id: 'bio11-ch6-t1', title: 'Tissues' }, { id: 'bio11-ch6-t2', title: 'Secondary Growth' } ], equations: []},
+                        { id: 'bio11-ch7', title: 'Structural Organisation in Animals', topics: [ { id: 'bio11-ch7-t1', title: 'Animal Tissues' }, { id: 'bio11-ch7-t2', title: 'Organ Systems' } ], equations: []},
+                        { id: 'bio11-ch8', title: 'Cell: The Unit of Life', topics: [ { id: 'bio11-ch8-t1', title: 'Cell Theory' }, { id: 'bio11-ch8-t2', title: 'Prokaryotic vs Eukaryotic Cells' } ], equations: []},
+                        { id: 'bio11-ch9', title: 'Biomolecules', topics: [ { id: 'bio11-ch9-t1', title: 'Proteins' }, { id: 'bio11-ch9-t2', title: 'Carbohydrates' }, { id: 'bio11-ch9-t3', title: 'Nucleic Acids' }, { id: 'bio11-ch9-t4', title: 'Enzymes' } ], equations: [ { id: 'eq-bio11-1', title: 'Enzyme Kinetics', formula: 'v = V_max[S]/(K_m + [S])' } ]},
+                        { id: 'bio11-ch10', title: 'Cell Cycle and Cell Division', topics: [ { id: 'bio11-ch10-t1', title: 'Mitosis' }, { id: 'bio11-ch10-t2', title: 'Meiosis' }, { id: 'bio11-ch10-t3', title: 'Cell Cycle Regulation' } ], equations: []},
+                        { id: 'bio11-ch11', title: 'Photosynthesis in Higher Plants', topics: [ { id: 'bio11-ch11-t1', title: 'Light Reactions' }, { id: 'bio11-ch11-t2', title: 'Calvin Cycle' }, { id: 'bio11-ch11-t3', title: 'C₄ Pathway' } ], equations: [ { id: 'eq-bio11-2', title: 'Photosynthesis', formula: '6CO₂ + 12H₂O → C₆H₁₂O₆ + 6O₂ + 6H₂O' } ]},
+                        { id: 'bio11-ch12', title: 'Respiration in Plants', topics: [ { id: 'bio11-ch12-t1', title: 'Glycolysis' }, { id: 'bio11-ch12-t2', title: 'Krebs Cycle' }, { id: 'bio11-ch12-t3', title: 'Electron Transport' } ], equations: [ { id: 'eq-bio11-3', title: 'Cellular Respiration', formula: 'C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + 38 ATP' } ]},
+                        { id: 'bio11-ch13', title: 'Plant Growth and Development', topics: [ { id: 'bio11-ch13-t1', title: 'Plant Hormones' }, { id: 'bio11-ch13-t2', title: 'Photoperiodism' }, { id: 'bio11-ch13-t3', title: 'Vernalization' } ], equations: []},
+                        { id: 'bio11-ch14', title: 'Breathing and Exchange of Gases', topics: [ { id: 'bio11-ch14-t1', title: 'Respiratory System' }, { id: 'bio11-ch14-t2', title: 'Gas Exchange' } ], equations: []},
+                        { id: 'bio11-ch15', title: 'Body Fluids and Circulation', topics: [ { id: 'bio11-ch15-t1', title: 'Blood' }, { id: 'bio11-ch15-t2', title: 'Heart' }, { id: 'bio11-ch15-t3', title: 'Circulation' } ], equations: []},
+                        { id: 'bio11-ch16', title: 'Excretory Products and Elimination', topics: [ { id: 'bio11-ch16-t1', title: 'Kidney Function' }, { id: 'bio11-ch16-t2', title: 'Urine Formation' } ], equations: []},
+                        { id: 'bio11-ch17', title: 'Locomotion and Movement', topics: [ { id: 'bio11-ch17-t1', title: 'Musculoskeletal System' } ], equations: []},
+                        { id: 'bio11-ch18', title: 'Neural Control and Coordination', topics: [ { id: 'bio11-ch18-t1', title: 'Nervous System' }, { id: 'bio11-ch18-t2', title: 'Reflex Action' } ], equations: []},
+                        { id: 'bio11-ch19', title: 'Chemical Coordination and Integration', topics: [ { id: 'bio11-ch19-t1', title: 'Endocrine System' }, { id: 'bio11-ch19-t2', title: 'Hormones' } ], equations: []}
+                    ]}
+                ]
+            },
+            '12': {
+                subjects: [
+                    { id: 'phy', name: 'Physics', icon: PhysicsIcon, class: 12, chapters: [
+                        { id: 'phy12-ch1', title: 'Electric Charges and Fields', topics: [ { id: 'phy12-ch1-t1', title: 'Coulomb\'s Law' }, { id: 'phy12-ch1-t2', title: 'Electric Field' }, { id: 'phy12-ch1-t3', title: 'Gauss\'s Law' } ], equations: [ { id: 'eq-phy12-1', title: 'Coulomb\'s Law', formula: 'F = (1/4πε₀)(q₁q₂)/r²' }, { id: 'eq-phy12-2', title: 'Electric Field', formula: 'E = F/q₀' }, { id: 'eq-phy12-3', title: 'Gauss\'s Law', formula: '∮ E·dA = Q/ε₀' } ]},
+                        { id: 'phy12-ch2', title: 'Electrostatic Potential and Capacitance', topics: [ { id: 'phy12-ch2-t1', title: 'Electric Potential' }, { id: 'phy12-ch2-t2', title: 'Capacitors' }, { id: 'phy12-ch2-t3', title: 'Energy' } ], equations: [ { id: 'eq-phy12-4', title: 'Electric Potential', formula: 'V = (1/4πε₀)(Q/r)' }, { id: 'eq-phy12-5', title: 'Capacitance', formula: 'C = Q/V' }, { id: 'eq-phy12-6', title: 'Capacitor Energy', formula: 'U = ½CV²' } ]},
+                        { id: 'phy12-ch3', title: 'Current Electricity', topics: [ { id: 'phy12-ch3-t1', title: 'Ohm\'s Law' }, { id: 'phy12-ch3-t2', title: 'Kirchhoff\'s Laws' }, { id: 'phy12-ch3-t3', title: 'Power' } ], equations: [ { id: 'eq-phy12-7', title: 'Ohm\'s Law', formula: 'V = IR' }, { id: 'eq-phy12-8', title: 'Kirchhoff\'s Current Law', formula: 'ΣI_in = ΣI_out' }, { id: 'eq-phy12-9', title: 'Power', formula: 'P = VI = I²R' } ]},
+                        { id: 'phy12-ch4', title: 'Moving Charges and Magnetism', topics: [ { id: 'phy12-ch4-t1', title: 'Lorentz Force' }, { id: 'phy12-ch4-t2', title: 'Biot-Savart Law' }, { id: 'phy12-ch4-t3', title: 'Ampere\'s Law' } ], equations: [ { id: 'eq-phy12-10', title: 'Lorentz Force', formula: 'F = q(E + v×B)' }, { id: 'eq-phy12-11', title: 'Ampere\'s Law', formula: '∮ B·dl = μ₀I' } ]},
+                        { id: 'phy12-ch5', title: 'Magnetism and Matter', topics: [ { id: 'phy12-ch5-t1', title: 'Magnetic Dipoles' }, { id: 'phy12-ch5-t2', title: 'Earth\'s Magnetism' } ], equations: [ { id: 'eq-phy12-12', title: 'Magnetic Moment', formula: 'μ = IA' }, { id: 'eq-phy12-13', title: 'Torque on Dipole', formula: 'τ = μ×B' } ]},
+                        { id: 'phy12-ch6', title: 'Electromagnetic Induction', topics: [ { id: 'phy12-ch6-t1', title: 'Faraday\'s Law' }, { id: 'phy12-ch6-t2', title: 'Lenz\'s Law' }, { id: 'phy12-ch6-t3', title: 'Self-Inductance' } ], equations: [ { id: 'eq-phy12-14', title: 'Faraday\'s Law', formula: 'ε = -dΦ/dt' }, { id: 'eq-phy12-15', title: 'Self-Inductance EMF', formula: 'ε = -L(dI/dt)' } ]},
+                        { id: 'phy12-ch7', title: 'Alternating Current', topics: [ { id: 'phy12-ch7-t1', title: 'AC Circuits' }, { id: 'phy12-ch7-t2', title: 'Resonance' }, { id: 'phy12-ch7-t3', title: 'Transformers' } ], equations: [ { id: 'eq-phy12-16', title: 'AC Voltage', formula: 'V = V₀sinωt' }, { id: 'eq-phy12-17', title: 'Impedance', formula: 'Z = √(R² + (X_L - X_C)²)' } ]},
+                        { id: 'phy12-ch8', title: 'Electromagnetic Waves', topics: [ { id: 'phy12-ch8-t1', title: 'Maxwell\'s Equations' }, { id: 'phy12-ch8-t2', title: 'EM Spectrum' } ], equations: [ { id: 'eq-phy12-18', title: 'Speed of Light', formula: 'c = 1/√(μ₀ε₀)' }, { id: 'eq-phy12-19', title: 'Wave Relation', formula: 'c = fλ' } ]},
+                        { id: 'phy12-ch9', title: 'Ray Optics and Optical Instruments', topics: [ { id: 'phy12-ch9-t1', title: 'Reflection' }, { id: 'phy12-ch9-t2', title: 'Refraction' }, { id: 'phy12-ch9-t3', title: 'Lenses, Mirrors' } ], equations: [ { id: 'eq-phy12-20', title: 'Mirror Formula', formula: '1/f = 1/v + 1/u' }, { id: 'eq-phy12-21', title: 'Snell\'s Law', formula: 'n₁sinθ₁ = n₂sinθ₂' } ]},
+                        { id: 'phy12-ch10', title: 'Wave Optics', topics: [ { id: 'phy12-ch10-t1', title: 'Interference' }, { id: 'phy12-ch10-t2', title: 'Diffraction' }, { id: 'phy12-ch10-t3', title: 'Polarization' } ], equations: [ { id: 'eq-phy12-22', title: 'Fringe Width', formula: 'β = λD/d' }, { id: 'eq-phy12-23', title: 'Malus\' Law', formula: 'I = I₀cos²θ' } ]},
+                        { id: 'phy12-ch11', title: 'Dual Nature of Radiation and Matter', topics: [ { id: 'phy12-ch11-t1', title: 'Photoelectric Effect' }, { id: 'phy12-ch11-t2', title: 'de Broglie Waves' } ], equations: [ { id: 'eq-phy12-24', title: 'Photoelectric Equation', formula: 'hf = φ + KE_max' }, { id: 'eq-phy12-25', title: 'de Broglie Wavelength', formula: 'λ = h/mv' } ]},
+                        { id: 'phy12-ch12', title: 'Atoms', topics: [ { id: 'phy12-ch12-t1', title: 'Bohr Model' }, { id: 'phy12-ch12-t2', title: 'Atomic Spectra' }, { id: 'phy12-ch12-t3', title: 'X-rays' } ], equations: [ { id: 'eq-phy12-26', title: 'Energy Levels', formula: 'E_n = -13.6/n² eV' }, { id: 'eq-phy12-27', title: 'Rydberg Formula', formula: '1/λ = R(1/n₁² - 1/n₂²)' } ]},
+                        { id: 'phy12-ch13', title: 'Nuclei', topics: [ { id: 'phy12-ch13-t1', title: 'Radioactivity' }, { id: 'phy12-ch13-t2', title: 'Nuclear Reactions' }, { id: 'phy12-ch13-t3', title: 'Mass-Energy' } ], equations: [ { id: 'eq-phy12-28', title: 'Mass-Energy Equivalence', formula: 'E = mc²' }, { id: 'eq-phy12-29', title: 'Radioactive Decay', formula: 'N = N₀e^(-λt)' }, { id: 'eq-phy12-30', title: 'Half-Life', formula: 't₁/₂ = 0.693/λ' } ]},
+                        { id: 'phy12-ch14', title: 'Semiconductor Electronics', topics: [ { id: 'phy12-ch14-t1', title: 'Diodes' }, { id: 'phy12-ch14-t2', title: 'Transistors' }, { id: 'phy12-ch14-t3', title: 'Logic Gates' } ], equations: [ { id: 'eq-phy12-31', title: 'Transistor Current', formula: 'I_E = I_B + I_C' }, { id: 'eq-phy12-32', title: 'Current Gain (β)', formula: 'β = I_C/I_B' } ]}
+                    ]},
+                    { id: 'chem', name: 'Chemistry', icon: ChemistryIcon, class: 12, chapters: [
+                        { id: 'chem12-ch1', title: 'The Solid State', topics: [ { id: 'chem12-ch1-t1', title: 'Crystal Systems' }, { id: 'chem12-ch1-t2', title: 'Unit Cells' }, { id: 'chem12-ch1-t3', title: 'Packing' } ], equations: [ { id: 'eq-chem12-1', title: 'Density of Unit Cell', formula: 'ρ = (Z×M)/(N_A×a³)' } ]},
+                        { id: 'chem12-ch2', title: 'Solutions', topics: [ { id: 'chem12-ch2-t1', title: 'Concentration' }, { id: 'chem12-ch2-t2', title: 'Colligative Properties' } ], equations: [ { id: 'eq-chem12-2', title: 'Osmotic Pressure', formula: 'π = CRT' }, { id: 'eq-chem12-3', title: 'Boiling Point Elevation', formula: 'ΔT_b = K_b×m' } ]},
+                        { id: 'chem12-ch3', title: 'Electrochemistry', topics: [ { id: 'chem12-ch3-t1', title: 'Galvanic Cells' }, { id: 'chem12-ch3-t2', title: 'Electrolysis' }, { id: 'chem12-ch3-t3', title: 'Corrosion' } ], equations: [ { id: 'eq-chem12-4', title: 'Nernst Equation', formula: 'E = E° - (RT/nF)lnQ' } ]},
+                        { id: 'chem12-ch4', title: 'Chemical Kinetics', topics: [ { id: 'chem12-ch4-t1', title: 'Rate Laws' }, { id: 'chem12-ch4-t2', title: 'Reaction Mechanisms' } ], equations: [ { id: 'eq-chem12-5', title: 'Rate Law', formula: 'Rate = k[A]^m[B]^n' } ]},
+                        { id: 'chem12-ch5', title: 'Surface Chemistry', topics: [ { id: 'chem12-ch5-t1', title: 'Adsorption' }, { id: 'chem12-ch5-t2', title: 'Catalysis' }, { id: 'chem12-ch5-t3', title: 'Colloids' } ], equations: []},
+                        { id: 'chem12-ch6', title: 'General Principles of Isolation of Elements', topics: [ { id: 'chem12-ch6-t1', title: 'Metallurgy' }, { id: 'chem12-ch6-t2', title: 'Extraction Processes' } ], equations: []},
+                        { id: 'chem12-ch7', title: 'The p-Block Elements', topics: [ { id: 'chem12-ch7-t1', title: 'Group 15-18 Elements' }, { id: 'chem12-ch7-t2', title: 'Properties' } ], equations: []},
+                        { id: 'chem12-ch8', title: 'The d- and f-Block Elements', topics: [ { id: 'chem12-ch8-t1', title: 'Transition Metals' }, { id: 'chem12-ch8-t2', title: 'Lanthanides, Actinides' } ], equations: []},
+                        { id: 'chem12-ch9', title: 'Coordination Compounds', topics: [ { id: 'chem12-ch9-t1', title: 'Complex Formation' }, { id: 'chem12-ch9-t2', title: 'Nomenclature' }, { id: 'chem12-ch9-t3', title: 'Bonding' } ], equations: []},
+                        { id: 'chem12-ch10', title: 'Haloalkanes and Haloarenes', topics: [ { id: 'chem12-ch10-t1', title: 'Organic Halogen Compounds' } ], equations: []},
+                        { id: 'chem12-ch11', title: 'Alcohols, Phenols and Ethers', topics: [ { id: 'chem12-ch11-t1', title: 'Functional Groups' }, { id: 'chem12-ch11-t2', title: 'Reactions' } ], equations: []},
+                        { id: 'chem12-ch12', title: 'Aldehydes, Ketones and Carboxylic Acids', topics: [ { id: 'chem12-ch12-t1', title: 'Carbonyl Compounds' } ], equations: []},
+                        { id: 'chem12-ch13', title: 'Amines', topics: [ { id: 'chem12-ch13-t1', title: 'Organic Nitrogen Compounds' } ], equations: []},
+                        { id: 'chem12-ch14', title: 'Biomolecules', topics: [ { id: 'chem12-ch14-t1', title: 'Carbohydrates, Proteins' }, { id: 'chem12-ch14-t2', title: 'Vitamins, Nucleic Acids' } ], equations: []},
+                        { id: 'chem12-ch15', title: 'Polymers', topics: [ { id: 'chem12-ch15-t1', title: 'Addition and Condensation Polymerization' } ], equations: []},
+                        { id: 'chem12-ch16', title: 'Chemistry in Everyday Life', topics: [ { id: 'chem12-ch16-t1', title: 'Drugs' }, { id: 'chem12-ch16-t2', title: 'Food Chemistry' }, { id: 'chem12-ch16-t3', title: 'Cleansing Agents' } ], equations: []}
+                    ]},
+                    { id: 'bio', name: 'Biology', icon: BiologyIcon, class: 12, chapters: [
+                        { id: 'bio12-ch1', title: 'Reproduction in Organisms', topics: [ { id: 'bio12-ch1-t1', title: 'Asexual and Sexual Reproduction' } ], equations: []},
+                        { id: 'bio12-ch2', title: 'Sexual Reproduction in Flowering Plants', topics: [ { id: 'bio12-ch2-t1', title: 'Pollination' }, { id: 'bio12-ch2-t2', title: 'Fertilization' }, { id: 'bio12-ch2-t3', title: 'Seed Development' } ], equations: []},
+                        { id: 'bio12-ch3', title: 'Human Reproduction', topics: [ { id: 'bio12-ch3-t1', title: 'Male and Female Reproductive Systems' } ], equations: []},
+                        { id: 'bio12-ch4', title: 'Reproductive Health', topics: [ { id: 'bio12-ch4-t1', title: 'Population Control' }, { id: 'bio12-ch4-t2', title: 'STDs' } ], equations: []},
+                        { id: 'bio12-ch5', title: 'Principles of Inheritance and Variation', topics: [ { id: 'bio12-ch5-t1', title: 'Mendel\'s Laws' }, { id: 'bio12-ch5-t2', title: 'Linkage' }, { id: 'bio12-ch5-t3', title: 'Crossing Over' } ], equations: []},
+                        { id: 'bio12-ch6', title: 'Molecular Basis of Inheritance', topics: [ { id: 'bio12-ch6-t1', title: 'DNA Structure' }, { id: 'bio12-ch6-t2', title: 'Replication' }, { id: 'bio12-ch6-t3', title: 'Transcription' } ], equations: []},
+                        { id: 'bio12-ch7', title: 'Evolution', topics: [ { id: 'bio12-ch7-t1', title: 'Origin of Life' }, { id: 'bio12-ch7-t2', title: 'Natural Selection' }, { id: 'bio12-ch7-t3', title: 'Speciation' } ], equations: [ { id: 'eq-bio12-1', title: 'Hardy-Weinberg Principle', formula: 'p² + 2pq + q² = 1' } ]},
+                        { id: 'bio12-ch8', title: 'Human Health and Disease', topics: [ { id: 'bio12-ch8-t1', title: 'Pathogens' }, { id: 'bio12-ch8-t2', title: 'Immunity' }, { id: 'bio12-ch8-t3', title: 'Vaccines' } ], equations: []},
+                        { id: 'bio12-ch9', title: 'Strategies for Enhancement in Food Production', topics: [ { id: 'bio12-ch9-t1', title: 'Plant Breeding' }, { id: 'bio12-ch9-t2', title: 'Animal Husbandry' } ], equations: []},
+                        { id: 'bio12-ch10', title: 'Microbes in Human Welfare', topics: [ { id: 'bio12-ch10-t1', title: 'Beneficial Microorganisms' } ], equations: []},
+                        { id: 'bio12-ch11', title: 'Biotechnology: Principles and Processes', topics: [ { id: 'bio12-ch11-t1', title: 'Genetic Engineering' }, { id: 'bio12-ch11-t2', title: 'PCR' }, { id: 'bio12-ch11-t3', title: 'Cloning' } ], equations: []},
+                        { id: 'bio12-ch12', title: 'Biotechnology and its Applications', topics: [ { id: 'bio12-ch12-t1', title: 'GM Crops' }, { id: 'bio12-ch12-t2', title: 'Gene Therapy' } ], equations: []},
+                        { id: 'bio12-ch13', title: 'Organisms and Populations', topics: [ { id: 'bio12-ch13-t1', title: 'Population Ecology' }, { id: 'bio12-ch13-t2', title: 'Life Tables' } ], equations: [ { id: 'eq-bio12-2', title: 'Population Growth', formula: 'dN/dt = rN' } ]},
+                        { id: 'bio12-ch14', title: 'Ecosystem', topics: [ { id: 'bio12-ch14-t1', title: 'Energy Flow' }, { id: 'bio12-ch14-t2', title: 'Nutrient Cycling' }, { id: 'bio12-ch14-t3', title: 'Productivity' } ], equations: []},
+                        { id: 'bio12-ch15', title: 'Biodiversity and Conservation', topics: [ { id: 'bio12-ch15-t1', title: 'Species Diversity' }, { id: 'bio12-ch15-t2', title: 'Conservation Strategies' } ], equations: []},
+                        { id: 'bio12-ch16', title: 'Environmental Issues', topics: [ { id: 'bio12-ch16-t1', title: 'Pollution' }, { id: 'bio12-ch16-t2', title: 'Global Warming' }, { id: 'bio12-ch16-t3', title: 'Ozone Depletion' } ], equations: []}
+                    ]}
+                ]
+            }
+        };
+
+
+        // --- UI COMPONENTS ---
+
+        const Topic = ({ topic, status, accuracy, onSelect }) => {
+            const isWeak = accuracy && accuracy.total > 1 && (accuracy.correct / accuracy.total) < 0.6;
+            const statusIcon = () => {
+                if (status === 'learning') return <ReviewIcon />;
+                if (status === 'completed') return <CheckCircleIcon className="text-green-600" />;
+                if (status === 'in_progress') return <InProgressIcon />;
+                return <div className="w-5 h-5 flex-shrink-0 border-2 border-gray-300 rounded-full"></div>;
+            };
+
+            return (
+                <div onClick={() => onSelect(topic)} className={`relative flex items-center justify-between p-4 rounded-lg paper hover:bg-gray-100 cursor-pointer transition-all duration-200 
+                    ${isWeak ? 'ring-2 ring-yellow-500/80' : ''} 
+                    ${status === 'completed' ? 'border border-primary-500' : ''}`}>
+                    <div className="flex items-center">
+                        <div className="w-5 h-5 flex-shrink-0">{statusIcon()}</div>
+                        <span className={`ml-3 handwritten ${status === 'completed' ? 'text-gray-500 line-through' : 'text-gray-800'}`}>{topic.title}</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                        {isWeak && <span className="text-yellow-700 text-xs font-bold bg-yellow-100 px-2 py-1 rounded-md">Needs Review</span>}
+                        <button className="text-white font-semibold text-sm chalk-btn px-3 py-1 rounded-md">Start</button>
+                    </div>
+                </div>
+            );
+        };
+
+        const Chapter = ({ chapter, userProgress, topicAccuracies, onSelectTopic, onSelectEquation }) => {
+            const [isOpen, setIsOpen] = useState(true);
+            const [activeTab, setActiveTab] = useState('topics'); // 'topics' or 'equations'
+            const chapterProgress = useMemo(() => {
+                const topicIds = chapter.topics.map(t => t.id);
+                if (topicIds.length === 0) return 0;
+                const completedTopics = topicIds.filter(id => userProgress[id]?.status === 'completed').length;
+                return (completedTopics / topicIds.length) * 100;
+            }, [chapter, userProgress]);
+
+            return (
+                <div className="mb-4 paper rounded-xl overflow-hidden shadow-lg">
+                    <button onClick={() => setIsOpen(!isOpen)} className="w-full text-left p-5 flex justify-between items-center paper hover:bg-gray-100 transition-colors">
+                        <div>
+                            <h3 className="font-bold text-lg text-gray-800 handwritten">{chapter.title}</h3>
+                            <div className="text-sm text-gray-600 mt-1">Progress</div>
+                        </div>
+                        <div className="flex items-center">
+                            <span className="text-gray-800 font-semibold mr-4">{Math.round(chapterProgress)}%</span>
+                            <svg className={`w-6 h-6 text-gray-800 transform transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </button>
+                    {isOpen && (
+                        <div className="p-4">
+                            <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+                                <div className="bg-primary-500 h-2 rounded-full" style={{ width: `${chapterProgress}%` }}></div>
+                            </div>
+                            <div className="flex border-b border-gray-200 mb-4">
+                                <button
+                                    onClick={() => setActiveTab('topics')}
+                                    className={`py-2 px-4 text-sm font-medium ${activeTab === 'topics' ? 'border-b-2 border-primary-500 text-primary-600' : 'text-gray-500 hover:text-gray-700'}`}
+                                >
+                                    Topics
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('equations')}
+                                    className={`py-2 px-4 text-sm font-medium ${activeTab === 'equations' ? 'border-b-2 border-primary-500 text-primary-600' : 'text-gray-500 hover:text-gray-700'}`}
+                                >
+                                    Equations
+                                </button>
+                            </div>
+                            {activeTab === 'topics' && (
+                                <div className="space-y-2">
+                                    {chapter.topics.length > 0 ? chapter.topics.map(topic => (
+                                        <Topic
+                                            key={topic.id}
+                                            topic={topic}
+                                            status={userProgress[topic.id]?.status}
+                                            accuracy={topicAccuracies[topic.id]}
+                                            onSelect={onSelectTopic}
+                                        />
+                                    )) : (
+                                        <p className="text-center text-gray-600 py-4">No topics in this chapter yet.</p>
+                                    )}
+                                </div>
+                            )}
+                            {activeTab === 'equations' && (
+                                <div className="space-y-2">
+                                    {chapter.equations && chapter.equations.length > 0 ? chapter.equations.map((eq) => (
+                                        <div key={eq.id} className="p-4 rounded-lg paper flex justify-between items-center">
+                                            <div>
+                                                <p className="font-semibold text-gray-800">{eq.title}</p>
+                                                <p className="text-gray-600 font-mono mt-1">{eq.formula}</p>
+                                            </div>
+                                            <button 
+                                                onClick={() => onSelectEquation(eq, chapter.title)}
+                                                className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-3 rounded-lg transition-colors text-sm"
+                                            >
+                                                <BrainIcon />
+                                                AI Tutor
+                                            </button>
+                                        </div>
+                                    )) : (
+                                        <p className="text-center text-gray-600 py-4">No equations available for this chapter.</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const Dashboard = ({ user, onSelectSubject, onSelectTopic, userProgress, curriculumData }) => {
+            const { points, streak } = user;
+
+            const calculateSubjectProgress = (subject) => {
+                const allTopicIds = subject.chapters.flatMap(ch => ch.topics.map(t => t.id));
+                if (allTopicIds.length === 0) return 0;
+                const completedTopics = allTopicIds.filter(id => userProgress[id]?.status === 'completed').length;
+                return (completedTopics / allTopicIds.length) * 100;
+            };
+            
+            const chaptersInProgress = useMemo(() => {
+                if (!curriculumData || !curriculumData.subjects) return [];
+                return curriculumData.subjects.flatMap(subject => 
+                    subject.chapters.map(chapter => {
+                        const hasInProgress = chapter.topics.some(t => userProgress[t.id]?.status === 'in_progress');
+                        const isComplete = chapter.topics.every(t => userProgress[t.id]?.status === 'completed' || userProgress[t.id]?.status === 'learning');
+                        return (hasInProgress && !isComplete) ? { ...chapter, subjectName: subject.name } : null;
+                    })
+                ).filter(Boolean);
+            }, [userProgress, curriculumData]);
+
+            return (
+                <>
+                    <div className="chalkboard rounded-xl p-6 mb-8">
+                        <h1 className="text-3xl font-bold chalk-text font-chalk mb-2">Welcome back, {user.name}!</h1>
+                        <p className="chalk-text opacity-90">You are viewing the curriculum for <span className="font-bold text-accent-yellow">Class {user.class}</span>.</p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div className="paper p-6 rounded-xl flex items-center justify-between shadow-lg">
+                            <div>
+                                <div className="text-gray-600 text-sm">Total Points</div>
+                                <div className="text-3xl font-bold text-yellow-600">{points}</div>
+                            </div>
+                            <div className="text-5xl">⭐</div>
+                        </div>
+                        <div className="paper p-6 rounded-xl flex items-center justify-between shadow-lg">
+                            <div>
+                                <div className="text-gray-600 text-sm">Study Streak</div>
+                                <div className="text-3xl font-bold text-orange-600">{streak.count} Day{streak.count !== 1 && 's'}</div>
+                            </div>
+                             <div className="text-5xl">🔥</div>
+                        </div>
+                    </div>
+
+                    {chaptersInProgress.length > 0 && (
+                        <div className="mb-8">
+                            <h2 className="text-2xl font-bold text-gray-800 mb-4 handwritten">Jump Back In</h2>
+                               <div className="paper p-4 rounded-xl space-y-3">
+                                {chaptersInProgress.map(chapter => (
+                                    <div key={chapter.id} className="p-4 paper rounded-lg hover:scale-[1.01] transition-transform cursor-pointer" onClick={() => onSelectSubject(curriculumData.subjects.find(s => s.name === chapter.subjectName), chapter.id)}>
+                                        <div className="text-sm text-primary-600 font-bold">{chapter.subjectName}</div>
+                                        <div className="font-semibold text-gray-800 handwritten">{chapter.title}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4 handwritten">Subjects</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {curriculumData.subjects.map(subject => {
+                            const progress = calculateSubjectProgress(subject);
+                            return (
+                                <div key={subject.id} onClick={() => onSelectSubject(subject)} className="paper rounded-xl p-6 cursor-pointer hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary-500/10 transition-all duration-300">
+                                    <div className="flex items-center mb-4">
+                                        <div className="p-3 paper rounded-lg mr-4"><subject.icon /></div>
+                                        <h2 className="text-2xl font-bold text-gray-800 handwritten">{subject.name}</h2>
+                                    </div>
+                                    <p className="text-gray-600 mb-4">Class {subject.class}</p>
+                                    <div className="w-full bg-gray-200 rounded-full h-3">
+                                        <div className="bg-primary-500 h-3 rounded-full" style={{ width: `${progress}%` }}></div>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </>
+            );
+        };
+        
+        // --- INTERACTIVE INPUT COMPONENTS ---
+        const OpenEndedInput = ({ onSubmit, isLoading }) => {
+            const [text, setText] = useState('');
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (!text.trim()) return;
+                onSubmit(text);
+                setText('');
+            };
+            return (
+                <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 flex items-center gap-4">
+                    <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Type your answer..." className="w-full p-3 text-gray-800 paper rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition" disabled={isLoading} autoFocus />
+                    <button type="submit" disabled={isLoading || !text.trim()} className="p-3 bg-primary-600 text-white rounded-lg disabled:bg-primary-300 disabled:cursor-not-allowed hover:bg-primary-700 transition"><SendIcon /></button>
+                </form>
+            );
+        };
+
+        const MCQInput = ({ question, onSubmit, isLoading }) => {
+            const [selected, setSelected] = useState(null);
+            
+            const handleSelect = (option) => {
+                if (selected !== null) return;
+                setSelected(option);
+                setTimeout(() => {
+                    onSubmit(option);
+                    setSelected(null); 
+                }, 1200);
+            };
+
+            const getButtonClass = (option) => {
+                if (selected === null) return 'paper hover:bg-primary-50 border-gray-300';
+                const isCorrect = option === question.correct_answer;
+                if (option === selected) {
+                    return isCorrect ? 'bg-green-100 border-green-500 text-green-800' : 'bg-red-100 border-red-500 text-red-800';
+                }
+                return 'bg-gray-100 border-gray-200 text-gray-500';
+            };
+
+            return (
+                <div className="p-4 border-t border-gray-200 space-y-2">
+                    {question.options.map((option, index) => (
+                        <button key={index} onClick={() => handleSelect(option)} disabled={selected !== null || isLoading} className={`w-full p-3 text-left font-semibold rounded-lg border-2 transition-all ${getButtonClass(option)}`}>{option}</button>
+                    ))}
+                </div>
+            );
+        };
+
+        const TrueFalseInput = ({ question, onSubmit, isLoading }) => {
+            const [selected, setSelected] = useState(null);
+
+            const handleSelect = (option) => {
+                if (selected !== null) return;
+                setSelected(option);
+                setTimeout(() => {
+                    onSubmit(option);
+                    setSelected(null);
+                }, 1200);
+            };
+            
+            const getButtonClass = (option) => {
+                if (selected === null) return 'paper hover:bg-primary-50 border-gray-300';
+                 const isCorrect = option === question.correct_answer;
+                if (option === selected) {
+                    return isCorrect ? 'bg-green-100 border-green-500 text-green-800' : 'bg-red-100 border-red-500 text-red-800';
+                }
+                return 'bg-gray-100 border-gray-200 text-gray-500';
+            };
+
+            return (
+                <div className="p-4 border-t border-gray-200 grid grid-cols-2 gap-4">
+                    <button onClick={() => handleSelect("True")} disabled={selected !== null || isLoading} className={`w-full p-3 text-center font-bold rounded-lg border-2 transition-all ${getButtonClass("True")}`}>True</button>
+                    <button onClick={() => handleSelect("False")} disabled={selected !== null || isLoading} className={`w-full p-3 text-center font-bold rounded-lg border-2 transition-all ${getButtonClass("False")}`}>False</button>
+                </div>
+            );
+        };
+
+        const FillBlankInput = ({ question, onSubmit, isLoading }) => {
+            const [values, setValues] = useState(Array(question.blanks.length).fill(''));
+            const [status, setStatus] = useState('pending');
+
+            const handleChange = (index, value) => {
+                const newValues = [...values];
+                newValues[index] = value;
+                setValues(newValues);
+            };
+
+            const handleSubmit = () => {
+                if (values.some(v => !v.trim())) return;
+                let allCorrect = true;
+                question.blanks.forEach((blank, index) => {
+                    if (values[index].trim().toLowerCase() !== blank.correct_answer.toLowerCase()) {
+                        allCorrect = false;
+                    }
+                });
+                setStatus(allCorrect ? 'correct' : 'incorrect');
+                setTimeout(() => {
+                    const userAnswer = question.template.map((part, i) => {
+                        if (part === null) {
+                            const blankIndex = question.template.slice(0, i + 1).filter(p => p === null).length - 1;
+                            return `__${values[blankIndex] || ''}__`;
+                        }
+                        return part;
+                    }).join('');
+                    onSubmit(userAnswer);
+                    setStatus('pending');
+                    setValues(Array(question.blanks.length).fill(''));
+                }, 1200);
+            };
+
+            return (
+                <div className="p-4 border-t border-gray-200">
+                    <div className="p-4 bg-gray-100 rounded-lg flex items-center flex-wrap gap-2 text-xl font-mono justify-center">
+                        {question.template.map((part, index) => {
+                            if (part === null) {
+                                const blankIndex = question.template.slice(0, index + 1).filter(p => p === null).length - 1;
+                                return <input key={index} type="text" value={values[blankIndex] || ''} onChange={(e) => handleChange(blankIndex, e.target.value)} className="w-24 p-1 text-center paper border-2 rounded-md focus:outline-none" style={{ borderColor: status === 'pending' ? '#cbd5e1' : status === 'correct' ? '#10b981' : '#ef4444' }} disabled={isLoading || status !== 'pending'} autoFocus={blankIndex === 0} />;
+                            }
+                            return <span key={index}>{part}</span>;
+                        })}
+                    </div>
+                    <div className="flex justify-end mt-4">
+                        <button onClick={handleSubmit} disabled={isLoading || status !== 'pending'} className="py-2 px-4 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition disabled:bg-primary-300">Check Answer</button>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- REFACTORED: Conversational Equation Tutor ---
+        const EquationTutor = ({ equation, chapterTitle, user, onExit, incrementUserPoints }) => {
+            const [conversation, setConversation] = useState([]);
+            const [isLoading, setIsLoading] = useState(false);
+            const [isLessonComplete, setIsLessonComplete] = useState(false);
+            const chatEndRef = useRef(null);
+
+            const scrollToBottom = () => {
+                chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            };
+
+            useEffect(scrollToBottom, [conversation]);
+
+            const callTutorAPI = async (currentConversation) => {
+                // FIX: Removed hardcoded API key
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                
+                const systemPrompt = `You are an expert AI tutor for a Class ${user.class} student in India, acting as a friendly and cool 'bhaiyya'. Your task is to help the student deeply understand the equation: '${equation.title}' (${equation.formula}). Your responses must be in ${user.language}.
+
+Your response MUST be a valid JSON object.
+
+⚠️ Core Teaching Rules:
+use english text but in preferred language
+1. **Socratic & Adaptive Method**: Your main goal is to guide the student. NEVER give direct answers. Based on the conversation history and the student's last answer, decide the best next question to ask.
+2. **Dynamic Question Types**: You MUST vary your question types. Choose one of the following for each turn: "open_ended", "multiple_choice", "true_false", or "fill_in_the_blank".
+3. **Language Style**: All text ('commentary', 'question_text', 'options', etc.) must be in the specified language, short, casual, and encouraging. Maintain the 'bhaiyya' persona regardless of language. Use desi slang equivalents where appropriate.
+4. **End of Lesson**: After several (at least 5-8) interactive turns, if you are confident the student understands, set "is_final_summary" to true. In this final turn, provide the formal definition and simple explanation in the 'summary' object and leave the other question fields null.(Don't move to next concept, until the current one is clear means if the user is answering wrong keep questioning on the same question until they get it right)
+5. **JSON Structure**: Adhere strictly to the provided JSON schema. Ensure all fields are present. For question types that don't need certain fields (e.g., 'options' for open_ended), provide an empty array [] or null.`;
+
+                const chatHistory = [
+                    { role: "user", parts: [{ text: systemPrompt }] },
+                    ...currentConversation.map(msg => ({
+                        role: msg.role === 'student' ? 'user' : 'model',
+                        parts: [{ text: JSON.stringify(msg.content) }]
+                    }))
+                ];
+                
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                commentary: { type: "STRING" },
+                                question_type: { type: "STRING" },
+                                question_text: { type: "STRING" },
+                                options: { type: "ARRAY", items: { type: "STRING" } },
+                                correct_answer: { type: "STRING" },
+                                // FIX: Changed template item type to just "STRING"
+                                template: { type: "ARRAY", items: { type: "STRING" } },
+                                blanks: { type: "ARRAY", items: { type: "OBJECT", properties: { id: { type: "NUMBER" }, correct_answer: { type: "STRING" } } } },
+                                is_final_summary: { type: "BOOLEAN" },
+                                summary: { type: "OBJECT", properties: { formal_definition: { type: "STRING" }, simple_explanation: { type: "STRING" } } }
+                            }
+                        }
+                    }
+                };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                    const result = await response.json();
+                    let jsonText = result.candidates[0].content.parts[0].text;
+                    const jsonMatch = jsonText.match(/```json\s*([\s\S]*?)\s*```/);
+                    if (jsonMatch && jsonMatch[1]) {
+                        jsonText = jsonMatch[1];
+                    }
+                    return JSON.parse(jsonText);
+                } catch (error) {
+                    console.error("API call failed:", error);
+                    return { commentary: "Arre yaar, connection mein thoda issue hai. Refresh karke try kar.", question_type: 'error' };
+                }
+            };
+
+            useEffect(() => {
+                const initialUserMessage = { role: 'student', content: { answer: `Hello bhaiyya! Let's start with '${equation.title}'. Please begin.` } };
+                setConversation([initialUserMessage]);
+                setIsLoading(true);
+
+                callTutorAPI([initialUserMessage]).then(aiResponse => {
+                    setConversation(prev => [...prev, { role: 'tutor', content: aiResponse }]);
+                    setIsLoading(false);
+                });
+            }, [equation]);
+
+            const handleAnswerSubmit = async (answer) => {
+                incrementUserPoints(10);
+                const newUserMessage = { role: 'student', content: { answer } };
+                const updatedConversation = [...conversation, newUserMessage];
+                setConversation(updatedConversation);
+                setIsLoading(true);
+
+                const aiResponse = await callTutorAPI(updatedConversation);
+                
+                if (aiResponse.is_final_summary) {
+                    setConversation(prev => [...prev, { role: 'tutor', content: aiResponse }]);
+                    setIsLessonComplete(true);
+                    incrementUserPoints(50);
+                } else {
+                    setConversation(prev => [...prev, { role: 'tutor', content: aiResponse }]);
+                }
+                
+                setIsLoading(false);
+            };
+
+            const lastTutorMessage = conversation.filter(m => m.role === 'tutor').pop()?.content;
+
+            return (
+                <div>
+                    <div className="flex justify-between items-center mb-6">
+                        <div className="chalkboard rounded-xl p-4">
+                            <h1 className="text-3xl font-bold chalk-text font-chalk">{equation.title}</h1>
+                            <p className="chalk-text opacity-90">From Chapter: <span className="font-semibold text-accent-yellow">{chapterTitle}</span></p>
+                        </div>
+                        <button onClick={onExit} className="paper-btn text-gray-800 font-bold py-2 px-4 rounded-lg transition-colors">
+                            ← Back to Subject
+                        </button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                        {/* Left Column: Equation Details */}
+                        <div className="lg:col-span-2 space-y-6">
+                            <div className="chalkboard p-6 rounded-xl shadow-lg sticky top-24">
+                                <h2 className="text-lg font-semibold chalk-text mb-2 font-chalk">The Equation</h2>
+                                <p className="text-4xl font-mono text-center py-4 px-2 bg-chalkboard text-accent-yellow rounded-lg break-all font-chalk">
+                                    {equation.formula}
+                                </p>
+                            </div>
+                             {equation.variables && equation.variables.length > 0 && (
+                                <div className="paper p-6 rounded-xl shadow-lg sticky top-52">
+                                    <h2 className="text-lg font-semibold text-gray-800 mb-3 handwritten">Key Variables</h2>
+                                    <ul className="space-y-2 text-gray-600 font-mono text-sm">
+                                        {equation.variables.map((variable, index) => (
+                                            <li key={index} className="flex items-center">
+                                                <span className="font-bold text-primary-600 mr-2">{variable.split(':')[0]}:</span>
+                                                <span>{variable.split(':')[1]}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Right Column: Interactive Chat Tutor */}
+                        <div className="lg:col-span-3 chalkboard rounded-xl shadow-2xl flex flex-col h-[75vh]">
+                            <div className="flex-grow p-6 overflow-y-auto custom-scrollbar">
+                                <div className="space-y-4">
+                                    {conversation.slice(1).map((msg, index) => (
+                                        <div key={index} className={`flex items-end gap-2 ${msg.role === 'student' ? 'justify-end' : 'justify-start'}`}>
+                                            {msg.role === 'tutor' && <div className="w-8 h-8 rounded-full bg-primary-200 flex items-center justify-center flex-shrink-0"><BrainIcon className="w-5 h-5 text-primary-700" /></div>}
+                                            <div className={`max-w-lg px-4 py-3 rounded-2xl ${msg.role === 'student' ? 'bg-primary-600 text-white rounded-br-none' : 'bg-gray-800 text-chalk-text rounded-bl-none'}`}>
+                                                {msg.role === 'student' ? <p>{msg.content.answer}</p> : 
+                                                (
+                                                    <div>
+                                                        <p className="whitespace-pre-wrap">{msg.content.commentary}</p>
+                                                        {msg.content.question_text && <p className="mt-2 font-semibold whitespace-pre-wrap">{msg.content.question_text}</p>}
+                                                        {msg.content.is_final_summary && (
+                                                            <div className="mt-3 pt-3 border-t border-gray-300">
+                                                                <p className="text-sm font-bold">Formal Definition:</p>
+                                                                <p className="text-sm italic">{msg.content.summary.formal_definition}</p>
+                                                                <p className="text-sm font-bold mt-2">Aasaan Bhasha Mein:</p>
+                                                                <p className="text-sm italic">{msg.content.summary.simple_explanation}</p>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {isLoading && (
+                                        <div className="flex items-end gap-2 justify-start">
+                                            <div className="w-8 h-8 rounded-full bg-primary-200 flex items-center justify-center flex-shrink-0"><BrainIcon className="w-5 h-5 text-primary-700" /></div>
+                                            <div className="max-w-lg px-4 py-3 rounded-2xl bg-gray-800 text-chalk-text rounded-bl-none">
+                                                <div className="flex items-center space-x-2 dot-pulse">
+                                                    <div className="w-2 h-2 bg-chalk-text rounded-full"></div>
+                                                    <div className="w-2 h-2 bg-chalk-text rounded-full"></div>
+                                                    <div className="w-2 h-2 bg-chalk-text rounded-full"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div ref={chatEndRef} />
+                                </div>
+                            </div>
+                            {!isLessonComplete && lastTutorMessage && lastTutorMessage.question_type && (
+                                <>
+                                    {lastTutorMessage.question_type === 'open_ended' && <OpenEndedInput onSubmit={handleAnswerSubmit} isLoading={isLoading} />}
+                                    {lastTutorMessage.question_type === 'multiple_choice' && <MCQInput question={lastTutorMessage} onSubmit={handleAnswerSubmit} isLoading={isLoading} />}
+                                    {lastTutorMessage.question_type === 'true_false' && <TrueFalseInput question={lastTutorMessage} onSubmit={handleAnswerSubmit} isLoading={isLoading} />}
+                                    {lastTutorMessage.question_type === 'fill_in_the_blank' && <FillBlankInput question={lastTutorMessage} onSubmit={handleAnswerSubmit} isLoading={isLoading} />}
+                                </>
+                            )}
+                             {isLessonComplete && (
+                                <div className="text-center p-4 border-t border-gray-700">
+                                    <button onClick={onExit} className="py-2 px-6 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition">Macha Diya! Back to Subject</button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const ChatTutor = ({ topic, user, onExit, updateTopicStatus, incrementUserPoints }) => {
+            const [messages, setMessages] = useState([]);
+            const [userInput, setUserInput] = useState('');
+            const [isLoading, setIsLoading] = useState(false);
+            const [topicUnderstood, setTopicUnderstood] = useState(false);
+            const chatEndRef = useRef(null);
+
+            const scrollToBottom = () => {
+                chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            };
+
+            useEffect(scrollToBottom, [messages]);
+            
+            const callGeminiAPI = async (prompt, history) => {
+                // FIX: Removed hardcoded API key
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                
+                const systemPrompt = `You are a friendly and cool 'tution wale bhaiyya' for a Class ${user.class} student in India. 
+Your job is to teach the topic '${topic.title}' using a flexible, Socratic approach. Your responses must be in ${user.language}.
+
+⚠️ Rules:
+
+1. **Socratic Method Only** - No direct textbook definitions.  
+   - Always begin with a short analogy or real-life example (cricket, pani puri, Bollywood, etc.).  
+   - Then ask a guiding question to connect the analogy to the concept.  
+
+2. **Adaptive Style** - No fixed steps. Ask as many questions as needed until the student gets it.  
+   - Use analogies, small puzzles, fill-in, MCQs, true/false, or direct comparisons naturally.  
+   - Respond based on student's answers, just like a real tutor.  
+
+3. **Language Style** - Your responses must be in english text but use ${user.language} just like hinglish. Keep them short & fun. 1–2 lines per message. Maintain the 'bhaiyya' persona and use equivalent slang where appropriate (e.g., "arre yaar", "samjha kya", "mast!", "bindaas").  
+
+4. **End of Lesson** - Once the student clearly understands, provide a final wrap-up:  
+     a) Formal Definition (English, 1 line).  
+     b) Aasaan Bhasha (in the student's chosen language, 1 line).  
+   - Finish with encouragement (🎉, 🚀, 👏). After this summary, your final message must be exactly "LESSON_COMPLETE".
+
+5. **Golden Rule** - The focus is **concept clarity**, no matter how many steps it takes.  
+   - You are a guide, not a lecturer.`;
+
+                const chatHistory = [
+                    { role: "user", parts: [{ text: systemPrompt }] },
+                    { role: "model", parts: [{ text: `Ready to start with '${topic.title}', bhai? Let's do this! 💪` }] },
+                    ...history.map(msg => ({
+                        role: msg.sender === 'ai' ? 'model' : 'user',
+                        parts: [{ text: msg.text }]
+                    })),
+                    { role: "user", parts: [{ text: prompt }] }
+                ];
+                
+                const payload = { contents: chatHistory };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts) {
+                            return result.candidates[0].content.parts[0].text;
+                        }
+                    }
+                } catch (error) {
+                    console.error("API call failed:", error);
+                }
+                return "Sorry, connection mein thoda issue hai. Try again in a bit!";
+            };
+
+            useEffect(() => {
+                const initialPrompt = `Hello bhaiyya! Let's start with the topic '${topic.title}' for Class ${user.class}. Please begin with a cool analogy and an opening question.`;
+                setIsLoading(true);
+                setTopicUnderstood(false);
+                callGeminiAPI(initialPrompt, []).then(aiResponse => {
+                    setMessages([{ text: aiResponse, sender: 'ai' }]);
+                    setIsLoading(false);
+                });
+            }, [topic, user.class]);
+
+            const handleSendMessage = async (e) => {
+                e.preventDefault();
+                if (!userInput.trim() || isLoading) return;
+
+                const newUserMessage = { text: userInput, sender: 'user' };
+                setMessages(prev => [...prev, newUserMessage]);
+                setUserInput('');
+                setIsLoading(true);
+
+                const aiResponseText = await callGeminiAPI(userInput, messages);
+                
+                if (aiResponseText.includes("LESSON_COMPLETE")) {
+                    const finalMessage = aiResponseText.replace("LESSON_COMPLETE", "").trim();
+                    setMessages(prev => [...prev, { text: finalMessage, sender: 'ai' }]);
+                    setTopicUnderstood(true);
+                    updateTopicStatus(topic.id, 'completed');
+                    incrementUserPoints(50);
+                } else {
+                    setMessages(prev => [...prev, { text: aiResponseText, sender: 'ai' }]);
+                    updateTopicStatus(topic.id, 'in_progress');
+                }
+                
+                setIsLoading(false);
+            };
+
+            return (
+                <div>
+                    <div className="flex justify-between items-center mb-4">
+                        <div className="chalkboard rounded-xl p-4">
+                            <h1 className="text-3xl font-bold chalk-text font-chalk">{topic.title}</h1>
+                        </div>
+                        <button onClick={onExit} className="paper-btn text-gray-800 font-bold py-2 px-4 rounded-lg transition-colors">
+                            ← Back to Subject
+                        </button>
+                    </div>
+
+                    <div className="chalkboard rounded-xl shadow-2xl flex flex-col h-[70vh]">
+                        <div className="flex-grow p-6 overflow-y-auto custom-scrollbar">
+                            <div className="space-y-4">
+                                {messages.map((msg, index) => (
+                                    <div key={index} className={`flex items-end gap-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                        {msg.sender === 'ai' && <div className="w-8 h-8 rounded-full bg-primary-200 flex items-center justify-center flex-shrink-0"><BrainIcon className="w-5 h-5 text-primary-700" /></div>}
+                                        <div className={`max-w-lg px-4 py-3 rounded-2xl ${msg.sender === 'user' ? 'bg-primary-600 text-white rounded-br-none' : 'bg-gray-800 text-chalk-text rounded-bl-none'}`}>
+                                            <p className="whitespace-pre-wrap">{msg.text}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                                {isLoading && (
+                                    <div className="flex items-end gap-2 justify-start">
+                                        <div className="w-8 h-8 rounded-full bg-primary-200 flex items-center justify-center flex-shrink-0"><BrainIcon className="w-5 h-5 text-primary-700" /></div>
+                                        <div className="max-w-lg px-4 py-3 rounded-2xl bg-gray-800 text-chalk-text rounded-bl-none">
+                                            <div className="flex items-center space-x-2 dot-pulse">
+                                                <div className="w-2 h-2 bg-chalk-text rounded-full"></div>
+                                                <div className="w-2 h-2 bg-chalk-text rounded-full"></div>
+                                                <div className="w-2 h-2 bg-chalk-text rounded-full"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                {topicUnderstood && (
+                                    <div className="text-center p-4">
+                                        <button onClick={onExit} className="py-2 px-4 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition">Lesson Complete! Back to Subject</button>
+                                    </div>
+                                )}
+                                <div ref={chatEndRef} />
+                            </div>
+                        </div>
+                        <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-700 flex items-center gap-4">
+                            <input
+                                type="text"
+                                value={userInput}
+                                onChange={(e) => setUserInput(e.target.value)}
+                                placeholder="Ask a question or respond..."
+                                className="w-full p-3 text-gray-800 paper rounded-lg border-2 border-gray-300 focus:border-primary-500 focus:outline-none transition"
+                                disabled={isLoading || topicUnderstood}
+                            />
+                            <button type="submit" disabled={isLoading || !userInput.trim() || topicUnderstood} className="p-3 bg-primary-600 text-white rounded-lg disabled:bg-primary-300 disabled:cursor-not-allowed hover:bg-primary-700 transition">
+                                <SendIcon />
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+
+        const LoginScreen = ({ onLogin }) => {
+            const [name, setName] = useState('');
+            const [selectedClass, setSelectedClass] = useState('10');
+            const [language, setLanguage] = useState('Hinglish');
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (name.trim()) {
+                    onLogin({ name, class: selectedClass, language });
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex items-center justify-center p-4">
+                    <div className="w-full max-w-md p-8 space-y-8 paper rounded-2xl shadow-2xl relative">
+                        <div className="absolute -top-4 -right-4 text-4xl text-accent-yellow floating floating-1">📚</div>
+                        <div className="absolute -bottom-4 -left-4 text-4xl text-accent-red floating floating-3">✏️</div>
+                        
+                        <div className="text-center relative z-10">
+                            <div className="flex justify-center">
+                                <div className="chalkboard p-3 rounded-full">
+                                    <Logo />
+                                </div>
+                            </div>
+                            <h1 className="text-4xl font-bold text-gray-800 mt-4 font-chalk">ScortIQ</h1>
+                            <p className="text-gray-600 mt-2 handwritten">Your digital classroom for smarter learning</p>
+                        </div>
+                        <form className="space-y-6 relative z-10" onSubmit={handleSubmit}>
+                            <div>
+                                <label htmlFor="name" className="text-sm font-bold text-gray-800 handwritten">Name</label>
+                                <input id="name" type="text" value={name} onChange={e => setName(e.target.value)} required className="w-full p-3 mt-1 text-gray-800 paper rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition" />
+                            </div>
+                             <div>
+                                <label htmlFor="class" className="text-sm font-bold text-gray-800 handwritten">Class</label>
+                                <select id="class" value={selectedClass} onChange={e => setSelectedClass(e.target.value)} className="w-full p-3 mt-1 text-gray-800 paper rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition">
+                                    <option value="9">Class 9</option>
+                                    <option value="10">Class 10</option>
+                                    <option value="11">Class 11</option>
+                                    <option value="12">Class 12</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label htmlFor="language" className="text-sm font-bold text-gray-800 handwritten">Preferred Language</label>
+                                <select id="language" value={language} onChange={e => setLanguage(e.target.value)} className="w-full p-3 mt-1 text-gray-800 paper rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition">
+                                    <option value="Hinglish">Hinglish</option>
+                                    <option value="English">English</option>
+                                    <option value="Hindi">Hindi</option>
+                                    <option value="Telugu">Telugu</option>
+                                    <option value="Punjabi">Punjabi</option>
+                                    <option value="Gujarati">Gujarati</option>
+                                </select>
+                            </div>
+                            <button type="submit" className="w-full py-3 font-bold text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition chalk-btn">Enter Classroom</button>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+        function App() {
+            const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('socratic_user')) || null);
+            const [userProgress, setUserProgress] = useState(() => JSON.parse(localStorage.getItem('socratic_progress')) || {});
+            const [currentView, setCurrentView] = useState(() => localStorage.getItem('socratic_user') ? 'dashboard' : 'login');
+            const [selectedSubject, setSelectedSubject] = useState(null);
+            const [selectedTopic, setSelectedTopic] = useState(null);
+            const [selectedEquation, setSelectedEquation] = useState(null);
+            const [currentChapterTitle, setCurrentChapterTitle] = useState('');
+
+            const curriculumData = useMemo(() => {
+                return user?.class ? ncertCurriculum[user.class] : { subjects: [] };
+            }, [user?.class]);
+            
+            useEffect(() => { if(user) localStorage.setItem('socratic_user', JSON.stringify(user)); }, [user]);
+            useEffect(() => { localStorage.setItem('socratic_progress', JSON.stringify(userProgress)); }, [userProgress]);
+
+            const updateStreak = () => {
+                if (!user) return;
+                const today = new Date().toDateString();
+                const lastDate = user.streak?.lastDate ? new Date(user.streak.lastDate).toDateString() : null;
+                if (lastDate !== today) {
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    const isContinuing = lastDate === yesterday.toDateString();
+                    setUser(prev => ({
+                        ...prev,
+                        streak: {
+                            count: isContinuing ? (prev.streak?.count || 0) + 1 : 1,
+                            lastDate: new Date().toISOString()
+                        }
+                    }));
+                }
+            };
+
+            const sendWelcomeEmail = (userName, userClass) => {
+                emailjs.send('service_2pd5enl', 'template_rf67iad', {
+                    user_name: userName,
+                    user_class: userClass,
+                    login_time: new Date().toLocaleString(),
+                }).then(res => console.log('Email success!', res.status), err => console.log('Email failed...', err));
+            };
+
+            const handleLogin = (userData) => { 
+                setUser({ ...userData, points: 0, streak: { count: 1, lastDate: new Date().toISOString() } }); 
+                setCurrentView('dashboard'); 
+                sendWelcomeEmail(userData.name, userData.class);
+            };
+
+            const handleLogout = () => {
+                localStorage.clear();
+                setUser(null);
+                setCurrentView('login');
+            };
+
+            const handleSelectSubject = (subject) => { 
+                setSelectedSubject(subject); 
+                setCurrentView('subject'); 
+            };
+            
+            const handleSelectTopic = (topic) => { 
+                if (!userProgress[topic.id]) {
+                    setUserProgress(prev => ({ ...prev, [topic.id]: { status: 'in_progress' } }));
+                }
+                updateStreak();
+                setSelectedTopic(topic); 
+                setCurrentView('topic'); 
+            };
+            
+            const handleSelectEquation = (equation, chapterTitle) => {
+                updateStreak();
+                setSelectedEquation(equation);
+                setCurrentChapterTitle(chapterTitle);
+                setCurrentView('equation');
+            };
+
+            const updateTopicStatus = (topicId, newStatus) => {
+                setUserProgress(prev => ({ ...prev, [topicId]: { ...prev[topicId], status: newStatus } }));
+            };
+
+            const incrementUserPoints = (amount) => {
+                setUser(prev => ({ ...prev, points: (prev.points || 0) + amount }));
+            };
+            
+            const navigateTo = (view) => { 
+                setSelectedSubject(null); 
+                setSelectedTopic(null); 
+                setSelectedEquation(null);
+                setCurrentView(view); 
+            };
+
+            const renderContent = () => {
+                switch (currentView) {
+                    case 'dashboard': 
+                        return <Dashboard user={user} onSelectSubject={handleSelectSubject} onSelectTopic={handleSelectTopic} userProgress={userProgress} curriculumData={curriculumData} />;
+                    
+                    case 'subject': 
+                        if (!selectedSubject) { navigateTo('dashboard'); return null; }
+                        return (
+                            <>
+                                <div className="flex justify-between items-center mb-4">
+                                    <div className="chalkboard rounded-xl p-4">
+                                        <h1 className="text-3xl font-bold chalk-text font-chalk">{selectedSubject.name}</h1>
+                                    </div>
+                                    <button onClick={() => navigateTo('dashboard')} className="paper-btn text-gray-800 font-bold py-2 px-4 rounded-lg">
+                                        ← Back to Dashboard
+                                    </button>
+                                </div>
+                                {selectedSubject.chapters.map(ch => (
+                                    <Chapter 
+                                        key={ch.id} 
+                                        chapter={ch} 
+                                        userProgress={userProgress} 
+                                        topicAccuracies={{}}
+                                        onSelectTopic={handleSelectTopic} 
+                                        onSelectEquation={handleSelectEquation}
+                                    />
+                                ))}
+                            </>
+                        );
+                    
+                    case 'topic': 
+                        if (!selectedTopic) { navigateTo('subject'); return null; }
+                        return <ChatTutor topic={selectedTopic} user={user} onExit={() => setCurrentView('subject')} updateTopicStatus={updateTopicStatus} incrementUserPoints={incrementUserPoints} />;
+
+                    case 'equation':
+                        if (!selectedEquation) { navigateTo('subject'); return null; }
+                        return <EquationTutor equation={selectedEquation} chapterTitle={currentChapterTitle} user={user} onExit={() => setCurrentView('subject')} incrementUserPoints={incrementUserPoints} />;
+
+                    default: 
+                        return <LoginScreen onLogin={handleLogin} />;
+                }
+            };
+            
+            if (!user) return <LoginScreen onLogin={handleLogin} />;
+
+            return (
+                <div className="min-h-screen text-gray-800">
+                    <nav className="bg-chalkboard/90 backdrop-blur-sm p-4 flex justify-between items-center sticky top-0 z-40 border-b border-gray-700 shadow-sm">
+                        <div className="flex items-center space-x-4">
+                            <button onClick={() => navigateTo('dashboard')} className="flex items-center gap-2 text-xl font-bold text-white font-chalk">
+                                <div className="p-1 rounded-full bg-white/10">
+                                    <Logo />
+                                </div>
+                                <span>ScortIQ</span>
+                            </button>
+                        </div>
+                        <div className="flex items-center space-x-6">
+                            <div className="hidden sm:flex items-center space-x-4">
+                                <div className="text-yellow-400 font-bold">⭐ {user.points || 0}</div>
+                                <div className="text-orange-400 font-bold">🔥 {user.streak?.count || 0}</div>
+                            </div>
+                            <div className="text-right">
+                                <div className="text-white font-semibold">{user.name} <span className="text-xs text-gray-300">(Class {user.class})</span></div>
+                                <button onClick={handleLogout} className="text-sm text-gray-300 hover:underline">Logout</button>
+                            </div>
+                        </div>
+                    </nav>
+                    <main className="max-w-5xl mx-auto p-4 sm:p-6 md:p-8">
+                        <div key={currentView} className="fade-enter fade-enter-active"> 
+                            {renderContent()}
+                        </div>
+                    </main>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+
+    </script>
+</body>
+</html>
