@@ -791,7 +791,7 @@
 
             const callTutorAPI = async (currentConversation) => {
                 // FIX: Removed hardcoded API key
-                const apiKey = ""; 
+                const apiKey = "AIzaSyDvZ8z3x9UM3xTBRNdU7uIq_aSomGzsN0k"; 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                 
                 const systemPrompt = `You are an expert AI tutor for a Class ${user.class} student in India, acting as a friendly and cool 'bhaiyya'. Your task is to help the student deeply understand the equation: '${equation.title}' (${equation.formula}). Your responses must be in ${user.language}.
@@ -1000,7 +1000,7 @@ use english text but in preferred language
             
             const callGeminiAPI = async (prompt, history) => {
                 // FIX: Removed hardcoded API key
-                const apiKey = ""; 
+                const apiKey = "AIzaSyDvZ8z3x9UM3xTBRNdU7uIq_aSomGzsN0k"; 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                 
                 const systemPrompt = `You are a friendly and cool 'tution wale bhaiyya' for a Class ${user.class} student in India. 
