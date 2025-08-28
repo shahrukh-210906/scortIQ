@@ -1,5 +1,5 @@
 import React from 'react';
-import { Logo, PerformanceIcon, SandboxIcon } from './ui/Icons';
+import { Logo, PerformanceIcon } from './ui/Icons';
 
 const Navigation = ({ user, onLogout, onNavigate }) => {
   return (
@@ -16,17 +16,10 @@ const Navigation = ({ user, onLogout, onNavigate }) => {
       <div className="flex items-center space-x-2 xs:space-x-6">
         <button
           onClick={() => onNavigate('performance')}
-          className="font-semibold text-text-secondary hover:text-brand-primary transition-colors flex items-center gap-2"
+          className="font-semibold text-text-secondary hover:text-brand-primary transition-colors flex items-center gap-2 mr-4"
         >
           <PerformanceIcon />
           <span className="hidden sm:inline">Performance</span>
-        </button>
-        <button
-          onClick={() => onNavigate('sandbox')}
-          className="font-semibold text-text-secondary hover:text-brand-primary transition-colors flex items-center gap-2"
-        >
-          <SandboxIcon />
-           <span className="hidden sm:inline">AI Sandbox</span>
         </button>
         <div className="text-right">
           <div className="text-text-primary font-semibold text-sm xs:text-base">

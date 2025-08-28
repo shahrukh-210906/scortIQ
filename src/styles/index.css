@@ -4,7 +4,12 @@
 
 body {
   background-color: #FDFCF9;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 22px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Patrick Hand', cursive;
 }
 
 .progress-bar {
@@ -99,7 +104,8 @@ body {
 }
 
 .accordion-content.open {
-  max-height: 600px;
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .accordion-content-inner {

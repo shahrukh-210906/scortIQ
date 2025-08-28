@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircleIcon, InProgressIcon, WarningIcon } from './ui/Icons';
+import { CheckCircleIcon, InProgressIcon, WarningIcon, BrainIcon } from './ui/Icons';
 
 const Topic = ({ topic, status, onSelect, onStartQuiz }) => {
   const getStatusInfo = () => {
@@ -17,7 +17,7 @@ const Topic = ({ topic, status, onSelect, onStartQuiz }) => {
 
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 rounded-lg hover:bg-background-alt transition-all duration-200 border-b border-border last:border-b-0">
-      <div onClick={() => onSelect(topic)} className="flex items-center cursor-pointer flex-grow w-full mb-3 sm:mb-0">
+      <div className="flex items-center flex-grow w-full mb-3 sm:mb-0">
         <div className={`status-icon ${statusInfo.bg}`}>
           {statusInfo.icon}
         </div>
@@ -26,12 +26,21 @@ const Topic = ({ topic, status, onSelect, onStartQuiz }) => {
           <div className="text-text-secondary text-xs xs:text-sm">{statusInfo.text}</div>
         </div>
       </div>
-      <button
-        onClick={(e) => { e.stopPropagation(); onStartQuiz(topic); }}
-        className="btn-primary btn-secondary text-sm py-2 px-4 w-full sm:w-auto"
-      >
-        Take Quiz
-      </button>
+      <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+        <button
+          onClick={() => onSelect(topic)}
+          className="btn-primary text-sm py-2 px-4 w-full sm:w-auto"
+        >
+          <BrainIcon />
+          Study
+        </button>
+        <button
+          onClick={() => onStartQuiz(topic)}
+          className="btn-primary btn-secondary text-sm py-2 px-4 w-full sm:w-auto"
+        >
+          Take Quiz
+        </button>
+      </div>
     </div>
   );
 };

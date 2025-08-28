@@ -6,7 +6,8 @@ module.exports = {
   theme: {
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
-      serif: ['Lora', 'serif'],
+      serif: ['"Patrick Hand"', 'cursive'],
+      chalk: ['"Patrick Hand"', 'cursive'],
     },
     extend: {
       screens: {

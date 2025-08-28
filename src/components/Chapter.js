@@ -31,7 +31,7 @@ const Chapter = ({ chapter, userProgress, onSelectTopic, onSelectEquation, onSta
           <ChevronDown />
         </div>
       </div>
-      <div className={`accordion-content ${isOpen ? 'open' : ''}`}>
+      <div className={`accordion-content custom-scrollbar ${isOpen ? 'open' : ''}`}>
         <div className="accordion-content-inner">
           <div className="tab-container">
             <button

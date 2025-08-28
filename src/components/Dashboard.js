@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import ProgressBar from './ui/ProgressBar';
-import { PhysicsIcon, ChemistryIcon, BiologyIcon } from './ui/Icons';
+import { PhysicsIcon, ChemistryIcon, BiologyIcon, SandboxIcon } from './ui/Icons';
 
-const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData }) => {
+const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData, onNavigate }) => {
   const subjectIcons = {
     phy: PhysicsIcon,
     chem: ChemistryIcon,
@@ -53,6 +53,26 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData }) => {
           </div>
           <ProgressBar progress={overallProgress} />
           <p className="text-text-tertiary text-sm mt-2">Keep going! You're doing great!</p>
+        </div>
+      </div>
+
+      <div className="mb-8">
+        <div className="card">
+          <div className="flex items-center">
+            <div className="p-3 rounded-xl mr-4 bg-gray-100">
+              <SandboxIcon />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-text-primary font-serif">Ask a doubt</h3>
+              <p className="text-text-secondary text-sm">Have a question? Ask our AI tutor anything!</p>
+            </div>
+          </div>
+          <button
+            onClick={() => onNavigate('sandbox')}
+            className="btn-primary w-full justify-center mt-4"
+          >
+            Start Chatting
+          </button>
         </div>
       </div>
 

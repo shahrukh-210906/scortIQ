@@ -4,12 +4,12 @@ import FloatingElements from './ui/FloatingElements';
 
 const LoginScreen = ({ onLogin }) => {
   const [name, setName] = useState('');
-  const [selectedClass, setSelectedClass] = useState('10');
-  const [language, setLanguage] = useState('Hinglish');
+  const [selectedClass, setSelectedClass] = useState('');
+  const [language, setLanguage] = useState('English');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (name.trim()) {
+    if (name.trim() && selectedClass) {
       onLogin({ name, class: selectedClass, language });
     }
   };
@@ -45,8 +45,10 @@ const LoginScreen = ({ onLogin }) => {
               id="class" 
               value={selectedClass} 
               onChange={e => setSelectedClass(e.target.value)} 
+              required
               className="w-full p-3 mt-1 text-text-primary bg-background-alt rounded-lg border-2 border-border focus:border-brand-primary focus:outline-none transition"
             >
+              <option value="" disabled>Select a class</option>
               <option value="9">Class 9</option>
               <option value="10">Class 10</option>
               <option value="11">Class 11</option>
@@ -61,13 +63,15 @@ const LoginScreen = ({ onLogin }) => {
               onChange={e => setLanguage(e.target.value)} 
               className="w-full p-3 mt-1 text-text-primary bg-background-alt rounded-lg border-2 border-border focus:border-brand-primary focus:outline-none transition"
             >
-              <option value="Hinglish">Hinglish</option>
               <option value="English">English</option>
               <option value="Hindi">Hindi</option>
               <option value="Telugu">Telugu</option>
               <option value="Punjabi">Punjabi</option>
               <option value="Gujarati">Gujarati</option>
             </select>
+            <p className="text-xs text-text-tertiary mt-2">
+              Note: The text for all languages will be in English characters (e.g., Hinglish).
+            </p>
           </div>
           <button type="submit" className="w-full btn-primary justify-center">
             Enter Classroom
