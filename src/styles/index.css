@@ -4,12 +4,13 @@
 
 body {
   background-color: #FDFCF9;
-  font-family: 'Patrick Hand', cursive;
-  font-size: 22px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px; /* A more standard base font size */
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Patrick Hand', cursive;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
 }
 
 .progress-bar {
@@ -46,33 +47,34 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-primary {
-  background-color: #4A694E;
+  background-image: linear-gradient(to top right, #4A694E, #6A9970);
   color: #FFFFFF;
   padding: 12px 24px;
   border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(74, 105, 78, 0.2);
+  border: none;
 }
 
 .btn-primary:hover {
-  background-color: #3E5842;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(74, 105, 78, 0.2);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 12px rgba(74, 105, 78, 0.3);
 }
 
 .btn-secondary {
-  background-color: #8B6F4E;
-  color: #FFFFFF;
+  background-image: linear-gradient(to top right, #8B6F4E, #a98d6a);
 }
 
 .btn-secondary:hover {
-  background-color: #7a6244;
+  background-image: linear-gradient(to top right, #8B6F4E, #a98d6a);
+  box-shadow: 0 6px 12px rgba(139, 111, 78, 0.3);
 }
 
 .accordion {

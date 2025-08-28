@@ -9,6 +9,12 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData, onNavi
     bio: BiologyIcon
   };
 
+  const subjectBorderColors = {
+    phy: 'border-brand-primary',
+    chem: 'border-brand-secondary',
+    bio: 'border-brand-success'
+  };
+
   const calculateSubjectProgress = (subject) => {
     const allTopicIds = subject.chapters.flatMap(ch => ch.topics.map(t => t.id));
     if (allTopicIds.length === 0) return 0;
@@ -57,13 +63,14 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData, onNavi
       </div>
 
       <div className="mb-8">
+        <h2 className="text-2xl sm:text-3xl font-bold font-serif text-text-primary mb-2">Free Chat</h2>
         <div className="card">
           <div className="flex items-center">
             <div className="p-3 rounded-xl mr-4 bg-gray-100">
               <SandboxIcon />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-text-primary font-serif">Ask a doubt</h3>
+              <h3 className="text-xl font-bold text-text-primary font-serif">AI Sandbox</h3>
               <p className="text-text-secondary text-sm">Have a question? Ask our AI tutor anything!</p>
             </div>
           </div>
@@ -82,7 +89,7 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData, onNavi
           const IconComponent = subjectIcons[subject.id];
 
           return (
-            <div key={subject.id} className="card">
+            <div key={subject.id} className={`card overflow-hidden ${subjectBorderColors[subject.id] || 'border-gray-200'} border-t-4`}>
               <div className="flex items-center mb-4">
                 <IconComponent />
                 <div>
