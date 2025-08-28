@@ -9,6 +9,9 @@ module.exports = {
       serif: ['Lora', 'serif'],
     },
     extend: {
+      screens: {
+        'xs': '480px',
+      },
       colors: {
         background: {
           page: '#FDFCF9',

@@ -28,8 +28,8 @@ const PerformanceTracker = ({ curriculumData, quizScores, onSelectTopic, onExit 
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold font-serif text-text-primary">Performance Analysis</h1>
+      <div className="flex flex-col xs:flex-row justify-between items-center mb-6">
+        <h1 className="text-2xl xs:text-3xl font-bold font-serif text-text-primary mb-4 xs:mb-0">Performance Analysis</h1>
         <button onClick={onExit} className="btn-primary">
           <BackIcon />
           Back to Dashboard
@@ -38,15 +38,15 @@ const PerformanceTracker = ({ curriculumData, quizScores, onSelectTopic, onExit 
 
       <div className="card mb-8">
         <h2 className="text-xl font-bold mb-4">Average Subject Scores</h2>
-        <div className="flex justify-around items-end h-64 border-b border-border pb-4">
+        <div className="flex flex-col xs:flex-row justify-around items-center xs:items-end h-auto xs:h-64 border-b border-border pb-4">
           {performanceData.subjectAverages.map(subject => (
-            <div key={subject.name} className="flex flex-col items-center w-1/4">
-              <div className="text-lg font-bold">{subject.average}%</div>
+            <div key={subject.name} className="flex xs:flex-col items-center w-full xs:w-1/4 mb-4 xs:mb-0">
+              <div className="text-lg font-bold w-1/4 xs:w-auto">{subject.average}%</div>
               <div 
-                className="w-16 bg-background-alt rounded-t-lg" 
-                style={{ height: `${subject.average * 2.4}px` }}
+                className="w-3/4 xs:w-16 h-8 xs:h-auto bg-background-alt rounded-lg xs:rounded-t-lg"
+                style={{ height: window.innerWidth < 480 ? 'auto' : `${subject.average * 2.4}px`, width: window.innerWidth < 480 ? `${subject.average}%` : '4rem' }}
               >
-                <div className="w-full bg-brand-primary rounded-t-lg" style={{ height: '100%' }}></div>
+                <div className="h-full xs:h-auto bg-brand-primary rounded-lg xs:rounded-t-lg" style={{ height: '100%' }}></div>
               </div>
               <p className="font-semibold mt-2">{subject.name}</p>
             </div>
@@ -62,13 +62,13 @@ const PerformanceTracker = ({ curriculumData, quizScores, onSelectTopic, onExit 
               <div 
                 key={topic.id} 
                 onClick={() => onSelectTopic(topic)} 
-                className="p-4 rounded-lg bg-red-50 border border-red-200 flex justify-between items-center cursor-pointer hover:bg-red-100"
+                className="p-3 xs:p-4 rounded-lg bg-red-50 border border-red-200 flex justify-between items-center cursor-pointer hover:bg-red-100"
               >
                 <div>
-                  <p className="font-semibold text-red-800">{topic.title}</p>
-                  <p className="text-sm text-red-600">Score: {quizScores[topic.id]}/10</p>
+                  <p className="font-semibold text-red-800 text-sm xs:text-base">{topic.title}</p>
+                  <p className="text-xs xs:text-sm text-red-600">Score: {quizScores[topic.id]}/10</p>
                 </div>
-                <button className="text-sm font-bold text-red-800">Review Topic →</button>
+                <button className="text-xs xs:text-sm font-bold text-red-800">Review Topic →</button>
               </div>
             ))}
           </div>

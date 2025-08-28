@@ -13,12 +13,12 @@ const SubjectView = ({ subject, userProgress, onSelectTopic, onSelectEquation, o
 
   return (
     <>
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col xs:flex-row justify-between items-center mb-6">
+        <div className="flex items-center gap-4 mb-4 xs:mb-0">
           <IconComponent />
           <div>
-            <h1 className="text-3xl font-bold font-serif text-text-primary">{subject.name}</h1>
-            <p className="text-text-secondary">Class {subject.class} NCERT Curriculum</p>
+            <h1 className="text-2xl xs:text-3xl font-bold font-serif text-text-primary">{subject.name}</h1>
+            <p className="text-sm xs:text-base text-text-secondary">Class {subject.class} NCERT Curriculum</p>
           </div>
         </div>
         <button onClick={onBack} className="btn-primary">

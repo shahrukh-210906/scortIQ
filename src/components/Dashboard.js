@@ -43,8 +43,8 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData }) => {
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold font-serif text-text-primary mb-2">Overall Progress Report</h1>
-        <p className="text-text-secondary mb-4">{completedChapters} of {totalChapters} chapters completed</p>
+        <h1 className="text-2xl xs:text-3xl font-bold font-serif text-text-primary mb-2">Overall Progress Report</h1>
+        <p className="text-sm xs:text-base text-text-secondary mb-4">{completedChapters} of {totalChapters} chapters completed</p>
 
         <div className="card mb-6">
           <div className="flex justify-between items-center mb-2">
@@ -56,7 +56,7 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {curriculumData.subjects.map(subject => {
           const progress = calculateSubjectProgress(subject);
           const IconComponent = subjectIcons[subject.id];

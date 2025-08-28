@@ -79,18 +79,18 @@ Your job is to teach the topic '${topic.title}' using a flexible, Socratic appro
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <div className="card">
-          <h1 className="text-2xl font-bold font-serif text-text-primary">{topic.title}</h1>
+      <div className="flex flex-col xs:flex-row justify-between items-center mb-4">
+        <div className="card w-full xs:w-auto mb-4 xs:mb-0">
+          <h1 className="text-xl xs:text-2xl font-bold font-serif text-text-primary">{topic.title}</h1>
         </div>
-        <button onClick={onExit} className="btn-primary">
+        <button onClick={onExit} className="btn-primary w-full xs:w-auto">
           <BackIcon />
           Back to Subject
         </button>
       </div>
 
-      <div className="card flex flex-col h-[70vh]">
-        <div className="flex-grow p-4 overflow-y-auto custom-scrollbar">
+      <div className="card flex flex-col h-[75vh]">
+        <div className="flex-grow p-2 xs:p-4 overflow-y-auto custom-scrollbar">
           <div className="space-y-4">
             {messages.map((msg, index) => (
               <div key={index} className={`flex items-end gap-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -99,8 +99,8 @@ Your job is to teach the topic '${topic.title}' using a flexible, Socratic appro
                     <BrainIcon className="w-5 h-5 text-white" />
                   </div>
                 )}
-                <div className={`max-w-lg px-4 py-3 rounded-xl ${msg.sender === 'user' ? 'bg-brand-primary text-white rounded-br-none' : 'bg-background-alt text-text-primary rounded-bl-none'}`}>
-                  <p className="whitespace-pre-wrap">{msg.text}</p>
+                <div className={`max-w-lg px-3 py-2 xs:px-4 xs:py-3 rounded-xl ${msg.sender === 'user' ? 'bg-brand-primary text-white rounded-br-none' : 'bg-background-alt text-text-primary rounded-bl-none'}`}>
+                  <p className="whitespace-pre-wrap text-sm xs:text-base">{msg.text}</p>
                 </div>
               </div>
             ))}
@@ -126,7 +126,7 @@ Your job is to teach the topic '${topic.title}' using a flexible, Socratic appro
             <div ref={chatEndRef} />
           </div>
         </div>
-        <form onSubmit={handleSendMessage} className="p-4 border-t border-border flex items-center gap-4">
+        <form onSubmit={handleSendMessage} className="p-4 border-t border-border flex items-center gap-2 xs:gap-4">
           <input
             type="text"
             value={userInput}

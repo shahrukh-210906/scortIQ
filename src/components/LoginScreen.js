@@ -17,15 +17,15 @@ const LoginScreen = ({ onLogin }) => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background-page relative overflow-hidden">
       <FloatingElements />
-      <div className="w-full max-w-md p-8 space-y-8 card z-10">
+      <div className="w-full max-w-md p-6 xs:p-8 space-y-6 xs:space-y-8 card z-10">
         <div className="text-center">
           <div className="flex justify-center">
             <div className="p-3 rounded-full bg-brand-primary/10">
               <Logo />
             </div>
           </div>
-          <h1 className="text-3xl font-bold font-serif text-text-primary mt-4">Welcome to ScortIQ</h1>
-          <p className="text-text-secondary mt-2">Your personal AI tutor for smarter learning.</p>
+          <h1 className="text-2xl xs:text-3xl font-bold font-serif text-text-primary mt-4">Welcome to ScortIQ</h1>
+          <p className="text-sm xs:text-base text-text-secondary mt-2">Your personal AI tutor for smarter learning.</p>
         </div>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
