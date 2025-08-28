@@ -93,7 +93,7 @@ function App() {
 
     switch (currentView) {
       case 'dashboard': 
-        return <Dashboard user={user} onSelectSubject={handleSelectSubject} userProgress={userProgress} curriculumData={curriculumData} />;
+        return <Dashboard user={user} onSelectSubject={handleSelectSubject} userProgress={userProgress} curriculumData={curriculumData} onNavigate={navigateTo} />;
 
       case 'subject': 
         if (!selectedSubject) { navigateTo('dashboard'); return null; }

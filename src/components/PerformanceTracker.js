@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { BackIcon } from './ui/Icons';
+import CircularProgressBar from './ui/CircularProgressBar'; // Import the new component
 
 const PerformanceTracker = ({ curriculumData, quizScores, onSelectTopic, onExit }) => {
   const performanceData = useMemo(() => {
@@ -37,18 +38,12 @@ const PerformanceTracker = ({ curriculumData, quizScores, onSelectTopic, onExit 
       </div>
 
       <div className="card mb-8">
-        <h2 className="text-xl font-bold mb-4">Average Subject Scores</h2>
-        <div className="flex flex-col xs:flex-row justify-around items-center xs:items-end h-auto xs:h-64 border-b border-border pb-4">
+        <h2 className="text-xl font-bold mb-4 text-center">Average Subject Scores</h2>
+        <div className="flex flex-col sm:flex-row justify-around items-center gap-8">
           {performanceData.subjectAverages.map(subject => (
-            <div key={subject.name} className="flex xs:flex-col items-center w-full xs:w-1/4 mb-4 xs:mb-0">
-              <div className="text-lg font-bold w-1/4 xs:w-auto">{subject.average}%</div>
-              <div 
-                className="w-3/4 xs:w-16 h-8 xs:h-auto bg-background-alt rounded-lg xs:rounded-t-lg"
-                style={{ height: window.innerWidth < 480 ? 'auto' : `${subject.average * 2.4}px`, width: window.innerWidth < 480 ? `${subject.average}%` : '4rem' }}
-              >
-                <div className="h-full xs:h-auto bg-brand-primary rounded-lg xs:rounded-t-lg" style={{ height: '100%' }}></div>
-              </div>
-              <p className="font-semibold mt-2">{subject.name}</p>
+            <div key={subject.name} className="flex flex-col items-center">
+              <CircularProgressBar progress={subject.average} />
+              <p className="font-semibold mt-4">{subject.name}</p>
             </div>
           ))}
         </div>
