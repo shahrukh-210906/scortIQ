@@ -18,14 +18,14 @@ const Chapter = ({ chapter, userProgress, onSelectTopic, onSelectEquation, onSta
     <div className="accordion">
       <div className="accordion-header" onClick={() => setIsOpen(!isOpen)}>
         <div className="flex-1">
-          <div className="flex flex-col xs:flex-row items-start xs:items-center gap-2 xs:gap-4 mb-2">
-            <h3 className="text-base xs:text-lg font-bold text-text-primary">{chapter.title}</h3>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 mb-2">
+            <h3 className="text-base sm:text-lg font-bold text-text-primary">{chapter.title}</h3>
             <span className="tag tag-complete text-xs">{Math.round(chapterProgress)}% Complete</span>
           </div>
           <ProgressBar progress={chapterProgress} />
         </div>
-        <div 
-          className="ml-4 transform transition-transform duration-300" 
+        <div
+          className="ml-4 transform transition-transform duration-300"
           style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
         >
           <ChevronDown />
@@ -72,7 +72,7 @@ const Chapter = ({ chapter, userProgress, onSelectTopic, onSelectEquation, onSta
                     <p className="font-semibold text-text-primary">{eq.title}</p>
                     <p className="text-text-secondary font-mono mt-1 text-sm xs:text-base">{eq.formula}</p>
                   </div>
-                  <button 
+                  <button
                     onClick={() => onSelectEquation(eq, chapter.title)}
                     className="btn-primary w-full xs:w-auto text-sm"
                   >

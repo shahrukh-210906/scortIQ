@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BackIcon, BrainIcon, SendIcon } from '../ui/Icons';
+import { BackIcon, SendIcon } from '../ui/Icons';
 import { callGeminiAPI } from '../../utils/aiService';
 import { sendActivityEmail } from '../../utils/emailService';
 
@@ -94,21 +94,13 @@ Your job is to teach the topic '${topic.title}' using a flexible, Socratic appro
           <div className="space-y-4">
             {messages.map((msg, index) => (
               <div key={index} className={`flex items-end gap-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {msg.sender === 'ai' && (
-                  <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center flex-shrink-0">
-                    <BrainIcon className="w-5 h-5 text-white" />
-                  </div>
-                )}
-                <div className={`max-w-lg px-3 py-2 xs:px-4 xs:py-3 rounded-xl ${msg.sender === 'user' ? 'bg-brand-primary text-white rounded-br-none' : 'bg-background-alt text-text-primary rounded-bl-none'}`}>
+                <div className={`max-w-lg px-3 py-2 sm:px-4 sm:py-3 rounded-xl ${msg.sender === 'user' ? 'bg-brand-primary text-white rounded-br-none' : 'bg-background-alt text-text-primary rounded-bl-none'}`}>
                   <p className="whitespace-pre-wrap text-sm xs:text-base">{msg.text}</p>
                 </div>
               </div>
             ))}
             {isLoading && (
               <div className="flex items-end gap-2 justify-start">
-                <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center flex-shrink-0">
-                  <BrainIcon className="w-5 h-5 text-white" />
-                </div>
                 <div className="max-w-lg px-4 py-3 rounded-xl bg-background-alt text-text-primary rounded-bl-none">
                   <div className="flex items-center space-x-2 dot-pulse">
                     <div className="w-2 h-2 bg-brand-primary rounded-full"></div>
@@ -126,7 +118,7 @@ Your job is to teach the topic '${topic.title}' using a flexible, Socratic appro
             <div ref={chatEndRef} />
           </div>
         </div>
-        <form onSubmit={handleSendMessage} className="p-4 border-t border-border flex items-center gap-2 xs:gap-4">
+        <form onSubmit={handleSendMessage} className="p-4 border-t border-border flex items-center gap-2 sm:gap-4">
           <input
             type="text"
             value={userInput}
@@ -135,9 +127,9 @@ Your job is to teach the topic '${topic.title}' using a flexible, Socratic appro
             className="w-full p-3 text-text-primary bg-background-alt rounded-lg border-2 border-border focus:border-brand-primary focus:outline-none transition"
             disabled={isLoading || topicUnderstood}
           />
-          <button 
-            type="submit" 
-            disabled={isLoading || !userInput.trim() || topicUnderstood} 
+          <button
+            type="submit"
+            disabled={isLoading || !userInput.trim() || topicUnderstood}
             className="p-3 bg-brand-primary text-white rounded-lg disabled:bg-blue-300 disabled:cursor-not-allowed hover:bg-brand-primary/90 transition"
           >
             <SendIcon />

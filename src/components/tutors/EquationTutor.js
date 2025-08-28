@@ -5,7 +5,6 @@ import { sendActivityEmail } from '../../utils/emailService';
 import OpenEndedInput from './inputs/OpenEndedInput';
 import MCQInput from './inputs/MCQInput';
 import TrueFalseInput from './inputs/TrueFalseInput';
-import FillBlankInput from './inputs/FillBlankInput';
 
 const EquationTutor = ({ equation, chapterTitle, user, onExit }) => {
   const [conversation, setConversation] = useState([]);
@@ -20,7 +19,7 @@ const EquationTutor = ({ equation, chapterTitle, user, onExit }) => {
   useEffect(scrollToBottom, [conversation]);
 
   useEffect(() => {
-    const initialUserMessage = { role: 'student', content: { answer: `Hello bhaiyya! Let's start with '${equation.title}'. Please begin.` } };
+    const initialUserMessage = { role: 'student', content: { answer: `Hello bhaiyya! Let's start with '${equation.title}'. Please ask your first question.` } };
     setConversation([initialUserMessage]);
     setIsLoading(true);
 
@@ -53,12 +52,12 @@ const EquationTutor = ({ equation, chapterTitle, user, onExit }) => {
 
   return (
     <div>
-      <div className="flex flex-col xs:flex-row justify-between items-center mb-4 xs:mb-6">
-        <div className="card mb-4 xs:mb-0">
-          <h1 className="text-xl xs:text-2xl font-bold font-serif text-text-primary">{equation.title}</h1>
-          <p className="text-sm xs:text-base text-text-secondary">From Chapter: <span className="font-semibold text-brand-primary">{chapterTitle}</span></p>
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6">
+        <div className="card mb-4 sm:mb-0">
+          <h1 className="text-xl sm:text-2xl font-bold font-serif text-text-primary">{equation.title}</h1>
+          <p className="text-sm sm:text-base text-text-secondary">From Chapter: <span className="font-semibold text-brand-primary">{chapterTitle}</span></p>
         </div>
-        <button onClick={onExit} className="btn-primary text-sm xs:text-base">
+        <button onClick={onExit} className="btn-primary text-sm sm:text-base">
           <BackIcon />
           Back to Subject
         </button>
@@ -79,11 +78,6 @@ const EquationTutor = ({ equation, chapterTitle, user, onExit }) => {
             <div className="space-y-4">
               {conversation.slice(1).map((msg, index) => (
                 <div key={index} className={`flex items-end gap-2 ${msg.role === 'student' ? 'justify-end' : 'justify-start'}`}>
-                  {msg.role === 'tutor' && (
-                    <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center flex-shrink-0">
-                      <BrainIcon className="w-5 h-5 text-white" />
-                    </div>
-                  )}
                   <div className={`max-w-lg px-3 py-2 xs:px-4 xs:py-3 rounded-xl ${msg.role === 'student' ? 'bg-brand-primary text-white rounded-br-none' : 'bg-background-alt text-text-primary rounded-bl-none'}`}>
                     {msg.role === 'student' ? (
                       <p className="text-sm xs:text-base">{msg.content.answer}</p>
@@ -106,9 +100,6 @@ const EquationTutor = ({ equation, chapterTitle, user, onExit }) => {
               ))}
               {isLoading && (
                 <div className="flex items-end gap-2 justify-start">
-                  <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center flex-shrink-0">
-                    <BrainIcon className="w-5 h-5 text-white" />
-                  </div>
                   <div className="max-w-lg px-4 py-3 rounded-xl bg-background-alt text-text-primary rounded-bl-none">
                     <div className="flex items-center space-x-2 dot-pulse">
                       <div className="w-2 h-2 bg-brand-primary rounded-full"></div>
@@ -131,14 +122,6 @@ const EquationTutor = ({ equation, chapterTitle, user, onExit }) => {
               )}
               {lastTutorMessage.question_type === 'true_false' && (
                 <TrueFalseInput question={lastTutorMessage} onSubmit={handleAnswerSubmit} isLoading={isLoading} />
-              )}
-              {lastTutorMessage.question_type === 'fill_in_the_blank' && (
-                <FillBlankInput 
-                  key={lastTutorMessage.question_text} 
-                  question={lastTutorMessage} 
-                  onSubmit={handleAnswerSubmit} 
-                  isLoading={isLoading} 
-                />
               )}
             </>
           )}

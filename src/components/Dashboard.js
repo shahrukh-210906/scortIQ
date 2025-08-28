@@ -43,12 +43,12 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData }) => {
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-2xl xs:text-3xl font-bold font-serif text-text-primary mb-2">Overall Progress Report</h1>
-        <p className="text-sm xs:text-base text-text-secondary mb-4">{completedChapters} of {totalChapters} chapters completed</p>
+        <h1 className="text-2xl sm:text-3xl font-bold font-serif text-text-primary mb-2">Overall Progress Report</h1>
+        <p className="text-sm sm:text-base text-text-secondary mb-4">{completedChapters} of {totalChapters} chapters completed</p>
 
         <div className="card mb-6">
-          <div className="flex justify-between items-center mb-2">
-            <span className="font-semibold text-text-primary">Total Progress</span>
+          <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center mb-2">
+            <span className="font-semibold text-text-primary mb-2 xs:mb-0">Total Progress</span>
             <span className="font-bold text-brand-primary text-lg">{overallProgress}% Complete</span>
           </div>
           <ProgressBar progress={overallProgress} />
@@ -79,8 +79,8 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData }) => {
                 <ProgressBar progress={progress} />
               </div>
 
-              <button 
-                onClick={() => onSelectSubject(subject)} 
+              <button
+                onClick={() => onSelectSubject(subject)}
                 className="btn-primary w-full justify-center"
               >
                 Continue Learning
