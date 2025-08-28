@@ -5,8 +5,8 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      sans: ['Nunito', 'sans-serif'],
-      serif: ['Nunito', 'sans-serif'],
+      sans: ['"Architects Daughter"', 'cursive'],
+      serif: ['"Architects Daughter"', 'cursive'],
     },
     extend: {
       screens: {
@@ -14,9 +14,9 @@ module.exports = {
       },
       colors: {
         background: {
-          page: '#FDFCF9',
-          card: '#FFFFFF',
-          alt: '#F7F5F2'
+          page: '#f7f5f2', // Textured paper background
+          card: '#ffffff',
+          alt: '#eaddc7'
         },
         text: {
           primary: '#343434',
@@ -34,9 +34,9 @@ module.exports = {
           danger: '#E53E3E',
         },
         subject: {
-          physics: '#EAEFE6',
-          chemistry: '#F5F0E9',
-          biology: '#E6EFEE',
+          physics: '#e0f2fe', // Light Blue
+          chemistry: '#ffedd5', // Light Orange
+          biology: '#dcfce7', // Light Green
         },
         border: {
           DEFAULT: '#EDEAE6',

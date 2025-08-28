@@ -3,21 +3,25 @@
 @tailwind utilities;
 
 body {
-  background-color: #FDFCF9;
-  font-family: 'Nunito', sans-serif;
-  font-size: 16px; /* A more standard base font size */
+  background-color: #f7f5f2;
+  background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+  font-family: 'Architects Daughter', cursive;
+  font-size: 20px;
+  color: #343434;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Architects Daughter', cursive;
   font-weight: 700;
+  color: #343434;
 }
 
 .progress-bar {
-  height: 8px;
-  background-color: #F7F5F2;
-  border-radius: 4px;
+  height: 10px;
+  background-color: #eaddc7;
+  border-radius: 5px;
   overflow: hidden;
+  border: 1px solid #dcdcdc;
 }
 
 .progress-fill {
@@ -31,27 +35,19 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-flex;
   align-items: center;
   padding: 4px 12px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   border-radius: 9999px;
-}
-
-.tag-complete { 
-  background-color: #EAEFE6; 
-  color: #4A694E; 
-}
-
-.tag-weak { 
-  background-color: #FED7D7; 
-  color: #C53030; 
+  background-color: #eaddc7;
+  color: #8B6F4E;
 }
 
 .btn-primary {
-  background-image: linear-gradient(to top right, #4A694E, #6A9970);
+  background-color: #4A694E;
   color: #FFFFFF;
-  padding: 12px 24px;
+  padding: 10px 20px;
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -59,95 +55,57 @@ h1, h2, h3, h4, h5, h6 {
   gap: 8px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 2px 4px rgba(74, 105, 78, 0.2);
-  border: none;
+  border: 2px solid #3E5842;
+  box-shadow: 2px 2px 0px #3E5842;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 12px rgba(74, 105, 78, 0.3);
+  transform: translate(2px, 2px);
+  box-shadow: none;
 }
 
 .btn-secondary {
-  background-image: linear-gradient(to top right, #8B6F4E, #a98d6a);
+  background-color: #8B6F4E;
+  border-color: #7a6244;
+  box-shadow: 2px 2px 0px #7a6244;
 }
 
 .btn-secondary:hover {
-  background-image: linear-gradient(to top right, #8B6F4E, #a98d6a);
-  box-shadow: 0 6px 12px rgba(139, 111, 78, 0.3);
-}
-
-.accordion {
-  border: 1px solid #EDEAE6;
-  border-radius: 16px;
-  background: #FFFFFF;
-  padding: 0;
-  margin-bottom: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-  transition: box-shadow 0.2s ease-in-out;
-}
-
-.accordion:hover {
-   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.accordion-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  cursor: pointer;
-}
-
-.accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease-out;
-}
-
-.accordion-content.open {
-  max-height: 70vh;
-  overflow-y: auto;
-}
-
-.accordion-content-inner {
-  padding: 0 20px 20px;
-  border-top: 1px solid #EDEAE6;
-  margin-top: 12px;
-  padding-top: 20px;
-}
-
-.status-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.status-complete { 
-  background-color: #C6F6D5; 
-}
-
-.status-pending { 
-  background-color: #FEEBC8; 
-}
-
-.status-weak { 
-  background-color: #FED7D7; 
+  background-color: #7a6244;
 }
 
 .card {
-  background: #FFFFFF;
+  background: #ffffff;
   padding: 24px;
-  border-radius: 16px;
-  border: 1px solid #EDEAE6;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  border: 2px solid #343434;
+  box-shadow: 4px 4px 0px #343434;
+  position: relative;
+  color: #343434;
+}
+
+.card::before, .card::after {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 25px;
+  background-color: rgba(0, 0, 0, 0.05);
+  transform: rotate(-45deg);
+}
+
+.card::before {
+  top: -10px;
+  left: -20px;
+}
+
+.card::after {
+  bottom: -10px;
+  right: -20px;
+  transform: rotate(135deg);
 }
 
 .tab-container {
-  background-color: #F7F5F2;
+  background-color: #f7f5f2;
   border-radius: 10px;
   padding: 4px;
   display: inline-flex;
@@ -167,6 +125,13 @@ h1, h2, h3, h4, h5, h6 {
   color: #343434;
   background-color: #FFFFFF;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.tab-content-container {
+  background-color: #f7f5f2;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #eaddc7;
 }
 
 .custom-scrollbar::-webkit-scrollbar { 

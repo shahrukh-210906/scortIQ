@@ -11,6 +11,7 @@ import Navigation from './components/Navigation';
 import FloatingElements from './components/ui/FloatingElements';
 import { ncertCurriculum } from './data/curriculum';
 import { sendWelcomeEmail } from './utils/emailService';
+import { SvgDefs } from './components/ui/Icons'; // Import the new SvgDefs component
 
 function App() {
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('socratic_user')) || null);
@@ -131,6 +132,7 @@ function App() {
 
   return (
     <div className="min-h-screen text-text-primary bg-background-page relative overflow-hidden">
+      <SvgDefs />
       <FloatingElements />
       <Navigation user={user} onLogout={handleLogout} onNavigate={navigateTo} />
       <main className="max-w-6xl mx-auto p-4 sm:p-6 md:p-8">
