@@ -1,5 +1,6 @@
-// IMPORTANT: Replace with your actual Gemini API key
-const API_KEY = "AIzaSyCDFrs_qmXK8ofkEi6Rmdcp-mBC71nYQq0";
+// IMPORTANT: The Gemini API key is now loaded from environment variables for security.
+// Ensure you have a .env file with the key defined as REACT_APP_GEMINI_API_KEY.
+const API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
 
 export const callGeminiAPI = async (prompt, history = []) => {
