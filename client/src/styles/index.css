@@ -1,0 +1,70 @@
+/* src/styles/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-background-page font-sans text-text-primary antialiased;
+}
+
+.card {
+  @apply bg-background-card p-6 rounded-xl border border-border shadow-sm;
+}
+
+.btn-primary {
+  @apply bg-brand-primary text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 ease-in-out;
+}
+
+.btn-primary:hover {
+  @apply bg-opacity-90;
+}
+
+.btn-primary:disabled {
+  @apply bg-brand-primary/50 cursor-not-allowed;
+}
+
+.btn-secondary {
+    @apply bg-background-alt text-text-primary border border-border;
+}
+
+.btn-secondary:hover {
+    @apply bg-gray-200;
+}
+
+
+/* --- Animation & Utility classes --- */
+.fade-enter { 
+  opacity: 0; 
+  transform: translateY(10px); 
+}
+
+.fade-enter-active { 
+  opacity: 1; 
+  transform: translateY(0); 
+  transition: opacity 300ms ease-in, transform 300ms ease-in; 
+}
+
+.dot-pulse > div { 
+  animation: dot-pulse-anim 1s infinite linear; 
+}
+
+@keyframes dot-pulse-anim {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.custom-scrollbar::-webkit-scrollbar { 
+  width: 6px; 
+}
+
+.custom-scrollbar::-webkit-scrollbar-track { 
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb { 
+  @apply bg-gray-300 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { 
+  @apply bg-gray-400;
+}
