@@ -38,10 +38,10 @@ const FloatingAtom = () => (
 
 const FloatingElements = () => (
   <>
-    <FloatingBook />
+    {/* <FloatingBook />
     <FloatingPencil />
     <FloatingProtractor />
-    <FloatingAtom />
+    <FloatingAtom /> */}
   </>
 );
 
