@@ -35,7 +35,7 @@ function App() {
       const storedToken = localStorage.getItem('token');
       if (storedToken) {
         try {
-          const res = await fetch('/api/auth/user', {
+          const res = await fetch('http://localhost:5000/api/auth/user', {
             method: 'GET',
             headers: { 'x-auth-token': storedToken },
           });
@@ -74,7 +74,7 @@ function App() {
     localStorage.setItem('token', data.token);
     setToken(data.token);
     try {
-      const res = await fetch('/api/auth/user', {
+      const res = await fetch('http://localhost:5000/api/auth/user', {
         method: 'GET',
         headers: { 'x-auth-token': data.token },
       });
