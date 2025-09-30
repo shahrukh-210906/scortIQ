@@ -11,6 +11,7 @@ import SandboxTutor from './components/tutors/SandboxTutor';
 import TopicQuiz from './components/TopicQuiz';
 import PerformanceTracker from './components/PerformanceTracker';
 import Navigation from './components/Navigation';
+import ClassroomDashboard from './components/ClassroomDashboard';
 import { ncertCurriculum } from './data/curriculum';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
   const [selectedEquation, setSelectedEquation] = useState(null);
   const [selectedTopicForQuiz, setSelectedTopicForQuiz] = useState(null);
   const [currentChapterTitle, setCurrentChapterTitle] = useState('');
+  const [selectedClassroom, setSelectedClassroom] = useState(null);
 
   const curriculumData = useMemo(() => {
     return user?.class ? ncertCurriculum[user.class] : { subjects: [] };
@@ -100,6 +102,11 @@ function App() {
   const handleProfileComplete = (updatedUser) => {
     setUser(updatedUser);
   };
+  
+  const handleSelectClassroom = (classroom) => {
+    setSelectedClassroom(classroom);
+    setCurrentView('classroom');
+  };
 
   const handleSelectSubject = (subject) => {
     setSelectedSubject(subject);
@@ -141,24 +148,42 @@ function App() {
     setSelectedTopic(null);
     setSelectedEquation(null);
     setSelectedTopicForQuiz(null);
+    setSelectedClassroom(null); // Clear classroom on general navigation
     setCurrentView(view);
   };
 
-
   const renderContent = () => {
-    // If user is a teacher, show the teacher dashboard
+    // If a classroom is selected, show its dedicated dashboard
+    if (currentView === 'classroom' && selectedClassroom) {
+      return (
+        <ClassroomDashboard
+          user={user}
+          token={token}
+          classroom={selectedClassroom}
+          onBack={() => navigateTo('dashboard')}
+        />
+      );
+    }
+    
     if (user && user.role === 'teacher') {
-        return <TeacherDashboard user={user} token={token} />;
+      return <TeacherDashboard user={user} token={token} onSelectClassroom={handleSelectClassroom} />;
     }
       
-    // Existing student content rendering logic
     if (selectedTopicForQuiz) {
       return <TopicQuiz topic={selectedTopicForQuiz} user={user} onQuizComplete={handleQuizComplete} />;
     }
 
     switch (currentView) {
       case 'dashboard':
-        return <Dashboard user={user} onSelectSubject={handleSelectSubject} userProgress={userProgress} curriculumData={curriculumData} onNavigate={navigateTo} />;
+        return <Dashboard 
+                  user={user} 
+                  token={token} 
+                  onSelectSubject={handleSelectSubject} 
+                  userProgress={userProgress} 
+                  curriculumData={curriculumData} 
+                  onNavigate={navigateTo} 
+                  onSelectClassroom={handleSelectClassroom} 
+               />;
       case 'subject':
         if (!selectedSubject) { navigateTo('dashboard'); return null; }
         return (

@@ -66,9 +66,7 @@ const TeacherDashboard = ({ user, token, onSelectClassroom }) => {
                 </button>
               </div>
             )) : (
-              <div className="card">
-                <p className="text-text-secondary">You haven't created any classrooms yet. Use the form to create your first one.</p>
-              </div>
+              <p className="text-text-secondary">You haven't created any classrooms yet.</p>
             )}
           </div>
         </div>

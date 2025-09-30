@@ -43,9 +43,50 @@ const ClassroomSchema = new mongoose.Schema({
   assignments: [
       {
           title: String,
+          description: String,
           dueDate: Date,
-          date: { type: Date, default: Date.now }
+          date: { type: Date, default: Date.now },
+          submissions: [
+            {
+              student: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+              content: String,
+              status: { type: String, enum: ['Pending', 'Submitted', 'Graded'], default: 'Pending' },
+              grade: Number,
+              feedback: String,
+              submittedDate: { type: Date }
+            }
+          ]
       }
+  ],
+  quizzes: [
+    {
+      title: String,
+      description: String,
+      topic: String,
+      questions: [
+        {
+          question: String,
+          options: [String],
+          correctAnswer: String
+        }
+      ],
+      scores: [
+        {
+          student: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+          score: Number,
+          date: { type: Date, default: Date.now }
+        }
+      ]
+    }
+  ],
+  leaderboard: [
+    {
+      student: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+      },
+      score: { type: Number, default: 0 }
+    }
   ],
   date: {
     type: Date,

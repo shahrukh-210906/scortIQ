@@ -1,9 +1,9 @@
 // src/components/Dashboard.js
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProgressBar from './ui/ProgressBar';
 import { PhysicsIcon, ChemistryIcon, BiologyIcon, SandboxIcon } from './ui/Icons';
 
-const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData, onNavigate }) => {
+const Dashboard = ({ user, token, onSelectSubject, userProgress, curriculumData, onNavigate, onSelectClassroom }) => {
   const [joinCode, setJoinCode] = useState('');
   const [joinedClasses, setJoinedClasses] = useState([]);
   const [joinError, setJoinError] = useState('');
@@ -16,11 +16,9 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData, onNavi
 
   useEffect(() => {
     const fetchJoinedClasses = async () => {
-        const token = localStorage.getItem('token');
         if (!token) return;
-
         try {
-            const res = await fetch('http://localhost:5000/api/classrooms/student', {
+            const res = await fetch('http://localhost:5000/api/classrooms', {
                 headers: { 'x-auth-token': token },
             });
             if (res.ok) {
@@ -32,12 +30,11 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData, onNavi
         }
     };
     fetchJoinedClasses();
-  }, [user]);
+  }, [user, token]);
 
   const handleJoinClass = async (e) => {
       e.preventDefault();
       setJoinError('');
-      const token = localStorage.getItem('token');
       try {
           const res = await fetch('http://localhost:5000/api/classrooms/join', {
               method: 'POST',
@@ -75,7 +72,6 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData, onNavi
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        {/* Main Content Area */}
         <div className="lg:col-span-2 space-y-6">
             <h2 className="text-xl font-bold text-text-primary">NCERT Curriculum</h2>
              {curriculumData.subjects.map(subject => {
@@ -97,16 +93,15 @@ const Dashboard = ({ user, onSelectSubject, userProgress, curriculumData, onNavi
              })}
         </div>
         
-        {/* Sidebar Area */}
         <div className="space-y-6">
             <div className="card">
                 <h3 className="text-lg font-bold text-text-primary mb-3">My Classrooms</h3>
                  {joinedClasses.length > 0 ? (
                     <div className="space-y-2 mb-4">
                         {joinedClasses.map(cls => (
-                            <div key={cls._id} className="p-3 bg-background-alt rounded-lg">
+                            <div key={cls._id} onClick={() => onSelectClassroom(cls)} className="p-3 bg-background-alt rounded-lg cursor-pointer hover:bg-gray-200">
                                 <p className="font-semibold text-sm">{cls.name}</p>
-                                <p className="text-xs text-text-secondary">{cls.subject}</p>
+                                <p className="text-xs text-text-secondary">{cls.subject} - Taught by {cls.teacher.name}</p>
                             </div>
                         ))}
                     </div>
