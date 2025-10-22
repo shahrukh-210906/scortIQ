@@ -11,7 +11,7 @@ import Navigation from './components/Navigation';
 import FloatingElements from './components/ui/FloatingElements';
 import { ncertCurriculum } from './data/curriculum';
 import { sendWelcomeEmail } from './utils/emailService';
-import { SvgDefs } from './components/ui/Icons'; // Import the new SvgDefs component
+// Removed: import { SvgDefs } from './components/ui/Icons';
 
 function App() {
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('socratic_user')) || null);
@@ -32,9 +32,9 @@ function App() {
   useEffect(() => { localStorage.setItem('socratic_progress', JSON.stringify(userProgress)); }, [userProgress]);
   useEffect(() => { localStorage.setItem('socratic_quiz_scores', JSON.stringify(quizScores)); }, [quizScores]);
 
-  const handleLogin = (userData) => { 
-    setUser(userData); 
-    setCurrentView('dashboard'); 
+  const handleLogin = (userData) => {
+    setUser(userData);
+    setCurrentView('dashboard');
     sendWelcomeEmail(userData.name, userData.class);
   };
 
@@ -44,17 +44,17 @@ function App() {
     setCurrentView('login');
   };
 
-  const handleSelectSubject = (subject) => { 
-    setSelectedSubject(subject); 
-    setCurrentView('subject'); 
+  const handleSelectSubject = (subject) => {
+    setSelectedSubject(subject);
+    setCurrentView('subject');
   };
 
-  const handleSelectTopic = (topic) => { 
+  const handleSelectTopic = (topic) => {
     if (!userProgress[topic.id]) {
       setUserProgress(prev => ({ ...prev, [topic.id]: { status: 'in_progress' } }));
     }
-    setSelectedTopic(topic); 
-    setCurrentView('topic'); 
+    setSelectedTopic(topic);
+    setCurrentView('topic');
   };
 
   const handleSelectEquation = (equation, chapterTitle) => {
@@ -79,12 +79,12 @@ function App() {
     setSelectedTopicForQuiz(null);
   };
 
-  const navigateTo = (view) => { 
-    setSelectedSubject(null); 
-    setSelectedTopic(null); 
+  const navigateTo = (view) => {
+    setSelectedSubject(null);
+    setSelectedTopic(null);
     setSelectedEquation(null);
     setSelectedTopicForQuiz(null);
-    setCurrentView(view); 
+    setCurrentView(view);
   };
 
   const renderContent = () => {
@@ -93,13 +93,13 @@ function App() {
     }
 
     switch (currentView) {
-      case 'dashboard': 
+      case 'dashboard':
         return <Dashboard user={user} onSelectSubject={handleSelectSubject} userProgress={userProgress} curriculumData={curriculumData} onNavigate={navigateTo} />;
 
-      case 'subject': 
+      case 'subject':
         if (!selectedSubject) { navigateTo('dashboard'); return null; }
         return (
-          <SubjectView 
+          <SubjectView
             subject={selectedSubject}
             userProgress={userProgress}
             onSelectTopic={handleSelectTopic}
@@ -109,7 +109,7 @@ function App() {
           />
         );
 
-      case 'topic': 
+      case 'topic':
         if (!selectedTopic) { navigateTo('subject'); return null; }
         return <ChatTutor topic={selectedTopic} user={user} onExit={() => setCurrentView('subject')} updateTopicStatus={updateTopicStatus} />;
 
@@ -123,7 +123,7 @@ function App() {
       case 'performance':
         return <PerformanceTracker curriculumData={curriculumData} quizScores={quizScores} onSelectTopic={handleSelectTopic} onExit={() => navigateTo('dashboard')} />;
 
-      default: 
+      default:
         return <LoginScreen onLogin={handleLogin} />;
     }
   };
@@ -132,11 +132,11 @@ function App() {
 
   return (
     <div className="min-h-screen text-text-primary bg-background-page relative overflow-hidden">
-      <SvgDefs />
+      {/* Removed: <SvgDefs /> */}
       <FloatingElements />
       <Navigation user={user} onLogout={handleLogout} onNavigate={navigateTo} />
       <main className="max-w-6xl mx-auto p-4 sm:p-6 md:p-8">
-        <div key={currentView} className="fade-enter fade-enter-active"> 
+        <div key={currentView} className="fade-enter fade-enter-active">
           {renderContent()}
         </div>
       </main>
