@@ -1,186 +1,260 @@
+/* src/styles/index.css */
+
+/* Import Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: #f7f5f2;
-  background-image: url('https://www.transparenttextures.com/patterns/paper.png');
-  font-family: 'Architects Daughter', cursive;
-  font-size: 20px;
-  color: #343434;
+/* Apply base styles using @layer */
+@layer base {
+  body {
+    background-color: #f7f5f2;
+    background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+    /* --- FONT CHANGE --- */
+    font-family: sans-serif; /* Use system default sans-serif */
+    /* font-family: 'Architects Daughter', cursive; */ /* Removed this line */
+    font-size: 20px; /* You might want to adjust this for a standard font, e.g., 16px */
+    color: #343434;
+    @apply text-base; /* Apply Tailwind's base font size if preferred over 20px */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    /* --- FONT CHANGE --- */
+    font-family: sans-serif; /* Use system default sans-serif */
+    /* font-family: 'Architects Daughter', cursive; */ /* Removed this line */
+    font-weight: 700;
+    color: #343434;
+    @apply mb-4; /* Add some default margin */
+  }
+
+  /* Add basic styling for HTML elements used in modal content */
+  p { @apply mb-3 leading-relaxed; }
+  strong { @apply font-bold text-brand-secondary; } /* Example */
+  hr { @apply my-4 border-t border-border; } /* Example */
+  ul, ol { @apply ml-5 mb-3; }
+  li { @apply mb-1; }
+  ul li { @apply list-disc; }
+  ol li { @apply list-decimal; }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Architects Daughter', cursive;
-  font-weight: 700;
-  color: #343434;
+/* Define custom components using @layer */
+@layer components {
+  .progress-bar {
+    height: 10px;
+    background-color: #eaddc7; /* Consider using Tailwind color like bg-yellow-200 */
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #dcdcdc; /* Consider using Tailwind color like border-gray-300 */
+  }
+
+  .progress-fill {
+    height: 100%;
+    background-color: #4A694E; /* Consider using bg-brand-primary */
+    border-radius: 4px;
+    transition: width 0.5s ease-in-out;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 9999px;
+    background-color: #eaddc7; /* Consider bg-yellow-200 */
+    color: #8B6F4E; /* Consider text-brand-secondary */
+    @apply text-sm px-3 py-1 rounded-full; /* Equivalent Tailwind */
+  }
+
+  .btn-primary {
+    background-color: #4A694E;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    display: inline-flex; /* Use inline-flex for button */
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border: 2px solid #3E5842; /* Darker shade of primary */
+    box-shadow: 2px 2px 0px #3E5842;
+    /* Tailwind equivalent: */
+    /* @apply inline-flex items-center justify-center px-5 py-2.5 text-lg font-bold text-white bg-brand-primary border-2 border-[#3E5842] rounded-lg shadow-[2px_2px_0px_#3E5842] gap-2 cursor-pointer transition-all duration-200 ease-in-out; */
+  }
+
+  .btn-primary:hover {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+    background-color: #3E5842; /* Darken on hover */
+     /* Tailwind equivalent: */
+    /* @apply translate-x-[2px] translate-y-[2px] shadow-none bg-[#3E5842]; */
+  }
+
+   .btn-primary:active {
+      transform: translate(2px, 2px); /* Keep same position as hover */
+      box-shadow: none;
+       /* Tailwind equivalent: */
+      /* @apply translate-x-[2px] translate-y-[2px] shadow-none; */
+   }
+
+   .btn-primary:disabled {
+     background-color: #a0a0a0; /* Gray out */
+     border-color: #6b6b6b;
+     box-shadow: 2px 2px 0px #6b6b6b;
+     color: #e0e0e0;
+     cursor: not-allowed;
+     transform: none; /* Disable hover transform */
+     /* Tailwind equivalent: */
+     /* @apply bg-gray-400 border-gray-600 shadow-gray-600 text-gray-200 cursor-not-allowed transform-none; */
+   }
+
+  /* Note: .btn-secondary definitions might conflict/override Tailwind if not done carefully */
+  .btn-secondary {
+    background-color: #8B6F4E;
+    color: #FFFFFF; /* Added color */
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    display: inline-flex; /* Use inline-flex for button */
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border: 2px solid #7a6244;
+    box-shadow: 2px 2px 0px #7a6244;
+     /* Tailwind equivalent: */
+    /* @apply inline-flex items-center justify-center px-5 py-2.5 text-lg font-bold text-white bg-brand-secondary border-2 border-[#7a6244] rounded-lg shadow-[2px_2px_0px_#7a6244] gap-2 cursor-pointer transition-all duration-200 ease-in-out; */
+  }
+
+  .btn-secondary:hover {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+    background-color: #7a6244; /* Darken on hover */
+     /* Tailwind equivalent: */
+    /* @apply translate-x-[2px] translate-y-[2px] shadow-none bg-[#7a6244]; */
+  }
+  .btn-secondary:active {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+       /* Tailwind equivalent: */
+      /* @apply translate-x-[2px] translate-y-[2px] shadow-none; */
+   }
+   .btn-secondary:disabled {
+     background-color: #a0a0a0; /* Gray out */
+     border-color: #6b6b6b;
+     box-shadow: 2px 2px 0px #6b6b6b;
+     color: #e0e0e0;
+     cursor: not-allowed;
+     transform: none; /* Disable hover transform */
+     /* Tailwind equivalent: */
+     /* @apply bg-gray-400 border-gray-600 shadow-gray-600 text-gray-200 cursor-not-allowed transform-none; */
+   }
+
+
+  .card {
+    background: #ffffff;
+    padding: 24px; /* Default Tailwind card has p-6 */
+    border-radius: 8px; /* Default Tailwind card has rounded-lg */
+    border: 2px solid #343434; /* Use text-primary */
+    box-shadow: 4px 4px 0px #343434; /* Use shadow-card from config */
+    position: relative;
+    color: #343434; /* Use text-primary */
+    /* Tailwind equivalent (using theme values): */
+    /* @apply bg-background-primary p-6 rounded-lg border-2 border-text-primary shadow-card relative text-text-primary; */
+  }
+
+  /* Decorative elements (pseudo-elements) - Keep as plain CSS */
+  .card::before, .card::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 25px;
+    background-color: rgba(0, 0, 0, 0.05);
+    transform: rotate(-45deg);
+    z-index: -1; /* Place behind card */
+  }
+
+  .card::before {
+    top: -10px;
+    left: -20px;
+  }
+
+  .card::after {
+    bottom: -10px;
+    right: -20px;
+    transform: rotate(135deg);
+  }
+
+  .tab-container {
+    background-color: #f7f5f2; /* Use bg-background-page */
+    border-radius: 10px;
+    padding: 4px;
+    display: inline-flex;
+    margin-bottom: 16px; /* Use mb-4 */
+    /* Tailwind equivalent: */
+    /* @apply inline-flex p-1 bg-background-page rounded-lg mb-4; */
+  }
+
+  .tab-item {
+    padding: 8px 16px; /* Use px-4 py-2 */
+    cursor: pointer;
+    border-radius: 8px; /* Use rounded-md */
+    font-weight: 600; /* Use font-semibold */
+    color: #6B6B6B; /* Use text-text-secondary */
+    transition: all 0.2s ease-in-out;
+    /* Tailwind equivalent: */
+    /* @apply px-4 py-2 rounded-md font-semibold text-text-secondary cursor-pointer transition-all duration-200 ease-in-out; */
+  }
+
+  .tab-item.active {
+    color: #343434; /* Use text-text-primary */
+    background-color: #FFFFFF; /* Use bg-background-primary */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Use shadow-sm */
+    /* Tailwind equivalent: */
+    /* @apply bg-background-primary text-text-primary shadow-sm; */
+  }
+
+  /* This might conflict with card style - maybe remove if not needed */
+  .tab-content-container {
+    background-color: #f7f5f2;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #eaddc7;
+    /* Tailwind equivalent: */
+    /* @apply bg-background-page p-4 rounded-lg border border-yellow-200; */
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: #F7F5F2; border-radius: 10px; } /* Use bg-background-page */
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; } /* Use bg-border */
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #CBD5E0; } /* Use bg-gray-400 */
+
+  /* Fade animation classes (for React Transition Group or similar) */
+  .fade-enter { opacity: 0; transform: translateY(10px); }
+  .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 300ms ease-in, transform 300ms ease-in; }
+  /* Add fade-exit, fade-exit-active if needed */
+
+  /* Dot Pulse Animation (applied via Tailwind) */
+   .dot-pulse > div { animation: dot-pulse-anim 1s infinite linear; }
+   @keyframes dot-pulse-anim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+  /* Floating Item Animation (keep as plain CSS) */
+  .floating-item { position: absolute; animation: float 15s ease-in-out infinite; opacity: 0.1; pointer-events: none; z-index: -1; }
+  @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-25px) rotate(8deg); } 100% { transform: translateY(0px) rotate(0deg); } }
 }
 
-.progress-bar {
-  height: 10px;
-  background-color: #eaddc7;
-  border-radius: 5px;
-  overflow: hidden;
-  border: 1px solid #dcdcdc;
-}
-
-.progress-fill {
-  height: 100%;
-  background-color: #4A694E;
-  border-radius: 4px;
-  transition: width 0.5s ease-in-out;
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  font-size: 14px;
-  font-weight: 700;
-  border-radius: 9999px;
-  background-color: #eaddc7;
-  color: #8B6F4E;
-}
-
-.btn-primary {
-  background-color: #4A694E;
-  color: #FFFFFF;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  border: 2px solid #3E5842;
-  box-shadow: 2px 2px 0px #3E5842;
-}
-
-.btn-primary:hover {
-  transform: translate(2px, 2px);
-  box-shadow: none;
-}
-
-.btn-secondary {
-  background-color: #8B6F4E;
-  border-color: #7a6244;
-  box-shadow: 2px 2px 0px #7a6244;
-}
-
-.btn-secondary:hover {
-  background-color: #7a6244;
-}
-
-.card {
-  background: #ffffff;
-  padding: 24px;
-  border-radius: 8px;
-  border: 2px solid #343434;
-  box-shadow: 4px 4px 0px #343434;
-  position: relative;
-  color: #343434;
-}
-
-.card::before, .card::after {
-  content: '';
-  position: absolute;
-  width: 50px;
-  height: 25px;
-  background-color: rgba(0, 0, 0, 0.05);
-  transform: rotate(-45deg);
-}
-
-.card::before {
-  top: -10px;
-  left: -20px;
-}
-
-.card::after {
-  bottom: -10px;
-  right: -20px;
-  transform: rotate(135deg);
-}
-
-.tab-container {
-  background-color: #f7f5f2;
-  border-radius: 10px;
-  padding: 4px;
-  display: inline-flex;
-  margin-bottom: 16px;
-}
-
-.tab-item {
-  padding: 8px 16px;
-  cursor: pointer;
-  border-radius: 8px;
-  font-weight: 600;
-  color: #6B6B6B;
-  transition: all 0.2s ease-in-out;
-}
-
-.tab-item.active {
-  color: #343434;
-  background-color: #FFFFFF;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.tab-content-container {
-  background-color: #f7f5f2;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #eaddc7;
-}
-
-.custom-scrollbar::-webkit-scrollbar { 
-  width: 6px; 
-}
-
-.custom-scrollbar::-webkit-scrollbar-track { 
-  background: #F7F5F2; 
-  border-radius: 10px; 
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb { 
-  background: #E2E8F0; 
-  border-radius: 10px; 
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { 
-  background: #CBD5E0; 
-}
-
-.fade-enter { 
-  opacity: 0; 
-  transform: translateY(10px); 
-}
-
-.fade-enter-active { 
-  opacity: 1; 
-  transform: translateY(0); 
-  transition: opacity 300ms ease-in, transform 300ms ease-in; 
-}
-
-.dot-pulse > div { 
-  animation: dot-pulse-anim 1s infinite linear; 
-}
-
-@keyframes dot-pulse-anim {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-}
-
-.floating-item {
-  position: absolute;
-  animation: float 15s ease-in-out infinite;
-  opacity: 0.1;
-  pointer-events: none;
-}
-
-@keyframes float {
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-25px) rotate(8deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
-}
+/* Add shake animation (ensure it's defined only once - here or in tailwind.config.js) */
+@keyframes shake {
+   0%, 100% { transform: translateX(0); }
+   10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+   20%, 40%, 60%, 80% { transform: translateX(5px); }
+ }
+ .animate-shake {
+   animation: shake 0.5s ease-in-out;
+ }
