@@ -86,6 +86,12 @@ test('student can study, submit a quiz, reload progress and rename their profile
   await expect(lessonProgress).toHaveAttribute('value', '3');
   await page.reload();
   await expect(lessonProgress).toHaveAttribute('value', '3');
+  await page.getByText('Report an issue with this lesson', { exact: true }).click();
+  await page
+    .getByLabel('Tell us what you noticed')
+    .fill('Please explain the example more clearly.');
+  await page.getByRole('button', { name: 'Send report', exact: true }).click();
+  await expect(page.getByRole('status')).toContainText('saved for review');
   await page.getByText('Learning sources (1)', { exact: true }).click();
   await expect(
     page.getByText('pilot-1 · Pilot draft · review pending', { exact: true }),

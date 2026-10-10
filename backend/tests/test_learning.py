@@ -10,7 +10,7 @@ os.environ["APP_ENV"] = "test"
 from fastapi.testclient import TestClient
 
 from backend.app import main
-from backend.app.database import AuthChallenge, Base, SessionLocal, engine
+from backend.app.database import AuthChallenge, Base, Feedback, SessionLocal, engine
 
 
 class LearningTests(unittest.TestCase):
@@ -35,6 +35,39 @@ class LearningTests(unittest.TestCase):
         response = self.client.post("/api/quizzes/chemical-reactions")
         self.assertEqual(response.status_code, 200)
         return response.json()
+
+    def test_content_feedback_validation_ownership_and_limits(self):
+        from sqlalchemy import select
+
+        from backend.app.content import CHAPTERS
+
+        topic_id = CHAPTERS[0]["topics"][0]["id"]
+        body = {
+            "topic_id": topic_id,
+            "category": "confusing",
+            "message": "Please explain this example more clearly.",
+        }
+        for _ in range(10):
+            self.assertEqual(self.client.post("/api/feedback", json=body).status_code, 201)
+        self.assertEqual(self.client.post("/api/feedback", json=body).status_code, 429)
+        with SessionLocal() as db:
+            reports = list(db.scalars(select(Feedback)))
+            self.assertEqual(len(reports), 10)
+            self.assertTrue(all(report.user_id == self.user_id for report in reports))
+        self.assertEqual(
+            self.client.post("/api/feedback", json={**body, "topic_id": "missing"}).status_code, 404
+        )
+        self.assertEqual(
+            self.client.post("/api/feedback", json={**body, "message": " " * 20}).status_code, 422
+        )
+        self.assertEqual(
+            self.client.post(
+                "/api/feedback", json=body, headers={"origin": "https://other.test"}
+            ).status_code,
+            403,
+        )
+        self.client.post("/api/auth/logout")
+        self.assertEqual(self.client.post("/api/feedback", json=body).status_code, 401)
 
     def test_email_signin_recovery_rotation_and_replay(self):
         original_cookie = self.client.cookies.get("scortiq_session")

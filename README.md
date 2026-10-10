@@ -75,12 +75,19 @@ Apply migrations before import, then run `python -m backend.import_sources path/
 
 Each JSONL record requires `id`, `title`, `topic_id`, `class_level: 10`, `language: "en"`, `version`, `rights`, `rights_confirmed: true`, `review_status: "draft"` or `"reviewed"`, and `passages` (1â€“100 strings, each at most 2000 characters). Reviewed material also requires a named `reviewer`. These metadata fields document the approval process; they do not replace an actual educator/rights review.
 
-The current database migration is `0003`. Upgrading from `0001` adds source, checklist and email challenge tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
+The current database migration is `0004`. Upgrading from `0001` adds source, checklist and email challenge tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
 
 ## Supabase email sign-in and recovery
 
 1. Set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` in `backend/.env`. Use the project URL and public key from your Supabase project; never use a service-role key. Restart the backend with `--env-file backend/.env` (the Windows start script loads this file automatically).
 2. Enable email authentication in Supabase. Configure the Magic Link email template to include `{{ .Token }}` so students receive a six-digit code rather than needing a link. See [Supabase passwordless email documentation](https://supabase.com/docs/guides/auth/auth-email-passwordless). Configure suitable email delivery/SMTP and provider limits for real student accounts.
-3. Sign out of the local pilot profile, enter your email, then enter the code. The same verified Supabase user recovers their saved learning on another device. New accounts start as “Learner”; rename in Settings. Local pilot progress is separate and is not automatically merged by email.
+3. Sign out of the local pilot profile, enter your email, then enter the code. The same verified Supabase user recovers their saved learning on another device. New accounts start as ï¿½Learnerï¿½; rename in Settings. Local pilot progress is separate and is not automatically merged by email.
 4. Challenges expire after ten minutes and permit five verification attempts. Email send reservations enforce a one-minute cooldown and five sends per hour per normalized address; failed provider calls also consume a reservation. Provider-side and global ingress rate limits/CAPTCHA, concurrent send-limit enforcement, expired challenge retention cleanup and delivery monitoring must be validated/hardened before public launch.
 5. Run migration `0003` for managed databases. Live email delivery, production PostgreSQL migration, multi-device sign-in and recovery must be verified with your configured project before marking the sign-in milestone complete. Automated tests mock Supabase; they do not send emails or prove a live integration.
+
+## Lesson issue reports â€” 10 October 2026
+
+Learners can expand "Report an issue with this lesson", choose a category and submit a 10â€“2,000 character description. Reports are stored against the authenticated account and topic; invalid topics, blank messages and cross-site writes are rejected. The UI preserves failed submissions for retry and confirms saved reports. A per-account limit allows ten reports per hour; stronger concurrent/global abuse enforcement remains release work. Reports are saved locally in the configured database; staff triage and notifications are not implemented yet.
+
+Run migration `0004` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
+

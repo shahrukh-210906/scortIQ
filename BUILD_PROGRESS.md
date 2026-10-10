@@ -16,3 +16,5 @@ Updated 8 October 2026. This bar counts defined milestones, not time, effort, or
 | Production hosting, load/accessibility/privacy checks, monitoring and recovery | Pending |
 
 Current milestone: configure and live-verify Supabase sign-in and recovery. Source review and model evaluation can continue independently, but no unreviewed model/content should be treated as release-ready.
+
+10 October: Existing rebuild committed and pushed. Added persisted learner issue reports with validation and submission feedback. Supabase configuration is deferred; feature work is tracked in `REMAINING_TASKS.md`.

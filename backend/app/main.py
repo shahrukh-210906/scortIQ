@@ -20,6 +20,7 @@ from .database import (
     Attempt,
     AuthChallenge,
     Base,
+    Feedback,
     Lesson,
     LessonStep,
     Session,
@@ -60,7 +61,7 @@ async def lifespan(app: FastAPI):
         ):
             raise RuntimeError("Production identity and inference URLs must use HTTPS.")
         with engine.connect() as connection:
-            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0003":
+            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0004":
                 raise RuntimeError(
                     "Apply the supported database migration before starting production."
                 )
@@ -118,6 +119,40 @@ def digest(value: str):
 
 class EmailInput(BaseModel):
     email: str = Field(min_length=3, max_length=254, pattern=r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
+
+
+class FeedbackInput(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    topic_id: str = Field(min_length=1, max_length=80)
+    category: Literal["incorrect", "confusing", "other"]
+    message: str = Field(min_length=10, max_length=2000)
+
+
+@app.post("/api/feedback", dependencies=[Depends(require_same_origin)], status_code=201)
+def report_content(
+    body: FeedbackInput, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    if not topic_by_id(body.topic_id):
+        raise HTTPException(404, "Topic not found.")
+    now = int(time.time())
+    recent = list(
+        db.scalars(
+            select(Feedback).where(Feedback.user_id == user.id, Feedback.created_at > now - 3600)
+        )
+    )
+    if len(recent) >= 10:
+        raise HTTPException(429, "You’ve sent several reports. Please try again in an hour.")
+    report = Feedback(
+        id=secrets.token_hex(16),
+        user_id=user.id,
+        topic_id=body.topic_id,
+        category=body.category,
+        message=body.message,
+        created_at=now,
+    )
+    db.add(report)
+    db.commit()
+    return {"id": report.id, "message": "Your report has been saved for review."}
 
 
 class VerifyInput(EmailInput):

@@ -7,6 +7,7 @@ import {
   type FormEvent,
   type ReactNode,
 } from 'react';
+import ContentFeedback from './ContentFeedback';
 import {
   Link,
   NavLink,
@@ -1026,6 +1027,7 @@ function LessonPage() {
           </section>
           <p className="source-note">{topic.source}</p>
           <SourceList sources={topic.sources} />
+          <ContentFeedback topicId={topicId!} />
           <Link className="button primary" to={`/quiz/${topic.chapter_id}`}>
             Check your understanding <ArrowRight size={17} />
           </Link>
