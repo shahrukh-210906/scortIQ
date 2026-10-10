@@ -1,0 +1,1514 @@
+{
+  "id": "ncert-cbse-class10-2026-27-planning-v1",
+  "class_level": 10,
+  "board": "CBSE",
+  "academic_year": "2026-27",
+  "checked_on": "2026-10-10",
+  "status": "planning_catalogue_not_published_lessons",
+  "teaching_languages": [
+    "en",
+    "hi",
+    "hinglish"
+  ],
+  "exam_answer_languages": [
+    "en",
+    "hi"
+  ],
+  "notes": [
+    "Original topic labels are editorial learning units, not an official NCERT topic index.",
+    "Science is split into three app subjects; NCERT publishes one integrated Science textbook.",
+    "No textbook passages, answer keys or full notes are included.",
+    "Teacher review must resolve detailed section mappings, rights and assessment scope before ingestion.",
+    "Mathematical modelling/proof appendices are optional enrichment, outside the 27 core chapters."
+  ],
+  "sources": {
+    "maths_contents": "https://ncert.nic.in/textbook/pdf/jemh1ps.pdf",
+    "science_contents": "https://www.ncert.nic.in/textbook/pdf/jesc1ps.pdf",
+    "maths_syllabus": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart1/Maths_SecP1X_2026-27.pdf",
+    "science_syllabus": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart1/Science_SecP1_2026-27.pdf"
+  },
+  "subjects": [
+    {
+      "id": "maths",
+      "title": "Maths",
+      "chapters": [
+        {
+          "id": "maths-ch01",
+          "title": "Real Numbers",
+          "ncert_chapter_number": 1,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh101.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch01-t01",
+              "title": "Prime factors and unique factorisation",
+              "content_status": "planning_only",
+              "activity_candidate": "factor-tree"
+            },
+            {
+              "id": "maths-ch01-t02",
+              "title": "Finding HCF and LCM using prime factors",
+              "content_status": "planning_only",
+              "activity_candidate": "factor-tree"
+            },
+            {
+              "id": "maths-ch01-t03",
+              "title": "Applying the HCF–LCM relationship",
+              "content_status": "planning_only",
+              "activity_candidate": "factor-tree"
+            },
+            {
+              "id": "maths-ch01-t04",
+              "title": "Proving square-root irrationality",
+              "content_status": "planning_only",
+              "activity_candidate": "factor-tree"
+            },
+            {
+              "id": "maths-ch01-t05",
+              "title": "Reasoning about irrational expressions",
+              "content_status": "planning_only",
+              "activity_candidate": "factor-tree"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch02",
+          "title": "Polynomials",
+          "ncert_chapter_number": 2,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh102.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch02-t01",
+              "title": "Reading zeroes from a graph",
+              "content_status": "planning_only",
+              "activity_candidate": "root-match"
+            },
+            {
+              "id": "maths-ch02-t02",
+              "title": "Finding zeroes of quadratic polynomials",
+              "content_status": "planning_only",
+              "activity_candidate": "root-match"
+            },
+            {
+              "id": "maths-ch02-t03",
+              "title": "Connecting roots with coefficients",
+              "content_status": "planning_only",
+              "activity_candidate": "root-match"
+            },
+            {
+              "id": "maths-ch02-t04",
+              "title": "Building a quadratic from its roots",
+              "content_status": "planning_only",
+              "activity_candidate": "root-match"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch03",
+          "title": "Pair of Linear Equations in Two Variables",
+          "ncert_chapter_number": 3,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh103.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch03-t01",
+              "title": "Turning word problems into two equations",
+              "content_status": "planning_only",
+              "activity_candidate": "equation-steps"
+            },
+            {
+              "id": "maths-ch03-t02",
+              "title": "Finding intersections graphically",
+              "content_status": "planning_only",
+              "activity_candidate": "equation-steps"
+            },
+            {
+              "id": "maths-ch03-t03",
+              "title": "Recognising one, none or infinitely many solutions",
+              "content_status": "planning_only",
+              "activity_candidate": "equation-steps"
+            },
+            {
+              "id": "maths-ch03-t04",
+              "title": "Solving by substitution",
+              "content_status": "planning_only",
+              "activity_candidate": "equation-steps"
+            },
+            {
+              "id": "maths-ch03-t05",
+              "title": "Solving by elimination",
+              "content_status": "planning_only",
+              "activity_candidate": "equation-steps"
+            },
+            {
+              "id": "maths-ch03-t06",
+              "title": "Checking contextual solutions",
+              "content_status": "planning_only",
+              "activity_candidate": "equation-steps"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch04",
+          "title": "Quadratic Equations",
+          "ncert_chapter_number": 4,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh104.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch04-t01",
+              "title": "Recognising standard quadratic form",
+              "content_status": "planning_only",
+              "activity_candidate": "equation-steps"
+            },
+            {
+              "id": "maths-ch04-t02",
+              "title": "Solving by factorisation",
+              "content_status": "planning_only",
+              "activity_candidate": "equation-steps"
+            },
+            {
+              "id": "maths-ch04-t03",
+              "title": "Applying the quadratic formula",
+              "content_status": "planning_only",
+              "activity_candidate": "equation-steps"
+            },
+            {
+              "id": "maths-ch04-t04",
+              "title": "Predicting roots using the discriminant",
+              "content_status": "planning_only",
+              "activity_candidate": "equation-steps"
+            },
+            {
+              "id": "maths-ch04-t05",
+              "title": "Modelling a situation with a quadratic",
+              "content_status": "planning_only",
+              "activity_candidate": "equation-steps"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch05",
+          "title": "Arithmetic Progressions",
+          "ncert_chapter_number": 5,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh105.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch05-t01",
+              "title": "Recognising a constant difference",
+              "content_status": "planning_only",
+              "activity_candidate": "sequence-builder"
+            },
+            {
+              "id": "maths-ch05-t02",
+              "title": "Finding the nth term",
+              "content_status": "planning_only",
+              "activity_candidate": "sequence-builder"
+            },
+            {
+              "id": "maths-ch05-t03",
+              "title": "Finding a term position",
+              "content_status": "planning_only",
+              "activity_candidate": "sequence-builder"
+            },
+            {
+              "id": "maths-ch05-t04",
+              "title": "Adding the first n terms",
+              "content_status": "planning_only",
+              "activity_candidate": "sequence-builder"
+            },
+            {
+              "id": "maths-ch05-t05",
+              "title": "Using progressions in everyday problems",
+              "content_status": "planning_only",
+              "activity_candidate": "sequence-builder"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch06",
+          "title": "Triangles",
+          "ncert_chapter_number": 6,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh106.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch06-t01",
+              "title": "Distinguishing similar and congruent shapes",
+              "content_status": "planning_only",
+              "activity_candidate": "proof-steps"
+            },
+            {
+              "id": "maths-ch06-t02",
+              "title": "Using the basic proportionality theorem",
+              "content_status": "planning_only",
+              "activity_candidate": "proof-steps"
+            },
+            {
+              "id": "maths-ch06-t03",
+              "title": "Using its converse",
+              "content_status": "planning_only",
+              "activity_candidate": "proof-steps"
+            },
+            {
+              "id": "maths-ch06-t04",
+              "title": "Applying AA similarity",
+              "content_status": "planning_only",
+              "activity_candidate": "proof-steps"
+            },
+            {
+              "id": "maths-ch06-t05",
+              "title": "Applying SSS and SAS similarity",
+              "content_status": "planning_only",
+              "activity_candidate": "proof-steps"
+            },
+            {
+              "id": "maths-ch06-t06",
+              "title": "Writing a clear similarity proof",
+              "content_status": "planning_only",
+              "activity_candidate": "proof-steps"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch07",
+          "title": "Coordinate Geometry",
+          "ncert_chapter_number": 7,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh107.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch07-t01",
+              "title": "Calculating distance between points",
+              "content_status": "planning_only",
+              "activity_candidate": "coordinate-plot"
+            },
+            {
+              "id": "maths-ch07-t02",
+              "title": "Using distance to classify a figure",
+              "content_status": "planning_only",
+              "activity_candidate": "coordinate-plot"
+            },
+            {
+              "id": "maths-ch07-t03",
+              "title": "Dividing a segment in a given ratio",
+              "content_status": "planning_only",
+              "activity_candidate": "coordinate-plot"
+            },
+            {
+              "id": "maths-ch07-t04",
+              "title": "Finding a midpoint",
+              "content_status": "planning_only",
+              "activity_candidate": "coordinate-plot"
+            },
+            {
+              "id": "maths-ch07-t05",
+              "title": "Solving coordinate-based problems",
+              "content_status": "planning_only",
+              "activity_candidate": "coordinate-plot"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch08",
+          "title": "Introduction to Trigonometry",
+          "ncert_chapter_number": 8,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh108.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch08-t01",
+              "title": "Choosing opposite, adjacent and hypotenuse",
+              "content_status": "planning_only",
+              "activity_candidate": "ratio-match"
+            },
+            {
+              "id": "maths-ch08-t02",
+              "title": "Understanding the six trigonometric ratios",
+              "content_status": "planning_only",
+              "activity_candidate": "ratio-match"
+            },
+            {
+              "id": "maths-ch08-t03",
+              "title": "Using standard-angle values",
+              "content_status": "planning_only",
+              "activity_candidate": "ratio-match"
+            },
+            {
+              "id": "maths-ch08-t04",
+              "title": "Connecting ratios and reciprocals",
+              "content_status": "planning_only",
+              "activity_candidate": "ratio-match"
+            },
+            {
+              "id": "maths-ch08-t05",
+              "title": "Applying basic trigonometric identities",
+              "content_status": "planning_only",
+              "activity_candidate": "ratio-match"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch09",
+          "title": "Some Applications of Trigonometry",
+          "ncert_chapter_number": 9,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh109.pdf",
+          "source_verification": "contents_and_cbse_scope; chapter_pdf_fetch_failed",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch09-t01",
+              "title": "Interpreting elevation and depression",
+              "content_status": "planning_only",
+              "activity_candidate": "triangle-builder"
+            },
+            {
+              "id": "maths-ch09-t02",
+              "title": "Drawing a right-triangle model",
+              "content_status": "planning_only",
+              "activity_candidate": "triangle-builder"
+            },
+            {
+              "id": "maths-ch09-t03",
+              "title": "Finding a height or distance",
+              "content_status": "planning_only",
+              "activity_candidate": "triangle-builder"
+            },
+            {
+              "id": "maths-ch09-t04",
+              "title": "Solving two-position observation problems",
+              "content_status": "planning_only",
+              "activity_candidate": "triangle-builder"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch10",
+          "title": "Circles",
+          "ncert_chapter_number": 10,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh110.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch10-t01",
+              "title": "Understanding a tangent and its contact point",
+              "content_status": "planning_only",
+              "activity_candidate": "proof-steps"
+            },
+            {
+              "id": "maths-ch10-t02",
+              "title": "Using the perpendicular radius property",
+              "content_status": "planning_only",
+              "activity_candidate": "proof-steps"
+            },
+            {
+              "id": "maths-ch10-t03",
+              "title": "Using equal tangents from an external point",
+              "content_status": "planning_only",
+              "activity_candidate": "proof-steps"
+            },
+            {
+              "id": "maths-ch10-t04",
+              "title": "Writing tangent proofs and solving lengths",
+              "content_status": "planning_only",
+              "activity_candidate": "proof-steps"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch11",
+          "title": "Areas Related to Circles",
+          "ncert_chapter_number": 11,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh111.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch11-t01",
+              "title": "Calculating circumference and circular area",
+              "content_status": "planning_only",
+              "activity_candidate": "area-builder"
+            },
+            {
+              "id": "maths-ch11-t02",
+              "title": "Finding arc length",
+              "content_status": "planning_only",
+              "activity_candidate": "area-builder"
+            },
+            {
+              "id": "maths-ch11-t03",
+              "title": "Calculating sector area",
+              "content_status": "planning_only",
+              "activity_candidate": "area-builder"
+            },
+            {
+              "id": "maths-ch11-t04",
+              "title": "Calculating segment area",
+              "content_status": "planning_only",
+              "activity_candidate": "area-builder"
+            },
+            {
+              "id": "maths-ch11-t05",
+              "title": "Working with shaded circular regions",
+              "content_status": "planning_only",
+              "activity_candidate": "area-builder"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch12",
+          "title": "Surface Areas and Volumes",
+          "ncert_chapter_number": 12,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh112.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch12-t01",
+              "title": "Recalling dimensions and solid formulas",
+              "content_status": "planning_only",
+              "activity_candidate": "solid-builder"
+            },
+            {
+              "id": "maths-ch12-t02",
+              "title": "Finding exposed area of joined solids",
+              "content_status": "planning_only",
+              "activity_candidate": "solid-builder"
+            },
+            {
+              "id": "maths-ch12-t03",
+              "title": "Adding volumes of joined solids",
+              "content_status": "planning_only",
+              "activity_candidate": "solid-builder"
+            },
+            {
+              "id": "maths-ch12-t04",
+              "title": "Choosing consistent units",
+              "content_status": "planning_only",
+              "activity_candidate": "solid-builder"
+            },
+            {
+              "id": "maths-ch12-t05",
+              "title": "Solving everyday mensuration problems",
+              "content_status": "planning_only",
+              "activity_candidate": "solid-builder"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch13",
+          "title": "Statistics",
+          "ncert_chapter_number": 13,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh113.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch13-t01",
+              "title": "Reading grouped frequency data",
+              "content_status": "planning_only",
+              "activity_candidate": "data-table"
+            },
+            {
+              "id": "maths-ch13-t02",
+              "title": "Finding grouped mean by direct calculation",
+              "content_status": "planning_only",
+              "activity_candidate": "data-table"
+            },
+            {
+              "id": "maths-ch13-t03",
+              "title": "Using assumed mean and step deviation",
+              "content_status": "planning_only",
+              "activity_candidate": "data-table"
+            },
+            {
+              "id": "maths-ch13-t04",
+              "title": "Finding the modal class and mode",
+              "content_status": "planning_only",
+              "activity_candidate": "data-table"
+            },
+            {
+              "id": "maths-ch13-t05",
+              "title": "Finding the median class and median",
+              "content_status": "planning_only",
+              "activity_candidate": "data-table"
+            },
+            {
+              "id": "maths-ch13-t06",
+              "title": "Comparing measures of central tendency",
+              "content_status": "planning_only",
+              "activity_candidate": "data-table"
+            }
+          ]
+        },
+        {
+          "id": "maths-ch14",
+          "title": "Probability",
+          "ncert_chapter_number": 14,
+          "book": "Mathematics",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jemh114.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "maths-ch14-t01",
+              "title": "Listing equally likely outcomes",
+              "content_status": "planning_only",
+              "activity_candidate": "outcome-sort"
+            },
+            {
+              "id": "maths-ch14-t02",
+              "title": "Calculating event probability",
+              "content_status": "planning_only",
+              "activity_candidate": "outcome-sort"
+            },
+            {
+              "id": "maths-ch14-t03",
+              "title": "Using complementary events",
+              "content_status": "planning_only",
+              "activity_candidate": "outcome-sort"
+            },
+            {
+              "id": "maths-ch14-t04",
+              "title": "Recognising impossible and certain events",
+              "content_status": "planning_only",
+              "activity_candidate": "outcome-sort"
+            },
+            {
+              "id": "maths-ch14-t05",
+              "title": "Solving coin, die and card problems",
+              "content_status": "planning_only",
+              "activity_candidate": "outcome-sort"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chemistry",
+      "title": "Chemistry",
+      "chapters": [
+        {
+          "id": "chemistry-ch01",
+          "title": "Chemical Reactions and Equations",
+          "ncert_chapter_number": 1,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc101.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "chemistry-ch01-t01",
+              "title": "Recognising evidence of chemical change",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch01-t02",
+              "title": "Turning words into chemical formulas",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch01-t03",
+              "title": "Balancing atoms with coefficients",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch01-t04",
+              "title": "Recording states and reaction conditions",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch01-t05",
+              "title": "Recognising combination and decomposition",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch01-t06",
+              "title": "Recognising displacement and precipitation",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch01-t07",
+              "title": "Comparing heat-releasing and heat-absorbing reactions",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch01-t08",
+              "title": "Identifying oxidation and reduction",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch01-t09",
+              "title": "Understanding corrosion and rancidity",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            }
+          ]
+        },
+        {
+          "id": "chemistry-ch02",
+          "title": "Acids, Bases and Salts",
+          "ncert_chapter_number": 2,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc102.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "chemistry-ch02-t01",
+              "title": "Identifying acids and bases with indicators",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch02-t02",
+              "title": "Explaining hydrogen and hydroxide ions",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch02-t03",
+              "title": "Reacting with metals, carbonates and oxides",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch02-t04",
+              "title": "Understanding neutralisation",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch02-t05",
+              "title": "Using pH in daily life",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch02-t06",
+              "title": "Producing sodium hydroxide",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch02-t07",
+              "title": "Comparing uses of bleaching powder",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch02-t08",
+              "title": "Using baking soda and washing soda",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            },
+            {
+              "id": "chemistry-ch02-t09",
+              "title": "Explaining water of crystallisation and plaster of Paris",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-balance"
+            }
+          ]
+        },
+        {
+          "id": "chemistry-ch03",
+          "title": "Metals and Non-metals",
+          "ncert_chapter_number": 3,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc103.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "chemistry-ch03-t01",
+              "title": "Comparing physical properties and exceptions",
+              "content_status": "planning_only",
+              "activity_candidate": "reactivity-sort"
+            },
+            {
+              "id": "chemistry-ch03-t02",
+              "title": "Comparing reactions with air and water",
+              "content_status": "planning_only",
+              "activity_candidate": "reactivity-sort"
+            },
+            {
+              "id": "chemistry-ch03-t03",
+              "title": "Comparing reactions with acids and salts",
+              "content_status": "planning_only",
+              "activity_candidate": "reactivity-sort"
+            },
+            {
+              "id": "chemistry-ch03-t04",
+              "title": "Using the reactivity order",
+              "content_status": "planning_only",
+              "activity_candidate": "reactivity-sort"
+            },
+            {
+              "id": "chemistry-ch03-t05",
+              "title": "Explaining electron transfer and ionic bonding",
+              "content_status": "planning_only",
+              "activity_candidate": "reactivity-sort"
+            },
+            {
+              "id": "chemistry-ch03-t06",
+              "title": "Connecting ionic properties with structure",
+              "content_status": "planning_only",
+              "activity_candidate": "reactivity-sort"
+            },
+            {
+              "id": "chemistry-ch03-t07",
+              "title": "Extracting metals by reactivity level",
+              "content_status": "planning_only",
+              "activity_candidate": "reactivity-sort"
+            },
+            {
+              "id": "chemistry-ch03-t08",
+              "title": "Understanding refining",
+              "content_status": "planning_only",
+              "activity_candidate": "reactivity-sort"
+            },
+            {
+              "id": "chemistry-ch03-t09",
+              "title": "Preventing corrosion and using alloys",
+              "content_status": "planning_only",
+              "activity_candidate": "reactivity-sort"
+            }
+          ]
+        },
+        {
+          "id": "chemistry-ch04",
+          "title": "Carbon and its Compounds",
+          "ncert_chapter_number": 4,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc104.pdf",
+          "source_verification": "contents_and_cbse_scope; chapter_pdf_fetch_failed",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "chemistry-ch04-t01",
+              "title": "Explaining covalent bonding",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-match"
+            },
+            {
+              "id": "chemistry-ch04-t02",
+              "title": "Understanding carbon chains and tetravalency",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-match"
+            },
+            {
+              "id": "chemistry-ch04-t03",
+              "title": "Distinguishing saturated and unsaturated compounds",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-match"
+            },
+            {
+              "id": "chemistry-ch04-t04",
+              "title": "Recognising structural arrangements",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-match"
+            },
+            {
+              "id": "chemistry-ch04-t05",
+              "title": "Recognising homologous families",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-match"
+            },
+            {
+              "id": "chemistry-ch04-t06",
+              "title": "Naming simple compounds and functional groups",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-match"
+            },
+            {
+              "id": "chemistry-ch04-t07",
+              "title": "Comparing combustion, oxidation, addition and substitution",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-match"
+            },
+            {
+              "id": "chemistry-ch04-t08",
+              "title": "Explaining ethanol and ethanoic acid",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-match"
+            },
+            {
+              "id": "chemistry-ch04-t09",
+              "title": "Explaining soap, micelles and detergents",
+              "content_status": "planning_only",
+              "activity_candidate": "reaction-match"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "biology",
+      "title": "Biology",
+      "chapters": [
+        {
+          "id": "biology-ch05",
+          "title": "Life Processes",
+          "ncert_chapter_number": 5,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc105.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "biology-ch05-t01",
+              "title": "Explaining why organisms need life processes",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch05-t02",
+              "title": "Connecting photosynthesis with plant nutrition",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch05-t03",
+              "title": "Comparing feeding in simple organisms",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch05-t04",
+              "title": "Tracing human digestion",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch05-t05",
+              "title": "Comparing aerobic and anaerobic respiration",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch05-t06",
+              "title": "Explaining human gas exchange",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch05-t07",
+              "title": "Tracing circulation and double circulation",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch05-t08",
+              "title": "Explaining water and food transport in plants",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch05-t09",
+              "title": "Tracing excretion through a nephron",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch05-t10",
+              "title": "Explaining waste removal in plants",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            }
+          ]
+        },
+        {
+          "id": "biology-ch06",
+          "title": "Control and Coordination",
+          "ncert_chapter_number": 6,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc106.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "biology-ch06-t01",
+              "title": "Tracing messages through a neuron",
+              "content_status": "planning_only",
+              "activity_candidate": "signal-path"
+            },
+            {
+              "id": "biology-ch06-t02",
+              "title": "Following a reflex pathway",
+              "content_status": "planning_only",
+              "activity_candidate": "signal-path"
+            },
+            {
+              "id": "biology-ch06-t03",
+              "title": "Connecting brain regions with functions",
+              "content_status": "planning_only",
+              "activity_candidate": "signal-path"
+            },
+            {
+              "id": "biology-ch06-t04",
+              "title": "Comparing voluntary and involuntary responses",
+              "content_status": "planning_only",
+              "activity_candidate": "signal-path"
+            },
+            {
+              "id": "biology-ch06-t05",
+              "title": "Comparing growth and non-growth plant movements",
+              "content_status": "planning_only",
+              "activity_candidate": "signal-path"
+            },
+            {
+              "id": "biology-ch06-t06",
+              "title": "Explaining tropic responses",
+              "content_status": "planning_only",
+              "activity_candidate": "signal-path"
+            },
+            {
+              "id": "biology-ch06-t07",
+              "title": "Connecting plant hormones with effects",
+              "content_status": "planning_only",
+              "activity_candidate": "signal-path"
+            },
+            {
+              "id": "biology-ch06-t08",
+              "title": "Connecting human hormones and glands",
+              "content_status": "planning_only",
+              "activity_candidate": "signal-path"
+            },
+            {
+              "id": "biology-ch06-t09",
+              "title": "Explaining feedback control",
+              "content_status": "planning_only",
+              "activity_candidate": "signal-path"
+            }
+          ]
+        },
+        {
+          "id": "biology-ch07",
+          "title": "How do Organisms Reproduce?",
+          "ncert_chapter_number": 7,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc107.pdf",
+          "source_verification": "contents_and_cbse_scope; chapter_pdf_fetch_failed",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "biology-ch07-t01",
+              "title": "Connecting DNA copying with variation",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch07-t02",
+              "title": "Comparing fission, budding and fragmentation",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch07-t03",
+              "title": "Explaining regeneration and spore formation",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch07-t04",
+              "title": "Explaining vegetative propagation",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch07-t05",
+              "title": "Tracing pollination and fertilisation",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch07-t06",
+              "title": "Tracing seed and fruit formation",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch07-t07",
+              "title": "Identifying male and female reproductive structures",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch07-t08",
+              "title": "Explaining fertilisation and development",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            },
+            {
+              "id": "biology-ch07-t09",
+              "title": "Understanding reproductive health and contraception",
+              "content_status": "planning_only",
+              "activity_candidate": "process-order"
+            }
+          ]
+        },
+        {
+          "id": "biology-ch08",
+          "title": "Heredity",
+          "ncert_chapter_number": 8,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc108.pdf",
+          "source_verification": "contents_and_cbse_scope; chapter_pdf_fetch_failed",
+          "assessment_scope": "teacher_review_required_due_to_cbse_wording",
+          "topics": [
+            {
+              "id": "biology-ch08-t01",
+              "title": "Distinguishing inherited differences from variation",
+              "content_status": "planning_only",
+              "activity_candidate": "inheritance-grid"
+            },
+            {
+              "id": "biology-ch08-t02",
+              "title": "Explaining genes and expression of traits",
+              "content_status": "planning_only",
+              "activity_candidate": "inheritance-grid"
+            },
+            {
+              "id": "biology-ch08-t03",
+              "title": "Following a one-trait Mendelian cross",
+              "content_status": "planning_only",
+              "activity_candidate": "inheritance-grid"
+            },
+            {
+              "id": "biology-ch08-t04",
+              "title": "Distinguishing dominant and recessive traits",
+              "content_status": "planning_only",
+              "activity_candidate": "inheritance-grid"
+            },
+            {
+              "id": "biology-ch08-t05",
+              "title": "Comparing phenotype and genotype",
+              "content_status": "planning_only",
+              "activity_candidate": "inheritance-grid"
+            },
+            {
+              "id": "biology-ch08-t06",
+              "title": "Following a two-trait inheritance example",
+              "content_status": "planning_only",
+              "activity_candidate": "inheritance-grid"
+            },
+            {
+              "id": "biology-ch08-t07",
+              "title": "Explaining human sex determination",
+              "content_status": "planning_only",
+              "activity_candidate": "inheritance-grid"
+            }
+          ]
+        },
+        {
+          "id": "biology-ch13",
+          "title": "Our Environment",
+          "ncert_chapter_number": 13,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc113.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "biology-ch13-t01",
+              "title": "Identifying living and non-living ecosystem parts",
+              "content_status": "planning_only",
+              "activity_candidate": "food-web"
+            },
+            {
+              "id": "biology-ch13-t02",
+              "title": "Connecting producers, consumers and decomposers",
+              "content_status": "planning_only",
+              "activity_candidate": "food-web"
+            },
+            {
+              "id": "biology-ch13-t03",
+              "title": "Building food chains and food webs",
+              "content_status": "planning_only",
+              "activity_candidate": "food-web"
+            },
+            {
+              "id": "biology-ch13-t04",
+              "title": "Tracing energy through trophic levels",
+              "content_status": "planning_only",
+              "activity_candidate": "food-web"
+            },
+            {
+              "id": "biology-ch13-t05",
+              "title": "Explaining biological magnification",
+              "content_status": "planning_only",
+              "activity_candidate": "food-web"
+            },
+            {
+              "id": "biology-ch13-t06",
+              "title": "Distinguishing degradable and persistent waste",
+              "content_status": "planning_only",
+              "activity_candidate": "food-web"
+            },
+            {
+              "id": "biology-ch13-t07",
+              "title": "Explaining ozone depletion",
+              "content_status": "planning_only",
+              "activity_candidate": "food-web"
+            },
+            {
+              "id": "biology-ch13-t08",
+              "title": "Choosing responsible waste practices",
+              "content_status": "planning_only",
+              "activity_candidate": "food-web"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "physics",
+      "title": "Physics",
+      "chapters": [
+        {
+          "id": "physics-ch09",
+          "title": "Light – Reflection and Refraction",
+          "ncert_chapter_number": 9,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc109.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "physics-ch09-t01",
+              "title": "Applying reflection rules",
+              "content_status": "planning_only",
+              "activity_candidate": "ray-and-formula"
+            },
+            {
+              "id": "physics-ch09-t02",
+              "title": "Identifying spherical-mirror terms",
+              "content_status": "planning_only",
+              "activity_candidate": "ray-and-formula"
+            },
+            {
+              "id": "physics-ch09-t03",
+              "title": "Drawing concave and convex mirror rays",
+              "content_status": "planning_only",
+              "activity_candidate": "ray-and-formula"
+            },
+            {
+              "id": "physics-ch09-t04",
+              "title": "Using mirror signs, formula and magnification",
+              "content_status": "planning_only",
+              "activity_candidate": "ray-and-formula"
+            },
+            {
+              "id": "physics-ch09-t05",
+              "title": "Recognising refraction and its laws",
+              "content_status": "planning_only",
+              "activity_candidate": "ray-and-formula"
+            },
+            {
+              "id": "physics-ch09-t06",
+              "title": "Connecting refractive index with light speed",
+              "content_status": "planning_only",
+              "activity_candidate": "ray-and-formula"
+            },
+            {
+              "id": "physics-ch09-t07",
+              "title": "Identifying convex and concave lenses",
+              "content_status": "planning_only",
+              "activity_candidate": "ray-and-formula"
+            },
+            {
+              "id": "physics-ch09-t08",
+              "title": "Drawing lens rays and images",
+              "content_status": "planning_only",
+              "activity_candidate": "ray-and-formula"
+            },
+            {
+              "id": "physics-ch09-t09",
+              "title": "Using lens signs, formula and magnification",
+              "content_status": "planning_only",
+              "activity_candidate": "ray-and-formula"
+            },
+            {
+              "id": "physics-ch09-t10",
+              "title": "Calculating lens power",
+              "content_status": "planning_only",
+              "activity_candidate": "ray-and-formula"
+            }
+          ]
+        },
+        {
+          "id": "physics-ch10",
+          "title": "The Human Eye and the Colourful World",
+          "ncert_chapter_number": 10,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc110.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "physics-ch10-t01",
+              "title": "Tracing light through the eye",
+              "content_status": "planning_only",
+              "activity_candidate": "vision-match"
+            },
+            {
+              "id": "physics-ch10-t02",
+              "title": "Explaining accommodation and viewing limits",
+              "content_status": "planning_only",
+              "activity_candidate": "vision-match"
+            },
+            {
+              "id": "physics-ch10-t03",
+              "title": "Correcting myopia and hypermetropia",
+              "content_status": "planning_only",
+              "activity_candidate": "vision-match"
+            },
+            {
+              "id": "physics-ch10-t04",
+              "title": "Explaining presbyopia",
+              "content_status": "planning_only",
+              "activity_candidate": "vision-match"
+            },
+            {
+              "id": "physics-ch10-t05",
+              "title": "Tracing refraction through a prism",
+              "content_status": "planning_only",
+              "activity_candidate": "vision-match"
+            },
+            {
+              "id": "physics-ch10-t06",
+              "title": "Explaining dispersion and rainbow formation",
+              "content_status": "planning_only",
+              "activity_candidate": "vision-match"
+            },
+            {
+              "id": "physics-ch10-t07",
+              "title": "Connecting atmospheric refraction with observations",
+              "content_status": "planning_only",
+              "activity_candidate": "vision-match"
+            },
+            {
+              "id": "physics-ch10-t08",
+              "title": "Explaining scattering and sky colour",
+              "content_status": "planning_only",
+              "activity_candidate": "vision-match"
+            }
+          ]
+        },
+        {
+          "id": "physics-ch11",
+          "title": "Electricity",
+          "ncert_chapter_number": 11,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc111.pdf",
+          "source_verification": "official_chapter_pdf_available; fine_grained_mapping_requires_review",
+          "assessment_scope": "map_each_topic_to_cbse_before_release",
+          "topics": [
+            {
+              "id": "physics-ch11-t01",
+              "title": "Connecting charge, current and time",
+              "content_status": "planning_only",
+              "activity_candidate": "circuit-and-units"
+            },
+            {
+              "id": "physics-ch11-t02",
+              "title": "Understanding voltage and measurement",
+              "content_status": "planning_only",
+              "activity_candidate": "circuit-and-units"
+            },
+            {
+              "id": "physics-ch11-t03",
+              "title": "Reading circuit symbols and connections",
+              "content_status": "planning_only",
+              "activity_candidate": "circuit-and-units"
+            },
+            {
+              "id": "physics-ch11-t04",
+              "title": "Applying the voltage–current relationship",
+              "content_status": "planning_only",
+              "activity_candidate": "circuit-and-units"
+            },
+            {
+              "id": "physics-ch11-t05",
+              "title": "Connecting resistance with length, area and material",
+              "content_status": "planning_only",
+              "activity_candidate": "circuit-and-units"
+            },
+            {
+              "id": "physics-ch11-t06",
+              "title": "Calculating resistivity",
+              "content_status": "planning_only",
+              "activity_candidate": "circuit-and-units"
+            },
+            {
+              "id": "physics-ch11-t07",
+              "title": "Combining resistors in series",
+              "content_status": "planning_only",
+              "activity_candidate": "circuit-and-units"
+            },
+            {
+              "id": "physics-ch11-t08",
+              "title": "Combining resistors in parallel",
+              "content_status": "planning_only",
+              "activity_candidate": "circuit-and-units"
+            },
+            {
+              "id": "physics-ch11-t09",
+              "title": "Using the heating relationship",
+              "content_status": "planning_only",
+              "activity_candidate": "circuit-and-units"
+            },
+            {
+              "id": "physics-ch11-t10",
+              "title": "Calculating power and electrical energy",
+              "content_status": "planning_only",
+              "activity_candidate": "circuit-and-units"
+            }
+          ]
+        },
+        {
+          "id": "physics-ch12",
+          "title": "Magnetic Effects of Electric Current",
+          "ncert_chapter_number": 12,
+          "book": "Science",
+          "source_url": "https://ncert.nic.in/textbook/pdf/jesc112.pdf",
+          "source_verification": "contents_and_cbse_scope; chapter_pdf_fetch_failed",
+          "assessment_scope": "teacher_review_required_due_to_cbse_wording",
+          "topics": [
+            {
+              "id": "physics-ch12-t01",
+              "title": "Reading magnetic field patterns",
+              "content_status": "planning_only",
+              "activity_candidate": "field-direction"
+            },
+            {
+              "id": "physics-ch12-t02",
+              "title": "Applying the right-hand thumb rule",
+              "content_status": "planning_only",
+              "activity_candidate": "field-direction"
+            },
+            {
+              "id": "physics-ch12-t03",
+              "title": "Comparing wire, loop and solenoid fields",
+              "content_status": "planning_only",
+              "activity_candidate": "field-direction"
+            },
+            {
+              "id": "physics-ch12-t04",
+              "title": "Predicting force on a current-carrying wire",
+              "content_status": "planning_only",
+              "activity_candidate": "field-direction"
+            },
+            {
+              "id": "physics-ch12-t05",
+              "title": "Applying Fleming’s left-hand rule",
+              "content_status": "planning_only",
+              "activity_candidate": "field-direction"
+            },
+            {
+              "id": "physics-ch12-t06",
+              "title": "Comparing alternating and direct current",
+              "content_status": "planning_only",
+              "activity_candidate": "field-direction"
+            },
+            {
+              "id": "physics-ch12-t07",
+              "title": "Understanding household circuit connections",
+              "content_status": "planning_only",
+              "activity_candidate": "field-direction"
+            },
+            {
+              "id": "physics-ch12-t08",
+              "title": "Explaining earthing, overloads and short circuits",
+              "content_status": "planning_only",
+              "activity_candidate": "field-direction"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "formative_supplements": [
+    {
+      "id": "chemistry-periodic-supplement",
+      "subject": "Chemistry",
+      "title": "Periodic classification",
+      "assessment_scope": "formative_only",
+      "topics": [
+        "Early attempts at element grouping",
+        "Arranging elements by atomic number",
+        "Locating groups and periods",
+        "Comparing valency, size and metallic character"
+      ],
+      "source_url": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart1/Science_SecP1IX_2026-27_RM.pdf",
+      "content_status": "planning_only"
+    },
+    {
+      "id": "biology-evolution-supplement",
+      "subject": "Biology",
+      "title": "Evolution",
+      "assessment_scope": "formative_only",
+      "topics": [
+        "Distinguishing acquired and inherited changes",
+        "Explaining selection and population changes",
+        "Understanding formation of species",
+        "Using fossils and structural comparisons",
+        "Understanding evolutionary relationships and human origins"
+      ],
+      "source_url": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart1/Science_SecP1IX_2026-27_RM.pdf",
+      "content_status": "planning_only"
+    },
+    {
+      "id": "physics-induction-supplement",
+      "subject": "Physics",
+      "title": "Motors, induction and generators",
+      "assessment_scope": "formative_only",
+      "topics": [
+        "Tracing how an electric motor works",
+        "Producing current with a changing field",
+        "Applying the generator direction rule",
+        "Comparing motor and generator energy changes"
+      ],
+      "source_url": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart1/Science_SecP1IX_2026-27_RM.pdf",
+      "content_status": "planning_only"
+    }
+  ],
+  "textbook_topics_requiring_exam_scope_review": [
+    "Atmospheric refraction in the eye chapter",
+    "Science heredity/magnetic-effects wording conflict",
+    "Textbook enrichment boxes",
+    "Physics formula derivations versus formula application"
+  ]
+}

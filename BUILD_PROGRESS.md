@@ -1,5 +1,7 @@
 # Rebuild progress
 
+10 October scope update: Added the agreed Class 10-only student/teacher specification and NCERT/CBSE 2026–27 planning catalogue: 27 chapters, 185 proposed topic units and 13 formative supplement topics. Five chapter PDF fetches failed; their detailed mappings are flagged for review. New classroom/exam/language features are specified, not yet implemented. Current priorities are in `REMAINING_TASKS.md`.
+
 Updated 8 October 2026. This bar counts defined milestones, not time, effort, or production readiness.
 
 `████░░░░` **4 of 8 milestones complete**

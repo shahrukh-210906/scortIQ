@@ -1,5 +1,7 @@
 # ScortIQ
 
+The current product direction is Class 10 only (CBSE 2026–27): learn with AI in English/Hindi/Hinglish, prepare exam answers in English/Hindi, practise relevant equations, take recall quizzes and write subjective practice exams under teacher supervision. See [product plan](CLASS10_PRODUCT_PLAN.md), [chapter/topic catalogue](CLASS10_CURRICULUM.md) and [implementation queue](REMAINING_TASKS.md). The catalogue is planning data, not published lesson content; the running pilot below has not yet been restructured to this full flow.
+
 A fresh rebuild of the science learning companion. React + TypeScript + Vite frontend, FastAPI backend, SQLAlchemy persistence and a server-side Hugging Face integration.
 
 ## Current milestone
