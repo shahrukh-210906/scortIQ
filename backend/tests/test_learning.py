@@ -36,6 +36,90 @@ class LearningTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         return response.json()
 
+    def approve_teacher(self, user_id):
+        from backend.app.database import Teacher
+
+        with SessionLocal() as db:
+            db.add(Teacher(user_id=user_id))
+            db.commit()
+
+    def test_classroom_membership_privacy_and_code_rotation(self):
+        self.assertEqual(
+            self.client.post("/api/classrooms", json={"name": "Class 10"}).status_code, 403
+        )
+        self.approve_teacher(self.user_id)
+        teacher_cookie = self.client.cookies.get("scortiq_session")
+        self.assertEqual(self.client.get("/api/me").json()["role"], "teacher")
+        room = self.client.post("/api/classrooms", json={"name": "Class 10 A"}).json()
+        endpoint = f"/api/classrooms/{room['id']}"
+        self.assertNotIn("join_code", self.client.get("/api/classrooms").json()[0])
+        student = self.client.post("/api/auth/local", json={"name": "Student"}).json()
+        student_cookie = self.client.cookies.get("scortiq_session")
+        self.assertEqual(self.client.get("/api/classrooms").json(), [])
+        for _ in range(2):
+            joined = self.client.post(
+                "/api/classrooms/join", json={"code": room["join_code"].lower()}
+            )
+            self.assertEqual(joined.status_code, 200)
+            self.assertNotIn("students", joined.json())
+        self.assertEqual(len(self.client.get("/api/classrooms").json()), 1)
+        self.assertEqual(self.client.post(endpoint + "/code").status_code, 403)
+        self.assertEqual(
+            self.client.delete(endpoint + f"/members/{student['id']}").status_code, 403
+        )
+        stranger = self.client.post("/api/auth/local", json={"name": "Other teacher"}).json()
+        self.approve_teacher(stranger["id"])
+        self.assertEqual(self.client.get("/api/classrooms").json(), [])
+        self.assertEqual(self.client.post(endpoint + "/code").status_code, 404)
+        self.client.cookies.set("scortiq_session", teacher_cookie)
+        roster = self.client.get("/api/classrooms").json()[0]["students"]
+        self.assertEqual(roster, [{"id": student["id"], "name": "Student"}])
+        new_code = self.client.post(endpoint + "/code").json()["join_code"]
+        self.assertNotEqual(new_code, room["join_code"])
+        self.assertEqual(
+            self.client.delete(endpoint + f"/members/{student['id']}").status_code, 200
+        )
+        self.client.cookies.set("scortiq_session", student_cookie)
+        self.assertEqual(self.client.get("/api/classrooms").json(), [])
+        self.assertEqual(
+            self.client.post("/api/classrooms/join", json={"code": room["join_code"]}).status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.post("/api/classrooms/join", json={"code": new_code}).status_code, 200
+        )
+        self.assertEqual(self.client.post(endpoint + "/leave").status_code, 200)
+        self.assertEqual(self.client.get("/api/classrooms").json(), [])
+
+    def test_classroom_validation_expiry_and_revocation(self):
+        from backend.app.database import Classroom, Teacher
+
+        self.approve_teacher(self.user_id)
+        self.assertEqual(self.client.post("/api/classrooms", json={"name": "  "}).status_code, 422)
+        self.assertEqual(
+            self.client.post(
+                "/api/classrooms", json={"name": "A"}, headers={"origin": "https://other.test"}
+            ).status_code,
+            403,
+        )
+        room = self.client.post("/api/classrooms", json={"name": "Class 10"}).json()
+        with SessionLocal() as db:
+            db.get(Classroom, room["id"]).code_expires = 0
+            db.delete(db.get(Teacher, self.user_id))
+            db.commit()
+        self.assertEqual(self.client.get("/api/me").json()["role"], "student")
+        self.assertEqual(self.client.post(f"/api/classrooms/{room['id']}/code").status_code, 403)
+        self.client.post("/api/auth/local", json={"name": "Student"})
+        self.assertEqual(
+            self.client.post("/api/classrooms/join", json={"code": room["join_code"]}).status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.post("/api/classrooms/join", json={"code": "invalid"}).status_code, 422
+        )
+        self.client.post("/api/auth/logout")
+        self.assertEqual(self.client.get("/api/classrooms").status_code, 401)
+
     def test_content_feedback_validation_ownership_and_limits(self):
         from sqlalchemy import select
 

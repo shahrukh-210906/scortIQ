@@ -77,7 +77,7 @@ Apply migrations before import, then run `python -m backend.import_sources path/
 
 Each JSONL record requires `id`, `title`, `topic_id`, `class_level: 10`, `language: "en"`, `version`, `rights`, `rights_confirmed: true`, `review_status: "draft"` or `"reviewed"`, and `passages` (1–100 strings, each at most 2000 characters). Reviewed material also requires a named `reviewer`. These metadata fields document the approval process; they do not replace an actual educator/rights review.
 
-The current database migration is `0008`. Upgrading from `0001` adds source, checklist and email challenge tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
+The current database migration is `0009`. Upgrading adds the learning, source, preference and classroom tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
 
 ## Supabase email sign-in and recovery
 
@@ -91,7 +91,7 @@ The current database migration is `0008`. Upgrading from `0001` adds source, che
 
 Learners can expand "Report an issue with this lesson", choose a category and submit a 10–2,000 character description. Reports are stored against the authenticated account and topic; invalid topics, blank messages and cross-site writes are rejected. The UI preserves failed submissions for retry and confirms saved reports. A per-account limit allows ten reports per hour; stronger concurrent/global abuse enforcement remains release work. Reports are saved locally in the configured database; staff triage and notifications are not implemented yet.
 
-Run migration `0008` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
+Run migration `0009` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
 
 ## Saved reflections — 10 October 2026
 
@@ -118,3 +118,11 @@ Exam notes include a sample question/answer, important terms, answer-writing ste
 The three Chemistry topics include fixed-formula balancing practice with server-calculated atom counts, hints and smallest-positive-whole-number coefficient checking (1–20). Success is saved without changing quiz scores. Topics without an activity omit that stage. Every pilot topic has its own two-question recall quiz, with answer keys hidden until submission, server grading, duplicate-submit protection and saved latest results. Unsubmitted recall selections and unfinished activity coefficients are kept while switching stages in the current page, but are not restored after a full reload. Chapter practice remains a separate assessment; topic scores are not yet included in dashboard aggregates.
 
 Migration `0008` adds journey/activity records and topic recall attempts without changing existing learning tables. Validation: build, 26 backend checks, six browser journeys, formatting/linting and migration parity pass. Browser coverage includes Hindi notes, stage restoration, incorrect/correct atom counts, saved recall results, activity omission and prior learning flows. Mocked inference checks do not establish live tutoring quality.
+
+## Teacher accounts and classrooms
+
+Accounts start as students. Teacher approval is an operator action with database access, never a browser role choice. With the backend environment loaded, use `python -m backend.manage_teacher list` to find an existing account, then `python -m backend.manage_teacher grant --user-id ACCOUNT_ID`. Reload that account to open the teacher classroom controls. Use `revoke` with the same ID to withdraw teacher access; server checks apply immediately. In production, only verified Supabase accounts can be granted access. Development local profiles can be used to try the feature while Supabase configuration is deferred.
+
+Approved teachers can create named classrooms, view their own student rosters, remove members and replace join codes. Students can join several classrooms and leave without losing personal learning progress. Codes contain 12 random hexadecimal characters, expire after seven days and are stored as hashes. The raw code appears only after creation/replacement, so replacing it is necessary if it was not saved. Previous codes stop working immediately after replacement. Removal alone does not prevent rejoining with a still-valid code. Revoking teacher approval disables classroom management and new joins; existing student memberships remain.
+
+Classroom lists and rosters are checked against the signed-in account. Students never receive other students' names or IDs. Invitations currently mean sharing a code yourself; the app does not send messages. Daily topic assignments, classroom analytics and teacher support settings are the next features. Migration `0009` adds teacher approval, classroom and membership tables. Validation includes 28 backend checks, seven browser journeys, build, format/lint checks and migration parity.

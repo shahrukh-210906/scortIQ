@@ -2545,3 +2545,44 @@ textarea:focus {
     flex: 1 1 40%;
   }
 }
+.classrooms-page > h1 {
+  margin: 8px 0 12px;
+}
+.classroom-form,
+.classroom-card {
+  margin-top: 24px;
+}
+.classroom-form form {
+  display: grid;
+  gap: 12px;
+  max-width: 440px;
+}
+.classroom-form input {
+  min-height: 44px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: inherit;
+}
+.classroom-form .button {
+  justify-self: start;
+}
+.classroom-code {
+  letter-spacing: 0.12em;
+  overflow-wrap: anywhere;
+}
+.classroom-roster {
+  list-style: none;
+  padding: 0;
+}
+.classroom-roster li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+}
+.classroom-roster .text-button {
+  min-height: 44px;
+}

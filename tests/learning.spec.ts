@@ -1,4 +1,55 @@
 import { test, expect } from '@playwright/test';
+import { execFileSync } from 'node:child_process';
+
+test('approved teachers create classrooms and students join and leave on mobile', async ({
+  page,
+  browser,
+}) => {
+  await page.goto('/');
+  await page.getByLabel('What should we call you?').fill('Class teacher');
+  await page.getByRole('button', { name: 'Start learning', exact: true }).click();
+  await expect(page.getByRole('link', { name: 'Classrooms', exact: true })).toBeVisible();
+  const teacher = await (await page.request.get('/api/me')).json();
+  execFileSync(process.platform === 'win32' ? '.venv/Scripts/python.exe' : 'python', [
+    '-m',
+    'backend.manage_teacher',
+    'grant',
+    '--user-id',
+    teacher.id,
+  ]);
+  await page.goto('/classrooms');
+  await page.getByLabel('Classroom name').fill('Class 10 Science');
+  await page.getByRole('button', { name: 'Create classroom', exact: true }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Classroom created' })).toBeVisible();
+  const code = (await page.locator('.classroom-code').innerText()).trim();
+  const studentContext = await browser.newContext({ viewport: { width: 375, height: 812 } });
+  try {
+    const studentPage = await studentContext.newPage();
+    await studentPage.goto('http://127.0.0.1:5173/');
+    await studentPage.getByLabel('What should we call you?').fill('Class student');
+    await studentPage.getByRole('button', { name: 'Start learning', exact: true }).click();
+    await expect(studentPage.getByRole('heading', { name: /Hello, Class/ })).toBeVisible();
+    await studentPage.goto('http://127.0.0.1:5173/classrooms');
+    await studentPage.getByLabel('Classroom code').fill(code);
+    await studentPage.getByRole('button', { name: 'Join classroom', exact: true }).click();
+    await expect(studentPage.getByRole('heading', { name: 'Class 10 Science' })).toBeVisible();
+    await expect(studentPage.getByRole('button', { name: 'Remove Class student' })).toHaveCount(0);
+    await studentPage.reload();
+    await expect(studentPage.getByRole('heading', { name: 'Class 10 Science' })).toBeVisible();
+    expect(
+      await studentPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+    ).toBe(true);
+    await studentPage.screenshot({ path: 'test-results/classrooms-mobile.png', fullPage: true });
+    await page.reload();
+    await expect(page.getByRole('heading', { name: 'Students (1)' })).toBeVisible();
+    await expect(page.getByText('Class student', { exact: true })).toBeVisible();
+    await page.screenshot({ path: 'test-results/classrooms-teacher.png', fullPage: true });
+    await studentPage.getByRole('button', { name: 'Leave classroom', exact: true }).click();
+    await expect(studentPage.getByRole('heading', { name: 'Class 10 Science' })).toHaveCount(0);
+  } finally {
+    await studentContext.close();
+  }
+});
 
 test('topic stages resume with exam notes, checked equations and saved recall results', async ({
   page,

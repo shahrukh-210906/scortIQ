@@ -33,6 +33,26 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(80))
 
 
+class Teacher(Base):
+    __tablename__ = "teachers"
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+
+
+class Classroom(Base):
+    __tablename__ = "classrooms"
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    teacher_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
+    name: Mapped[str] = mapped_column(String(80))
+    code_hash: Mapped[str] = mapped_column(String(64), unique=True)
+    code_expires: Mapped[int] = mapped_column(Integer)
+
+
+class Membership(Base):
+    __tablename__ = "memberships"
+    classroom_id: Mapped[str] = mapped_column(ForeignKey("classrooms.id"), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+
+
 class Preferences(Base):
     __tablename__ = "preferences"
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)

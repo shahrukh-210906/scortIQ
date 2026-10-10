@@ -22,15 +22,18 @@ from .database import (
     AuthChallenge,
     Base,
     Bookmark,
+    Classroom,
     Feedback,
     Journey,
     Lesson,
     LessonStep,
+    Membership,
     Preferences,
     RecallAttempt,
     Reflection,
     Session,
     SessionLocal,
+    Teacher,
     Usage,
     User,
     engine,
@@ -68,7 +71,7 @@ async def lifespan(app: FastAPI):
         ):
             raise RuntimeError("Production identity and inference URLs must use HTTPS.")
         with engine.connect() as connection:
-            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0008":
+            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0009":
                 raise RuntimeError(
                     "Apply the supported database migration before starting production."
                 )
@@ -121,6 +124,7 @@ def user_payload(user: User, db: DBSession):
     return {
         "id": user.id,
         "name": user.name,
+        "role": "teacher" if db.get(Teacher, user.id) else "student",
         "verified": user.identity.startswith("supabase:"),
         "teaching_language": preferences.teaching_language if preferences else "en",
         "exam_language": preferences.exam_language if preferences else "en",
@@ -138,6 +142,151 @@ def save_preferences(db: DBSession, user: User, body):
         preferences.teaching_language = body.teaching_language
     if body.exam_language is not None:
         preferences.exam_language = body.exam_language
+
+
+class ClassroomInput(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    name: str = Field(min_length=1, max_length=80)
+
+
+class JoinInput(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    code: str = Field(min_length=12, max_length=12, pattern=r"^[a-fA-F0-9]+$")
+
+
+def require_teacher(user: User, db: DBSession):
+    if not db.get(Teacher, user.id):
+        raise HTTPException(403, "Approved teacher access is required.")
+
+
+def owned_classroom(classroom_id: str, user: User, db: DBSession):
+    require_teacher(user, db)
+    classroom = db.get(Classroom, classroom_id)
+    if not classroom or classroom.teacher_id != user.id:
+        raise HTTPException(404, "Classroom not found.")
+    return classroom
+
+
+def classroom_payload(classroom: Classroom, user: User, db: DBSession):
+    teacher = db.get(User, classroom.teacher_id)
+    result = {
+        "id": classroom.id,
+        "name": classroom.name,
+        "teacher_name": teacher.name,
+        "code_expires": classroom.code_expires,
+    }
+    if classroom.teacher_id == user.id and db.get(Teacher, user.id):
+        students = db.scalars(
+            select(User)
+            .join(Membership, Membership.user_id == User.id)
+            .where(Membership.classroom_id == classroom.id)
+            .order_by(User.name, User.id)
+        )
+        result["students"] = [{"id": student.id, "name": student.name} for student in students]
+    return result
+
+
+def new_classroom_code(classroom: Classroom):
+    code = secrets.token_hex(6).upper()
+    classroom.code_hash = hashlib.sha256(code.encode()).hexdigest()
+    classroom.code_expires = int(time.time()) + 7 * 86400
+    return code
+
+
+@app.get("/api/classrooms")
+def classrooms(user: User = Depends(require_user), db: DBSession = Depends(get_db)):
+    if db.get(Teacher, user.id):
+        query = select(Classroom).where(Classroom.teacher_id == user.id)
+    else:
+        query = select(Classroom).join(Membership).where(Membership.user_id == user.id)
+    return [
+        classroom_payload(item, user, db)
+        for item in db.scalars(query.order_by(Classroom.name, Classroom.id))
+    ]
+
+
+@app.post("/api/classrooms", dependencies=[Depends(require_same_origin)], status_code=201)
+def create_classroom(
+    body: ClassroomInput, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    require_teacher(user, db)
+    classroom = Classroom(id=secrets.token_hex(16), teacher_id=user.id, name=body.name)
+    code = new_classroom_code(classroom)
+    db.add(classroom)
+    db.commit()
+    return {**classroom_payload(classroom, user, db), "join_code": code}
+
+
+@app.post("/api/classrooms/join", dependencies=[Depends(require_same_origin)])
+def join_classroom(
+    body: JoinInput, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    if db.get(Teacher, user.id):
+        raise HTTPException(403, "Use a student account to join a classroom.")
+    code_hash = hashlib.sha256(body.code.upper().encode()).hexdigest()
+    classroom = db.scalar(
+        select(Classroom).where(
+            Classroom.code_hash == code_hash, Classroom.code_expires > time.time()
+        )
+    )
+    if not classroom or not db.get(Teacher, classroom.teacher_id):
+        raise HTTPException(
+            404, "This code is invalid or expired. Ask your teacher for a new code."
+        )
+    if not db.get(Membership, (classroom.id, user.id)):
+        db.add(Membership(classroom_id=classroom.id, user_id=user.id))
+        try:
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+            if not db.get(Membership, (classroom.id, user.id)):
+                raise
+    return classroom_payload(classroom, user, db)
+
+
+@app.post("/api/classrooms/{classroom_id}/code", dependencies=[Depends(require_same_origin)])
+def rotate_classroom_code(
+    classroom_id: str, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    classroom = owned_classroom(classroom_id, user, db)
+    code = new_classroom_code(classroom)
+    db.commit()
+    return {"join_code": code}
+
+
+@app.delete(
+    "/api/classrooms/{classroom_id}/members/{student_id}",
+    dependencies=[Depends(require_same_origin)],
+)
+def remove_member(
+    classroom_id: str,
+    student_id: str,
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    owned_classroom(classroom_id, user, db)
+    db.execute(
+        delete(Membership).where(
+            Membership.classroom_id == classroom_id, Membership.user_id == student_id
+        )
+    )
+    db.commit()
+    return {"removed": True}
+
+
+@app.post("/api/classrooms/{classroom_id}/leave", dependencies=[Depends(require_same_origin)])
+def leave_classroom(
+    classroom_id: str, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    if not db.get(Membership, (classroom_id, user.id)):
+        raise HTTPException(404, "Classroom not found.")
+    db.execute(
+        delete(Membership).where(
+            Membership.classroom_id == classroom_id, Membership.user_id == user.id
+        )
+    )
+    db.commit()
+    return {"left": True}
 
 
 def digest(value: str):
