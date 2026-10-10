@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { api, post, type User, type Curriculum } from './api';
 import { AssignmentBoard, AssignmentForm } from './Assignments';
+import TeacherSupport from './TeacherSupport';
 
 type Classroom = {
   id: string;
@@ -176,6 +177,13 @@ export default function Classrooms({ user, curriculum }: { user: User; curriculu
             >
               Leave classroom
             </button>
+          )}
+          {teacher && (
+            <TeacherSupport
+              classroomId={room.id}
+              students={room.students ?? []}
+              curriculum={curriculum}
+            />
           )}
           {teacher && (
             <AssignmentForm

@@ -1,6 +1,86 @@
 import { test, expect } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 
+test('teacher topic support saves, resumes and is visible only on the selected student topic', async ({
+  page,
+  browser,
+}) => {
+  await page.goto('/');
+  const teacher = await (
+    await page.request.post('/api/auth/local', { data: { name: 'Support teacher' } })
+  ).json();
+  execFileSync(process.platform === 'win32' ? '.venv/Scripts/python.exe' : 'python', [
+    '-m',
+    'backend.manage_teacher',
+    'grant',
+    '--user-id',
+    teacher.id,
+  ]);
+  const room = await (
+    await page.request.post('/api/classrooms', { data: { name: 'Support classroom' } })
+  ).json();
+  const context = await browser.newContext({ viewport: { width: 375, height: 812 } });
+  try {
+    const student = await context.newPage();
+    await student.goto('http://127.0.0.1:5173/');
+    const profile = await (
+      await student.request.post('/api/auth/local', {
+        data: { name: 'Support student', teaching_language: 'hinglish' },
+      })
+    ).json();
+    await student.request.post('/api/classrooms/join', { data: { code: room.join_code } });
+    await page.goto('/classrooms');
+    await page.getByText('Personalise topic support', { exact: true }).click();
+    await page.getByLabel('Student for support', { exact: true }).selectOption(profile.id);
+    await page.getByLabel('Topic for support', { exact: true }).selectOption('reactions-signs');
+    await page.getByLabel('Use simpler language', { exact: true }).check();
+    await page.getByLabel('Explain in smaller steps with more detail', { exact: true }).check();
+    await page.getByLabel('Offer extra guided practice', { exact: true }).check();
+    await page.getByRole('button', { name: 'Save topic support', exact: true }).click();
+    await expect(page.getByRole('status').filter({ hasText: 'Support saved' })).toBeVisible();
+    await page.reload();
+    await page.getByText('Personalise topic support', { exact: true }).click();
+    await page.getByLabel('Student for support', { exact: true }).selectOption(profile.id);
+    await page.getByLabel('Topic for support', { exact: true }).selectOption('reactions-signs');
+    await expect(page.getByLabel('Use simpler language', { exact: true })).toBeChecked();
+    await page.screenshot({ path: 'test-results/teacher-support-desktop.png', fullPage: true });
+    await student.goto('http://127.0.0.1:5173/lesson/reactions-signs');
+    const support = student.getByRole('region', {
+      name: 'Teacher support for this topic',
+      exact: true,
+    });
+    await expect(support.getByText('Use simpler language', { exact: true })).toBeVisible();
+    await expect(support.getByText('Offer extra guided practice', { exact: true })).toBeVisible();
+    await expect(
+      support.getByText('These choices will guide AI tutoring when it is connected.'),
+    ).toBeVisible();
+    expect(await student.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+    await student.screenshot({ path: 'test-results/student-support-mobile.png', fullPage: true });
+    await student.goto('http://127.0.0.1:5173/lesson/light-reflection');
+    await expect(
+      student.getByRole('button', { name: 'Continue to exam notes', exact: true }),
+    ).toBeVisible();
+    await expect(support).toHaveCount(0);
+    for (const label of [
+      'Use simpler language',
+      'Explain in smaller steps with more detail',
+      'Offer extra guided practice',
+    ])
+      await page.getByLabel(label, { exact: true }).uncheck();
+    await page.getByRole('button', { name: 'Save topic support', exact: true }).click();
+    await expect(page.getByRole('status').filter({ hasText: 'Support saved' })).toBeVisible();
+    await student.goto('http://127.0.0.1:5173/lesson/reactions-signs');
+    await expect(
+      student.getByRole('button', { name: 'Continue to exam notes', exact: true }),
+    ).toBeVisible();
+    await expect(support).toHaveCount(0);
+  } finally {
+    await context.close();
+  }
+});
+
 test('daily assignments appear on student dashboards and teachers see saved practice', async ({
   page,
   browser,
@@ -116,7 +196,9 @@ test('approved teachers create classrooms and students join and leave on mobile'
     await studentPage.screenshot({ path: 'test-results/classrooms-mobile.png', fullPage: true });
     await page.reload();
     await expect(page.getByRole('heading', { name: 'Students (1)' })).toBeVisible();
-    await expect(page.getByText('Class student', { exact: true })).toBeVisible();
+    await expect(
+      page.locator('.classroom-roster').getByText('Class student', { exact: true }),
+    ).toBeVisible();
     await page.screenshot({ path: 'test-results/classrooms-teacher.png', fullPage: true });
     await studentPage.getByRole('button', { name: 'Leave classroom', exact: true }).click();
     await expect(studentPage.getByRole('heading', { name: 'Class 10 Science' })).toHaveCount(0);

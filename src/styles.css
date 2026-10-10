@@ -2643,3 +2643,50 @@ textarea:focus {
 .assignment-board .text-button {
   min-height: 44px;
 }
+.teacher-support {
+  margin: 24px 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.teacher-support summary {
+  cursor: pointer;
+  min-height: 44px;
+  font-weight: 700;
+}
+.teacher-support select {
+  width: 100%;
+  min-height: 44px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: inherit;
+  background: var(--surface);
+}
+.teacher-support fieldset {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 0;
+}
+.teacher-support .support-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+}
+.teacher-support input[type='checkbox'] {
+  width: 20px;
+  min-height: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.student-support {
+  margin: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--cream);
+}
+.student-support ul {
+  padding-left: 20px;
+}

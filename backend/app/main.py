@@ -34,6 +34,7 @@ from .database import (
     Reflection,
     Session,
     SessionLocal,
+    SupportSetting,
     Teacher,
     Usage,
     User,
@@ -72,7 +73,7 @@ async def lifespan(app: FastAPI):
         ):
             raise RuntimeError("Production identity and inference URLs must use HTTPS.")
         with engine.connect() as connection:
-            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0010":
+            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0011":
                 raise RuntimeError(
                     "Apply the supported database migration before starting production."
                 )
@@ -271,6 +272,11 @@ def remove_member(
             Membership.classroom_id == classroom_id, Membership.user_id == student_id
         )
     )
+    db.execute(
+        delete(SupportSetting).where(
+            SupportSetting.classroom_id == classroom_id, SupportSetting.user_id == student_id
+        )
+    )
     db.commit()
     return {"removed": True}
 
@@ -286,12 +292,108 @@ def leave_classroom(
             Membership.classroom_id == classroom_id, Membership.user_id == user.id
         )
     )
+    db.execute(
+        delete(SupportSetting).where(
+            SupportSetting.classroom_id == classroom_id, SupportSetting.user_id == user.id
+        )
+    )
     db.commit()
     return {"left": True}
 
 
 def digest(value: str):
     return hashlib.sha256(value.encode()).hexdigest()
+
+
+class SupportInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    simple_language: StrictBool
+    more_detail: StrictBool
+    extra_practice: StrictBool
+
+
+SUPPORT_FIELDS = ("simple_language", "more_detail", "extra_practice")
+
+
+def support_payload(setting):
+    return {field: bool(getattr(setting, field)) for field in SUPPORT_FIELDS}
+
+
+def effective_support(db: DBSession, user_id: str, topic_id: str):
+    # Only current memberships and still-approved classroom owners can affect tutoring.
+    settings = list(
+        db.scalars(
+            select(SupportSetting)
+            .join(Classroom, Classroom.id == SupportSetting.classroom_id)
+            .join(Teacher, Teacher.user_id == Classroom.teacher_id)
+            .join(
+                Membership,
+                (Membership.classroom_id == SupportSetting.classroom_id)
+                & (Membership.user_id == SupportSetting.user_id),
+            )
+            .where(SupportSetting.user_id == user_id, SupportSetting.topic_id == topic_id)
+        )
+    )
+    return {field: any(getattr(setting, field) for setting in settings) for field in SUPPORT_FIELDS}
+
+
+@app.get("/api/classrooms/{classroom_id}/support")
+def classroom_support(
+    classroom_id: str, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    owned_classroom(classroom_id, user, db)
+    rows = db.scalars(
+        select(SupportSetting)
+        .join(
+            Membership,
+            (Membership.classroom_id == SupportSetting.classroom_id)
+            & (Membership.user_id == SupportSetting.user_id),
+        )
+        .where(SupportSetting.classroom_id == classroom_id)
+    )
+    return [
+        {"student_id": row.user_id, "topic_id": row.topic_id, **support_payload(row)}
+        for row in rows
+    ]
+
+
+@app.put(
+    "/api/classrooms/{classroom_id}/support/{student_id}/{topic_id}",
+    dependencies=[Depends(require_same_origin)],
+)
+def save_support(
+    classroom_id: str,
+    student_id: str,
+    topic_id: str,
+    body: SupportInput,
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    owned_classroom(classroom_id, user, db)
+    if not db.get(Membership, (classroom_id, student_id)):
+        raise HTTPException(404, "Student not found in this classroom.")
+    if not topic_by_id(topic_id):
+        raise HTTPException(422, "Choose an available pilot topic.")
+    setting = db.get(SupportSetting, (classroom_id, student_id, topic_id))
+    if not setting:
+        setting = SupportSetting(classroom_id=classroom_id, user_id=student_id, topic_id=topic_id)
+        db.add(setting)
+    for field in SUPPORT_FIELDS:
+        setattr(setting, field, int(getattr(body, field)))
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(409, "Support changed in another window. Reload and try again.")
+    return support_payload(setting)
+
+
+@app.get("/api/lessons/{lesson_id}/support")
+def lesson_support(
+    lesson_id: str, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    lesson = owned_lesson(db, user, lesson_id)
+    return effective_support(db, user.id, lesson.topic_id)
 
 
 class AssignmentInput(BaseModel):
@@ -1123,6 +1225,13 @@ async def tutor_turn(
         "hi": " Teach in simple Hindi. Preserve equations, units and source IDs exactly.",
         "hinglish": " Teach in simple conversational Hinglish using Roman Hindi and English scientific terms. Preserve equations, units and source IDs exactly.",
     }[teaching_language]
+    support = effective_support(db, user.id, lesson.topic_id)
+    if support["simple_language"]:
+        system += " Teacher support for this topic: use simple vocabulary and short sentences; explain each scientific term."
+    if support["more_detail"]:
+        system += " Teacher support for this topic: explain in small steps with a concrete example, then check understanding before moving on."
+    if support["extra_practice"]:
+        system += " Teacher support for this topic: offer one extra guided practice question at a time with hints rather than immediately revealing the answer."
     messages = [
         {"role": "system", "content": system},
         *[{"role": message["role"], "content": message["content"]} for message in history[-12:]],

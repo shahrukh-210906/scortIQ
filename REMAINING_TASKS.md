@@ -15,7 +15,8 @@ See `CLASS10_PRODUCT_PLAN.md` and `CLASS10_CURRICULUM.md`. This direction supers
 - [ ] Complete one reviewed topic journey with real AI grounding and exam-writing notes in English/Hindi.
 - [x] Add authorised teacher roles, classroom creation, invitations and membership.
 - [x] Add daily topic assignments and assignment-aware student/teacher dashboards.
-- [ ] Add teacher support settings per student/topic and evidence-based analytics.
+- [x] Add teacher support settings per student/topic and apply them to the AI tutor policy.
+- [ ] Expand classroom analytics with attempt history and question-level evidence for teacher review.
 - [ ] Add subjective practice exams, answer auto-save, reviewed rubrics and provisional AI feedback.
 - [ ] Add teacher review/approval of assigned exam marks and correction history.
 - [ ] Review all catalogue topics, resolve assessment-scope ambiguity and expand content safely.

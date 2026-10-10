@@ -10,6 +10,7 @@ import {
 import ContentFeedback from './ContentFeedback';
 import Classrooms from './Classrooms';
 import { AssignmentBoard } from './Assignments';
+import { StudentSupport } from './TeacherSupport';
 import LanguageFields from './LanguageFields';
 import CurriculumCatalogue from './CurriculumCatalogue';
 import BookmarkButton from './BookmarkButton';
@@ -1165,6 +1166,7 @@ function LessonPage() {
               aria-label={config.inference_configured ? 'Connected' : 'Not connected'}
             />
           </div>
+          <StudentSupport lessonId={lesson.id} connected={config.inference_configured} />
           <div className="chat-messages" aria-live="polite">
             {!lesson.messages.length && (
               <div className="chat-intro">
