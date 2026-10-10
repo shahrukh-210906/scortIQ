@@ -77,7 +77,7 @@ Apply migrations before import, then run `python -m backend.import_sources path/
 
 Each JSONL record requires `id`, `title`, `topic_id`, `class_level: 10`, `language: "en"`, `version`, `rights`, `rights_confirmed: true`, `review_status: "draft"` or `"reviewed"`, and `passages` (1–100 strings, each at most 2000 characters). Reviewed material also requires a named `reviewer`. These metadata fields document the approval process; they do not replace an actual educator/rights review.
 
-The current database migration is `0006`. Upgrading from `0001` adds source, checklist and email challenge tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
+The current database migration is `0007`. Upgrading from `0001` adds source, checklist and email challenge tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
 
 ## Supabase email sign-in and recovery
 
@@ -91,7 +91,7 @@ The current database migration is `0006`. Upgrading from `0001` adds source, che
 
 Learners can expand "Report an issue with this lesson", choose a category and submit a 10–2,000 character description. Reports are stored against the authenticated account and topic; invalid topics, blank messages and cross-site writes are rejected. The UI preserves failed submissions for retry and confirms saved reports. A per-account limit allows ten reports per hour; stronger concurrent/global abuse enforcement remains release work. Reports are saved locally in the configured database; staff triage and notifications are not implemented yet.
 
-Run migration `0006` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
+Run migration `0007` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
 
 ## Saved reflections — 10 October 2026
 
@@ -100,3 +100,11 @@ Each lesson now includes a written answer field. Learners can save and revise up
 ## Bookmarks and review queue — 10 October 2026
 
 Choose "Save for review" on a lesson to keep that concept in the learning library's "Saved for review" list. The queue persists across reloads, is private to the account and lists recently saved concepts first. Open a saved concept to revisit it or remove it from either the lesson or the queue. Saving/removing does not change checklist completion or quiz scores. Migration `0006` adds bookmarks without altering learning records.
+
+## Language preferences and four-subject study map — 10 October 2026
+
+Choose teaching language (English, Hindi or Hinglish) and exam-answer language (English or Hindi) before opening a local profile or verifying an email code. Settings saves both independently. Existing accounts default to English; verified sign-in preserves previously saved preferences unless the learner changes the language controls. The server includes the chosen teaching language in the tutor system policy on each request. This does not translate existing notes or prove live bilingual tutor quality; current pilot notes remain English and the endpoint still requires configuration/evaluation.
+
+Study includes a searchable NCERT/CBSE 2026–27 map of all four subjects, 27 chapters and 185 planned topics. Expand a chapter to see its topics and official NCERT link. Planned topics are explicitly unavailable, with the existing pilot lessons remaining separately accessible. This preserves prior lesson IDs and saved learning. Supplementary formative units remain in the planning catalogue and are not yet included in the core study-map UI.
+
+Migration `0007` adds account language preferences without changing users or learning records. Validation: build, 24 backend checks, five browser journeys, formatter/linter checks and migration parity pass; browser coverage includes preference reload, four-subject browsing, search and mobile overflow.

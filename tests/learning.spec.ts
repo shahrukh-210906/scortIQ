@@ -1,5 +1,48 @@
 import { test, expect } from '@playwright/test';
 
+test('language preferences persist and all four study subjects can be browsed', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/');
+  await page.getByLabel('Teaching language', { exact: true }).selectOption('hinglish');
+  await page.getByLabel('Exam-answer language', { exact: true }).selectOption('hi');
+  await page.getByLabel('What should we call you?').fill('Language learner');
+  await page.getByRole('button', { name: 'Start learning', exact: true }).click();
+  await page.goto('/settings');
+  await expect(page.getByLabel('Teaching language', { exact: true })).toHaveValue('hinglish');
+  await expect(page.getByLabel('Exam-answer language', { exact: true })).toHaveValue('hi');
+  await page.getByLabel('Exam-answer language', { exact: true }).selectOption('en');
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.getByRole('status')).toContainText('language preferences have been updated');
+  await page.reload();
+  await expect(page.getByLabel('Teaching language', { exact: true })).toHaveValue('hinglish');
+  await expect(page.getByLabel('Exam-answer language', { exact: true })).toHaveValue('en');
+  await page.goto('/learn');
+  const map = page.getByRole('region', { name: 'Class 10 study map' });
+  for (const [subject, chapter] of [
+    ['maths', 'Real Numbers'],
+    ['chemistry', 'Acids, Bases and Salts'],
+    ['biology', 'Heredity'],
+    ['physics', 'Electricity'],
+  ]) {
+    await map.getByLabel('Study subject').selectOption(subject);
+    await expect(map.locator('summary').filter({ hasText: chapter })).toBeVisible();
+  }
+  await map.locator('summary').filter({ hasText: 'Electricity' }).click();
+  await expect(
+    map.getByText('Connecting charge, current and time', { exact: false }),
+  ).toBeVisible();
+  await expect(map.getByText('Lesson not available yet')).toHaveCount(36);
+  await map.getByLabel('Search the study map').fill('no matching concept');
+  await expect(map).toContainText('No matching chapters or topics.');
+  await map.getByLabel('Search the study map').fill('resistivity');
+  await expect(map.locator('summary')).toHaveCount(1);
+  await map.locator('summary').click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: 'test-results/study-map-mobile.png', fullPage: true });
+});
+
 test('saved review concepts persist, retry failures and can be removed on mobile', async ({
   page,
 }) => {
@@ -160,7 +203,9 @@ test('student can study, submit a quiz, reload progress and rename their profile
   await page.getByRole('link', { name: 'Settings', exact: true }).click();
   await page.getByLabel('Name', { exact: true }).fill('Asha Rao');
   await page.getByRole('button', { name: 'Save changes' }).click();
-  await expect(page.getByRole('status')).toHaveText('Your name has been updated.');
+  await expect(page.getByRole('status')).toHaveText(
+    'Your profile and language preferences have been updated.',
+  );
   await page.screenshot({ path: 'test-results/settings-desktop.png', fullPage: true });
   await page.getByRole('link', { name: 'Overview', exact: true }).click();
   await page.screenshot({ path: 'test-results/dashboard-desktop.png', fullPage: true });

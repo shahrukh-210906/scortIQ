@@ -1,4 +1,5 @@
-export type User = { id: string; name: string; verified?: boolean };
+export type Languages = { teaching_language: 'en' | 'hi' | 'hinglish'; exam_language: 'en' | 'hi' };
+export type User = Languages & { id: string; name: string; verified?: boolean };
 export type Topic = {
   id: string;
   title: string;

@@ -2351,3 +2351,87 @@ textarea:focus {
     gap: 0;
   }
 }
+.language-fields {
+  display: grid;
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  margin: 20px 0;
+  min-width: 0;
+}
+.language-fields legend {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.language-fields select,
+.catalogue-tools select,
+.catalogue-tools input {
+  width: 100%;
+  min-height: 44px;
+  padding: 12px;
+  border: 1px solid #879b93;
+  border-radius: 10px;
+  background: white;
+  color: #18392e;
+  font: inherit;
+}
+.language-fields select:focus-visible,
+.catalogue-tools select:focus-visible,
+.catalogue-tools input:focus-visible {
+  outline: 3px solid #267958;
+  outline-offset: 3px;
+}
+.curriculum-catalogue {
+  margin: 32px 0;
+}
+.curriculum-catalogue > p {
+  line-height: 1.6;
+  margin: 16px 0;
+}
+.catalogue-tools {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 16px;
+  margin: 24px 0;
+}
+.catalogue-tools label {
+  display: grid;
+  gap: 10px;
+  font-weight: 600;
+}
+.catalogue-chapter {
+  margin: 12px 0;
+  padding: 20px;
+}
+.catalogue-chapter summary {
+  cursor: pointer;
+  min-height: 44px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.catalogue-chapter summary span {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 20px;
+}
+.catalogue-chapter li {
+  line-height: 1.6;
+  margin: 16px 0;
+}
+.catalogue-status {
+  display: block;
+  font-size: 14px;
+  color: #596b63;
+}
+.catalogue-chapter a {
+  display: inline-block;
+  min-height: 44px;
+  padding: 12px 0;
+  text-decoration: underline;
+}
+@media (max-width: 600px) {
+  .catalogue-tools {
+    grid-template-columns: 1fr;
+  }
+}

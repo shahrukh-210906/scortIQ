@@ -8,6 +8,8 @@ import {
   type ReactNode,
 } from 'react';
 import ContentFeedback from './ContentFeedback';
+import LanguageFields from './LanguageFields';
+import CurriculumCatalogue from './CurriculumCatalogue';
 import BookmarkButton from './BookmarkButton';
 import ReflectionAnswer from './ReflectionAnswer';
 import {
@@ -58,6 +60,7 @@ import {
   type Result,
   type Topic,
   type User,
+  type Languages,
   type SourceRef,
 } from './api';
 import { EmailSignIn } from './EmailSignIn';
@@ -201,8 +204,8 @@ export default function App() {
           await load();
           navigate('/');
         }}
-        onStart={async (name) => {
-          const profile = await post<User>('/auth/local', { name });
+        onStart={async (name, languages) => {
+          const profile = await post<User>('/auth/local', { name, ...languages });
           bootGeneration.current++;
           setUser(profile);
           setProgress(emptyProgress);
@@ -236,10 +239,15 @@ function Welcome({
   onSignedIn,
 }: {
   config: Config;
-  onStart: (name: string) => Promise<void>;
+  onStart: (name: string, languages: Languages) => Promise<void>;
   onSignedIn: () => Promise<void>;
 }) {
   const [name, setName] = useState('');
+  const [languages, setLanguages] = useState<Languages>({
+    teaching_language: 'en',
+    exam_language: 'en',
+  });
+  const [languagesChanged, setLanguagesChanged] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   async function submit(e: FormEvent) {
@@ -247,7 +255,7 @@ function Welcome({
     setBusy(true);
     setError('');
     try {
-      await onStart(name.trim());
+      await onStart(name.trim(), languages);
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -273,11 +281,12 @@ function Welcome({
             <em>Real understanding.</em>
           </h1>
           <p className="welcome-description">
-            Your own space to explore science, work through the tricky bits, and learn at your pace.
+            Your Class 10 space to explore Maths and Science, work through the tricky bits, and
+            learn at your pace.
           </p>
           <div className="welcome-points">
             <span>
-              <CheckCircle2 size={18} /> Class 10 science
+              <CheckCircle2 size={18} /> Class 10 Maths & Science
             </span>
             <span>
               <CheckCircle2 size={18} /> Guided lessons
@@ -298,7 +307,20 @@ function Welcome({
               ? 'Sign in with your email to save your learning and return on any device.'
               : 'Start with a name. Choose a concept. See where your curiosity takes you.'}
           </p>
-          {config.email_signin && <EmailSignIn onSignedIn={onSignedIn} />}
+          <LanguageFields
+            value={languages}
+            onChange={(value) => {
+              setLanguages(value);
+              setLanguagesChanged(true);
+            }}
+            disabled={busy}
+          />
+          {config.email_signin && (
+            <EmailSignIn
+              onSignedIn={onSignedIn}
+              languages={languagesChanged ? languages : undefined}
+            />
+          )}
           {config.local_profiles ? (
             <form onSubmit={submit}>
               <label htmlFor="name">What should we call you?</label>
@@ -720,6 +742,7 @@ function Library() {
           <ChapterCard key={c.id} chapter={c} />
         ))}
       </div>
+      <CurriculumCatalogue />
       {!chapters.length && (
         <EmptyState
           title="No chapters found"
@@ -1422,6 +1445,10 @@ function ProgressPage() {
 function SettingsPage() {
   const { user, setUser, config } = useLearning();
   const [name, setName] = useState(user.name);
+  const [languages, setLanguages] = useState<Languages>({
+    teaching_language: user.teaching_language ?? 'en',
+    exam_language: user.exam_language ?? 'en',
+  });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
@@ -1431,7 +1458,9 @@ function SettingsPage() {
     setSaved(false);
     setError('');
     try {
-      setUser(await api<User>('/me', { method: 'PATCH', body: JSON.stringify({ name }) }));
+      setUser(
+        await api<User>('/me', { method: 'PATCH', body: JSON.stringify({ name, ...languages }) }),
+      );
       setSaved(true);
     } catch (e) {
       setError((e as Error).message);
@@ -1460,26 +1489,34 @@ function SettingsPage() {
             required
             maxLength={80}
           />
+          <LanguageFields
+            value={languages}
+            onChange={(value) => {
+              setLanguages(value);
+              setSaved(false);
+            }}
+            disabled={busy}
+          />
           <button className="button primary" disabled={busy || !name.trim()}>
             {busy ? 'Saving…' : 'Save changes'}
             <Check size={17} />
           </button>
           {saved && (
             <p className="success" role="status">
-              Your name has been updated.
+              Your profile and language preferences have been updated.
             </p>
           )}
           {error && <ErrorNotice message={error} />}
         </form>
         <hr />
         <h3>About this pilot</h3>
-        <p>Class 10 · Science · English</p>
+        <p>Class 10 · CBSE 2026–27 · Maths & Science</p>
         <p>
           {user.verified
             ? 'Your account uses verified email sign-in. Sign in with the same email to recover your learning.'
             : 'This is a local development profile, not a verified student account.'}{' '}
-          Hindi/Hinglish support and wider curriculum coverage will follow educator and model
-          evaluation.
+          Saved teaching preferences guide the tutor when connected. Current pilot notes are in
+          English; reviewed Hindi notes and live language-quality evaluation are still pending.
         </p>
         <p>
           AI tutor:{' '}

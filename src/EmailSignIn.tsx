@@ -1,7 +1,13 @@
 import { useState, type FormEvent } from 'react';
-import { post } from './api';
+import { post, type Languages } from './api';
 
-export function EmailSignIn({ onSignedIn }: { onSignedIn: () => Promise<void> }) {
+export function EmailSignIn({
+  onSignedIn,
+  languages,
+}: {
+  onSignedIn: () => Promise<void>;
+  languages?: Languages;
+}) {
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [sent, setSent] = useState(false);
@@ -20,7 +26,7 @@ export function EmailSignIn({ onSignedIn }: { onSignedIn: () => Promise<void> })
     setError('');
     try {
       if (sent) {
-        await post('/auth/email/verify', { email: email.trim(), code });
+        await post('/auth/email/verify', { email: email.trim(), code, ...languages });
         await onSignedIn();
       } else await send();
     } catch (e) {

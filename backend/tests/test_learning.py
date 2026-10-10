@@ -121,6 +121,51 @@ class LearningTests(unittest.TestCase):
         self.client.post("/api/auth/logout")
         self.assertEqual(self.client.post(endpoint, json={"saved": True}).status_code, 401)
 
+    def test_language_preferences_validate_persist_and_preserve_learning(self):
+        self.client.post("/api/lessons/reactions-signs")
+        original = self.client.get("/api/progress").json()
+        self.assertEqual(self.client.get("/api/me").json()["teaching_language"], "en")
+        updated = self.client.patch(
+            "/api/me", json={"name": "Asha", "teaching_language": "hinglish", "exam_language": "hi"}
+        )
+        self.assertEqual(updated.status_code, 200)
+        self.assertEqual(updated.json()["teaching_language"], "hinglish")
+        self.assertEqual(self.client.get("/api/me").json()["exam_language"], "hi")
+        self.client.patch("/api/me", json={"name": "Asha renamed"})
+        self.assertEqual(self.client.get("/api/me").json()["teaching_language"], "hinglish")
+        self.assertEqual(self.client.get("/api/progress").json(), original)
+        self.assertEqual(
+            self.client.patch(
+                "/api/me", json={"name": "Asha", "exam_language": "hinglish"}
+            ).status_code,
+            422,
+        )
+        self.assertEqual(
+            self.client.patch(
+                "/api/me", json={"name": "Asha", "teaching_language": "invalid"}
+            ).status_code,
+            422,
+        )
+        other = self.client.post(
+            "/api/auth/local",
+            json={"name": "Other", "teaching_language": "hi", "exam_language": "en"},
+        )
+        self.assertEqual(other.json()["teaching_language"], "hi")
+        self.assertEqual(other.json()["exam_language"], "en")
+
+    def test_catalogue_has_four_subjects_and_only_planned_topics(self):
+        response = self.client.get("/api/catalogue")
+        self.assertEqual(response.status_code, 200)
+        catalogue = response.json()
+        self.assertEqual(catalogue["class_level"], 10)
+        self.assertEqual(
+            {s["title"] for s in catalogue["subjects"]},
+            {"Maths", "Chemistry", "Biology", "Physics"},
+        )
+        topics = [t for s in catalogue["subjects"] for c in s["chapters"] for t in c["topics"]]
+        self.assertEqual(len(topics), 185)
+        self.assertTrue(all(t["availability"] == "planned" for t in topics))
+
     def test_email_signin_recovery_rotation_and_replay(self):
         original_cookie = self.client.cookies.get("scortiq_session")
         account = {
@@ -156,6 +201,10 @@ class LearningTests(unittest.TestCase):
                 400,
             )
             self.client.post("/api/lessons/reactions-signs")
+            self.client.patch(
+                "/api/me",
+                json={"name": "Asha", "teaching_language": "hinglish", "exam_language": "hi"},
+            )
             self.client.cookies.set("scortiq_session", original_cookie)
             self.assertEqual(self.client.get("/api/me").status_code, 401)
             # A new browser recovers the same provider identity and saved progress.
@@ -170,6 +219,8 @@ class LearningTests(unittest.TestCase):
                 "/api/auth/email/verify", json={"email": "asha@example.com", "code": "123456"}
             )
             self.assertEqual(recovered.json()["id"], verified_id)
+            self.assertEqual(recovered.json()["teaching_language"], "hinglish")
+            self.assertEqual(recovered.json()["exam_language"], "hi")
             self.assertIn("reactions-signs", other.get("/api/progress").json()["started_topics"])
             with patch.object(main, "PRODUCTION", True):
                 self.assertEqual(other.get("/api/me").status_code, 200)
@@ -368,6 +419,9 @@ class LearningTests(unittest.TestCase):
         self.assertEqual(self.client.get("/api/me").json()["name"], "Asha Rao")
 
     def test_valid_tutor_reply_persists_and_quota_is_enforced(self):
+        self.client.patch(
+            "/api/me", json={"name": "Asha", "teaching_language": "hinglish", "exam_language": "hi"}
+        )
         lesson = self.client.post("/api/lessons/reactions-signs").json()
         provider_response = Mock()
         provider_response.raise_for_status.return_value = None
@@ -399,6 +453,8 @@ class LearningTests(unittest.TestCase):
             )
             self.assertEqual(limited.status_code, 429)
             self.assertEqual(provider.post.await_count, 1)
+            prompt = provider.post.call_args.kwargs["json"]["messages"][0]["content"]
+            self.assertIn("Teach in simple conversational Hinglish", prompt)
         resumed = self.client.post("/api/lessons/reactions-signs").json()
         self.assertEqual(
             resumed["messages"][1]["content"], "What new substance do you think forms?"

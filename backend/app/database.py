@@ -25,6 +25,13 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(80))
 
 
+class Preferences(Base):
+    __tablename__ = "preferences"
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    teaching_language: Mapped[str] = mapped_column(String(10), default="en")
+    exam_language: Mapped[str] = mapped_column(String(10), default="en")
+
+
 class Session(Base):
     __tablename__ = "sessions"
     token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)

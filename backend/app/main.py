@@ -5,6 +5,7 @@ import secrets
 import time
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Literal
 from urllib.parse import urlparse
 
@@ -24,6 +25,7 @@ from .database import (
     Feedback,
     Lesson,
     LessonStep,
+    Preferences,
     Reflection,
     Session,
     SessionLocal,
@@ -63,7 +65,7 @@ async def lifespan(app: FastAPI):
         ):
             raise RuntimeError("Production identity and inference URLs must use HTTPS.")
         with engine.connect() as connection:
-            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0006":
+            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0007":
                 raise RuntimeError(
                     "Apply the supported database migration before starting production."
                 )
@@ -111,8 +113,28 @@ def require_same_origin(request: Request):
         raise HTTPException(403, "Cross-site requests are not allowed.")
 
 
-def user_payload(user: User):
-    return {"id": user.id, "name": user.name, "verified": user.identity.startswith("supabase:")}
+def user_payload(user: User, db: DBSession):
+    preferences = db.get(Preferences, user.id)
+    return {
+        "id": user.id,
+        "name": user.name,
+        "verified": user.identity.startswith("supabase:"),
+        "teaching_language": preferences.teaching_language if preferences else "en",
+        "exam_language": preferences.exam_language if preferences else "en",
+    }
+
+
+def save_preferences(db: DBSession, user: User, body):
+    if body.teaching_language is None and body.exam_language is None:
+        return
+    preferences = db.get(Preferences, user.id)
+    if not preferences:
+        preferences = Preferences(user_id=user.id, teaching_language="en", exam_language="en")
+        db.add(preferences)
+    if body.teaching_language is not None:
+        preferences.teaching_language = body.teaching_language
+    if body.exam_language is not None:
+        preferences.exam_language = body.exam_language
 
 
 def digest(value: str):
@@ -159,6 +181,8 @@ def report_content(
 
 class VerifyInput(EmailInput):
     code: str = Field(pattern=r"^[0-9]{6}$")
+    teaching_language: Literal["en", "hi", "hinglish"] | None = None
+    exam_language: Literal["en", "hi"] | None = None
 
 
 async def supabase_request(path: str, payload: dict | None = None, token: str | None = None):
@@ -289,6 +313,7 @@ async def email_verify(
     if old_session:
         db.delete(old_session)
     session_token = secrets.token_urlsafe(32)
+    save_preferences(db, user, body)
     db.add(
         Session(token_hash=digest(session_token), user_id=user.id, expires=int(time.time()) + 3600)
     )
@@ -302,11 +327,13 @@ async def email_verify(
         max_age=3600,
     )
     response.delete_cookie("scortiq_challenge", path="/api/auth/email")
-    return user_payload(user)
+    return user_payload(user, db)
 
 
 class ProfileInput(BaseModel):
     name: str = Field(min_length=1, max_length=80)
+    teaching_language: Literal["en", "hi", "hinglish"] | None = None
+    exam_language: Literal["en", "hi"] | None = None
 
 
 class QuizInput(BaseModel):
@@ -391,6 +418,7 @@ def local_profile(body: ProfileInput, response: Response, db: DBSession = Depend
     user = User(id=secrets.token_hex(16), identity=f"local:{secrets.token_hex(16)}", name=name)
     db.add(user)
     db.flush()
+    save_preferences(db, user, body)
     db.add(
         Session(
             token_hash=hashlib.sha256(token.encode()).hexdigest(),
@@ -400,12 +428,12 @@ def local_profile(body: ProfileInput, response: Response, db: DBSession = Depend
     )
     db.commit()
     response.set_cookie("scortiq_session", token, httponly=True, samesite="strict", max_age=604800)
-    return user_payload(user)
+    return user_payload(user, db)
 
 
 @app.get("/api/me")
-def me(user: User = Depends(require_user)):
-    return user_payload(user)
+def me(user: User = Depends(require_user), db: DBSession = Depends(get_db)):
+    return user_payload(user, db)
 
 
 @app.patch("/api/me", dependencies=[Depends(require_same_origin)])
@@ -415,8 +443,9 @@ def update_profile(
     if not body.name.strip():
         raise HTTPException(422, "Enter your name.")
     user.name = body.name.strip()
+    save_preferences(db, user, body)
     db.commit()
-    return user_payload(user)
+    return user_payload(user, db)
 
 
 @app.post("/api/auth/logout", dependencies=[Depends(require_same_origin)])
@@ -428,6 +457,17 @@ def logout(request: Request, response: Response, db: DBSession = Depends(get_db)
         db.commit()
     response.delete_cookie("scortiq_session")
     return {"ok": True}
+
+
+@app.get("/api/catalogue")
+def catalogue():
+    path = Path(__file__).resolve().parents[2] / "curriculum" / "class10_ncert_2026_27.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    for subject in data["subjects"]:
+        for chapter in subject["chapters"]:
+            for topic in chapter["topics"]:
+                topic["availability"] = "planned"
+    return data
 
 
 @app.get("/api/curriculum")
@@ -573,6 +613,12 @@ async def tutor_turn(
         "that support your explanation. Never invent source IDs. Retrieved lesson evidence: "
         + json.dumps(evidence)
     )
+    teaching_language = user_payload(user, db)["teaching_language"]
+    system += {
+        "en": " Teach in clear English.",
+        "hi": " Teach in simple Hindi. Preserve equations, units and source IDs exactly.",
+        "hinglish": " Teach in simple conversational Hinglish using Roman Hindi and English scientific terms. Preserve equations, units and source IDs exactly.",
+    }[teaching_language]
     messages = [
         {"role": "system", "content": system},
         *[{"role": message["role"], "content": message["content"]} for message in history[-12:]],
