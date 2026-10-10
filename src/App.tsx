@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import ContentFeedback from './ContentFeedback';
+import ReflectionAnswer from './ReflectionAnswer';
 import {
   Link,
   NavLink,
@@ -997,6 +998,11 @@ function LessonPage() {
             <p className="eyebrow">PAUSE & THINK</p>
             <h3>{topic.question}</h3>
             <p>Try answering in your own words before opening the explanation.</p>
+            <ReflectionAnswer
+              key={lesson.id}
+              lessonId={lesson.id}
+              initialAnswer={lesson.reflection}
+            />
             <button
               className="text-button"
               aria-expanded={answerVisible}

@@ -7,7 +7,7 @@ Updated 10 October 2026. Supabase configuration is deferred at the user's reques
 - [x] Let learners report incorrect or confusing lesson content, with persisted account-owned reports and submission feedback.
 
 ## Features to build next
-- [ ] Save learners' written reflections and restore them when a lesson is reopened.
+- [x] Save learners' written reflections and restore them when a lesson is reopened.
 - [ ] Add bookmarks and a review queue for concepts learners want to revisit.
 - [ ] Add supported equation-balancing practice with deterministic checking and hints.
 - [ ] Add quiz attempt history and a way to reopen previous answer explanations.

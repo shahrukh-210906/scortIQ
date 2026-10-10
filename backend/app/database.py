@@ -61,6 +61,13 @@ class Lesson(Base):
     __table_args__ = (UniqueConstraint("user_id", "topic_id"),)
 
 
+class Reflection(Base):
+    __tablename__ = "reflections"
+    lesson_id: Mapped[str] = mapped_column(ForeignKey("lessons.id"), primary_key=True)
+    answer: Mapped[str] = mapped_column(Text)
+    updated_at: Mapped[int] = mapped_column(Integer)
+
+
 class Attempt(Base):
     __tablename__ = "attempts"
     id: Mapped[str] = mapped_column(String(64), primary_key=True)

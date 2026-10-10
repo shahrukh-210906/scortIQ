@@ -18,3 +18,4 @@ Updated 8 October 2026. This bar counts defined milestones, not time, effort, or
 Current milestone: configure and live-verify Supabase sign-in and recovery. Source review and model evaluation can continue independently, but no unreviewed model/content should be treated as release-ready.
 
 10 October: Existing rebuild committed and pushed. Added persisted learner issue reports with validation and submission feedback. Supabase configuration is deferred; feature work is tracked in `REMAINING_TASKS.md`.
+10 October: Added saved, editable account-owned written reflections. Build, 21 backend checks, migration parity and browser journeys validate the feature.

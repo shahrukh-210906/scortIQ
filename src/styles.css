@@ -2292,3 +2292,25 @@ textarea:focus {
 .content-feedback p {
   line-height: 1.6;
 }
+.reflection-answer {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0;
+}
+.reflection-answer label {
+  font-weight: 600;
+}
+.reflection-answer textarea {
+  width: 100%;
+  font: inherit;
+  padding: 12px;
+  border: 1px solid #879b93;
+  border-radius: 10px;
+  resize: vertical;
+  background: white;
+  color: #18392e;
+}
+.reflection-answer textarea:focus-visible {
+  outline: 3px solid #267958;
+  outline-offset: 3px;
+}

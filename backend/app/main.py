@@ -23,6 +23,7 @@ from .database import (
     Feedback,
     Lesson,
     LessonStep,
+    Reflection,
     Session,
     SessionLocal,
     Usage,
@@ -61,7 +62,7 @@ async def lifespan(app: FastAPI):
         ):
             raise RuntimeError("Production identity and inference URLs must use HTTPS.")
         with engine.connect() as connection:
-            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0004":
+            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0005":
                 raise RuntimeError(
                     "Apply the supported database migration before starting production."
                 )
@@ -330,11 +331,13 @@ class StepInput(BaseModel):
 
 def lesson_payload(db: DBSession, lesson: Lesson):
     saved = set(db.scalars(select(LessonStep.step).where(LessonStep.lesson_id == lesson.id)))
+    reflection = db.get(Reflection, lesson.id)
     return {
         "id": lesson.id,
         "topic_id": lesson.topic_id,
         "messages": json.loads(lesson.messages),
         "completed_steps": [step for step in LESSON_STEPS if step in saved],
+        "reflection": reflection.answer if reflection else "",
     }
 
 
@@ -480,6 +483,35 @@ def start_lesson(
             if not lesson:
                 raise HTTPException(409, "The lesson could not be opened. Try again.")
     return lesson_payload(db, lesson)
+
+
+class ReflectionInput(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    answer: str = Field(min_length=1, max_length=4000)
+
+
+@app.post("/api/lessons/{lesson_id}/reflection", dependencies=[Depends(require_same_origin)])
+def save_reflection(
+    lesson_id: str,
+    body: ReflectionInput,
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    lesson = db.get(Lesson, lesson_id)
+    if not lesson or lesson.user_id != user.id:
+        raise HTTPException(404, "Lesson not found.")
+    reflection = db.get(Reflection, lesson_id)
+    if reflection:
+        reflection.answer = body.answer
+        reflection.updated_at = int(time.time())
+    else:
+        db.add(Reflection(lesson_id=lesson_id, answer=body.answer, updated_at=int(time.time())))
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(409, "Your answer changed in another window. Please try saving again.")
+    return {"answer": body.answer}
 
 
 @app.post("/api/lessons/{lesson_id}/steps", dependencies=[Depends(require_same_origin)])

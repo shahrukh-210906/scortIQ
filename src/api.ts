@@ -42,6 +42,7 @@ export type Lesson = {
   topic_id: string;
   messages: Message[];
   completed_steps: string[];
+  reflection: string;
 };
 export type Quiz = {
   id: string;

@@ -81,17 +81,27 @@ test('student can study, submit a quiz, reload progress and rename their profile
   await page.getByRole('button', { name: 'I’ve worked through the example' }).click();
   await expect(lessonProgress).toHaveAttribute('value', '2');
   await page.getByRole('button', { name: 'Show explanation' }).click();
+  await page
+    .getByLabel('Your answer, in your own words')
+    .fill('Water remains water when it freezes.');
+  await page.getByRole('button', { name: 'Save my answer', exact: true }).click();
+  await expect(page.getByText('Your answer is saved.', { exact: true })).toBeVisible();
   await expect(page.getByText('It remains water; no new substance forms.')).toBeVisible();
   await page.getByRole('button', { name: 'I’ve reflected on the question' }).click();
   await expect(lessonProgress).toHaveAttribute('value', '3');
   await page.reload();
+  await expect(page.getByLabel('Your answer, in your own words')).toHaveValue(
+    'Water remains water when it freezes.',
+  );
   await expect(lessonProgress).toHaveAttribute('value', '3');
   await page.getByText('Report an issue with this lesson', { exact: true }).click();
   await page
     .getByLabel('Tell us what you noticed')
     .fill('Please explain the example more clearly.');
   await page.getByRole('button', { name: 'Send report', exact: true }).click();
-  await expect(page.getByRole('status')).toContainText('saved for review');
+  await expect(page.getByRole('status').filter({ hasText: 'saved for review' })).toContainText(
+    'saved for review',
+  );
   await page.getByText('Learning sources (1)', { exact: true }).click();
   await expect(
     page.getByText('pilot-1 · Pilot draft · review pending', { exact: true }),

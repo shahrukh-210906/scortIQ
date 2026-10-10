@@ -69,6 +69,23 @@ class LearningTests(unittest.TestCase):
         self.client.post("/api/auth/logout")
         self.assertEqual(self.client.post("/api/feedback", json=body).status_code, 401)
 
+    def test_reflection_is_saved_editable_and_account_owned(self):
+        lesson = self.client.post("/api/lessons/reactions-signs").json()
+        endpoint = f"/api/lessons/{lesson['id']}/reflection"
+        self.assertEqual(lesson["reflection"], "")
+        for answer in ["My first explanation", "My revised explanation"]:
+            self.assertEqual(self.client.post(endpoint, json={"answer": answer}).status_code, 200)
+            resumed = self.client.post("/api/lessons/reactions-signs").json()
+            self.assertEqual(resumed["reflection"], answer)
+            self.assertEqual(resumed["completed_steps"], [])
+        self.assertEqual(self.client.post(endpoint, json={"answer": "   "}).status_code, 422)
+        self.assertEqual(self.client.post(endpoint, json={"answer": "x" * 4001}).status_code, 422)
+        self.client.post("/api/auth/local", json={"name": "Another learner"})
+        self.assertEqual(
+            self.client.post(endpoint, json={"answer": "Overwrite attempt"}).status_code, 404
+        )
+        self.assertEqual(self.client.post("/api/lessons/reactions-signs").json()["reflection"], "")
+
     def test_email_signin_recovery_rotation_and_replay(self):
         original_cookie = self.client.cookies.get("scortiq_session")
         account = {
