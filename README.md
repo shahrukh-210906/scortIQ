@@ -1,74 +1,86 @@
-# ScortIQ - AI Learning Companion
+# ScortIQ
 
-ScortIQ is an interactive AI-powered learning platform designed for Indian students. It provides personalized tutoring using the Socratic method and covers NCERT curriculum for classes 9-12.
+A fresh rebuild of the science learning companion. React + TypeScript + Vite frontend, FastAPI backend, SQLAlchemy persistence and a server-side Hugging Face integration.
 
-## Features
+## Current milestone
 
-- **AI Tutors**: Interactive conversation-based learning
-- **Equation Tutor**: Specialized tutor for mathematical equations and formulas
-- **Sandbox Mode**: Learn any topic beyond curriculum
-- **Quiz System**: Test your knowledge with AI-generated quizzes
-- **Performance Tracking**: Monitor your progress across subjects
-- **Multi-language Support**: Supports Hinglish and other Indian languages
+Working local pilot: onboarding, three science chapters/seven concepts, lesson opening/resume, explanations, server-graded quizzes, saved progress, profile editing, mobile navigation, and ownership checks. Quiz answer keys remain on the server until submission. Failed/abandoned attempts do not become scores; repeated submissions do not count twice.
 
-## Getting Started
+Lessons now have a saved three-step checklist (read, example, reflection) with an accessible progress bar. Steps are completed in order and are isolated per account. Checklist completion is not a mastery claim and does not change quiz scores.
 
-### Prerequisites
+Versioned source documents/passages now ground tutor requests. Development seeds original draft notes; production retrieval accepts only reviewed sources. Topic/language/class filters prevent mixing unrelated curriculum passages. Retrieval currently uses bounded lexical ranking, not semantic embeddings or a completed textbook retrieval system. References are checked against the retrieved passage IDs and shown with the reply; that check does not prove factual entailment.
 
-- Node.js (version 16 or higher)
-- npm or yarn
+This is **not a production-ready release yet**. Local profiles are not verified identities. Original seed content is awaiting educator review. The Hugging Face tutor is disabled until an actual endpoint is configured; no fake AI responses are used. No model has been trained.
 
-### Installation
+## Run locally (Windows PowerShell, from project root)
 
-1. Clone or extract the project
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+Requires Node.js 22+ and Python 3.12+.
 
-3. Configure EmailJS (optional):
-   - Sign up at [EmailJS](https://www.emailjs.com/)
-   - Update the service IDs and template IDs in `src/utils/emailService.js`
-
-4. Get a Gemini API key:
-   - Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-   - Create an API key and update it in `src/utils/aiService.js`
-
-5. Start the development server:
-   ```bash
-   npm start
-   ```
-
-### Building for Production
-
-```bash
-npm run build
+```powershell
+npm ci
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r backend/requirements.lock.txt
+.\.venv\Scripts\python.exe -m alembic upgrade head
+.\.venv\Scripts\python.exe -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
 ```
+
+In a second terminal:
+
+```powershell
+npm run dev
+```
+
+Open http://127.0.0.1:5173. Frontend requests are proxied to the backend on port 8000, keeping cookies same-origin. Do not expose the development server publicly. SQLite lives under `backend/.data/`; the local session lasts seven days. Leaving the learning space ends the session; local profiles do not provide account recovery. Verified authentication is required for cross-device account access.
+
+The backend defaults to development and creates missing tables for local convenience. Production requires migrations before startup. If an existing development schema was created without Alembic, do not run an initial migration on top of it blindly; use a fresh development database or inspect and baseline the schema explicitly.
 
 ## Configuration
 
-### EmailJS Setup
-1. Create templates for:
-   - Welcome emails
-   - Activity tracking
-2. Update service IDs in `src/utils/emailService.js`
+Copy `backend/.env.example` to `backend/.env`, set the values, and start Uvicorn with `--env-file backend/.env`. The file is ignored by Git. Keep secrets exclusively on the server.
 
-### AI Configuration
-Update your Gemini API key in `src/utils/aiService.js`
+- `APP_ENV=production` disables local profile creation and requires PostgreSQL plus `SUPABASE_URL` (HTTPS) and `SUPABASE_PUBLISHABLE_KEY` (public publishable or legacy anon key).
+- Email-code sign-in verifies the code and confirmed account through Supabase Auth. The backend issues a one-hour HttpOnly, SameSite=Strict browser session with Secure enabled in production. Supabase access tokens never reach the frontend. Production rejects local profiles. Provider revocation is not continuously polled during that one-hour session; stricter revocation policies remain release work.
+- `DATABASE_URL=postgresql+psycopg://...` selects PostgreSQL. Run Alembic against that database before starting production.
+- `HF_ENDPOINT_URL` must point to the base URL of a compatible dedicated inference endpoint; the backend appends `/v1/chat/completions`.
+- `HF_TOKEN` and `HF_MODEL_ID` configure authenticated inference. Replies must be JSON objects containing a non-empty `reply` string and `citations`, an array of 1–3 unique retrieved passage IDs. Invalid or invented references produce recoverable errors without saving the response.
+- `DAILY_TUTOR_LIMIT` defaults to 30 request reservations per user per UTC day. Failed provider calls also consume reservations to bound retry costs. Sessions are limited to 20 AI turns; recent history is bounded. Global ingress rate limits and operational spend controls remain release work.
 
-## Project Structure
+## Checks
 
-```
-src/
-├── components/          # React components
-│   ├── tutors/         # AI tutor components
-│   └── ui/             # UI components
-├── data/               # Curriculum data
-├── styles/             # CSS and styling
-├── utils/              # Utility functions
-└── hooks/              # Custom React hooks
+```powershell
+npm run build
+npm run format:check
+.\.venv\Scripts\python.exe -m unittest backend.tests.test_learning -v
+npm run test:e2e
 ```
 
-## License
+Browser tests use installed Chrome on Windows and Chromium in Linux CI. They start the local servers if needed. Test screenshots/traces are under `test-results/`. Backend tests use a separate temporary database and test account isolation, hidden keys, server grading, idempotency, invalid attempts, lesson resume, inference outages, logout, cross-site writes and local-profile disabling in production mode.
 
-This project is for educational purposes.
+Install `backend/requirements-dev.txt` to run `python -m ruff check backend ml` and `python -m ruff format --check backend ml`. Application versions are locked in `package-lock.json` and `backend/requirements.lock.txt`; `backend/requirements.txt` declares the allowed ranges for deliberate dependency updates. On Windows, `scripts/start.ps1` starts the backend and frontend together after dependencies are installed.
+
+## Next milestones
+
+1. Configure Supabase email delivery and validate live sign-in/recovery, HTTPS session behavior, abuse limits and access policies.
+2. Import educator-reviewed sources and build the content administration/review flow.
+3. Extend the existing source ingestion and lexical retrieval with a rights-reviewed textbook corpus, semantic retrieval, factual-support evaluation, safe math checking and assessment rubrics.
+4. Create a frozen evaluation benchmark and reviewed training dataset; run and evaluate LoRA/QLoRA experiments (`ml/`).
+5. Deploy an approved Hugging Face model, run live integration/error/load tests, and add tracing, alerts and rollback.
+6. Add managed staging/production hosting, global request limits, backup restore tests, privacy/consent/deletion flows and accessibility audit.
+
+See `REBUILD_PLAN.md` for the complete roadmap. The old tracked application can be recovered from Git history; the previous uncommitted AI service edits were removed as part of the requested reset.
+
+## Import learning sources
+
+Apply migrations before import, then run `python -m backend.import_sources path/to/sources.jsonl` with the backend environment active. Imports are atomic, accept only known pilot topics, and require rights confirmation. Re-importing the exact document is safe; changing an existing source ID is rejected. Corrections need a new versioned ID. No external textbook has been downloaded or imported.
+
+Each JSONL record requires `id`, `title`, `topic_id`, `class_level: 10`, `language: "en"`, `version`, `rights`, `rights_confirmed: true`, `review_status: "draft"` or `"reviewed"`, and `passages` (1–100 strings, each at most 2000 characters). Reviewed material also requires a named `reviewer`. These metadata fields document the approval process; they do not replace an actual educator/rights review.
+
+The current database migration is `0003`. Upgrading from `0001` adds source, checklist and email challenge tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
+
+## Supabase email sign-in and recovery
+
+1. Set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` in `backend/.env`. Use the project URL and public key from your Supabase project; never use a service-role key. Restart the backend with `--env-file backend/.env` (the Windows start script loads this file automatically).
+2. Enable email authentication in Supabase. Configure the Magic Link email template to include `{{ .Token }}` so students receive a six-digit code rather than needing a link. See [Supabase passwordless email documentation](https://supabase.com/docs/guides/auth/auth-email-passwordless). Configure suitable email delivery/SMTP and provider limits for real student accounts.
+3. Sign out of the local pilot profile, enter your email, then enter the code. The same verified Supabase user recovers their saved learning on another device. New accounts start as �Learner�; rename in Settings. Local pilot progress is separate and is not automatically merged by email.
+4. Challenges expire after ten minutes and permit five verification attempts. Email send reservations enforce a one-minute cooldown and five sends per hour per normalized address; failed provider calls also consume a reservation. Provider-side and global ingress rate limits/CAPTCHA, concurrent send-limit enforcement, expired challenge retention cleanup and delivery monitoring must be validated/hardened before public launch.
+5. Run migration `0003` for managed databases. Live email delivery, production PostgreSQL migration, multi-device sign-in and recovery must be verified with your configured project before marking the sign-in milestone complete. Automated tests mock Supabase; they do not send emails or prove a live integration.

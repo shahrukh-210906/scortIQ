@@ -1,0 +1,29 @@
+name: Checks
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: pip install -r backend/requirements-dev.txt
+      - run: npm run format:check
+      - run: python -m ruff check backend ml
+      - run: python -m ruff format --check backend ml
+      - run: npm run build
+      - run: python -m unittest backend.tests.test_learning -v
+      - run: python -m alembic upgrade head
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-test-results
+          path: test-results/
