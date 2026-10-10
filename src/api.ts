@@ -17,6 +17,7 @@ export type Chapter = {
 };
 export type Curriculum = { class_level: number; version: string; chapters: Chapter[] };
 export type Progress = {
+  bookmarked_topics: string[];
   started_topics: string[];
   completed_steps_by_topic: Record<string, string[]>;
   attempts: { id: string; chapter_id: string; score: number; total: number; created_at: number }[];

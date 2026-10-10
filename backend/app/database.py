@@ -41,6 +41,13 @@ class AuthChallenge(Base):
     attempts: Mapped[int] = mapped_column(Integer, default=0)
 
 
+class Bookmark(Base):
+    __tablename__ = "bookmarks"
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    topic_id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    created_at: Mapped[int] = mapped_column(Integer)
+
+
 class Feedback(Base):
     __tablename__ = "feedback"
     id: Mapped[str] = mapped_column(String(64), primary_key=True)

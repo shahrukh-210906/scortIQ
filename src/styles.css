@@ -2314,3 +2314,40 @@ textarea:focus {
   outline: 3px solid #267958;
   outline-offset: 3px;
 }
+.bookmark-control {
+  margin: 16px 0;
+}
+.review-queue {
+  margin-bottom: 24px;
+  padding: 24px;
+}
+.review-queue > p {
+  line-height: 1.6;
+}
+.review-queue ul {
+  list-style: none;
+  padding: 0;
+}
+.review-queue li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid #d9e2df;
+  padding: 16px 0;
+}
+.review-queue li a {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.review-queue li p {
+  margin-top: 8px;
+}
+@media (max-width: 600px) {
+  .review-queue li {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0;
+  }
+}

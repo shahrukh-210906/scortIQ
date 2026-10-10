@@ -19,3 +19,4 @@ Current milestone: configure and live-verify Supabase sign-in and recovery. Sour
 
 10 October: Existing rebuild committed and pushed. Added persisted learner issue reports with validation and submission feedback. Supabase configuration is deferred; feature work is tracked in `REMAINING_TASKS.md`.
 10 October: Added saved, editable account-owned written reflections. Build, 21 backend checks, migration parity and browser journeys validate the feature.
+10 October: Added account-owned bookmarks and a mobile-friendly Saved for review queue. Validated build, 22 backend checks, four browser journeys (including failed-save retry, reload persistence and removal), formatting and migration parity.

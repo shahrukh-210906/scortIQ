@@ -1,5 +1,44 @@
 import { test, expect } from '@playwright/test';
 
+test('saved review concepts persist, retry failures and can be removed on mobile', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/');
+  await page.getByLabel('What should we call you?').fill('Review learner');
+  await page.getByRole('button', { name: 'Start learning', exact: true }).click();
+  await page.goto('/lesson/reactions-signs');
+  let requests = 0;
+  await page.route('**/api/bookmarks/reactions-signs', (route) => {
+    requests++;
+    if (requests === 1)
+      return route.fulfill({ status: 503, json: { detail: 'Please try saving again.' } });
+    return route.continue();
+  });
+  await page.getByRole('button', { name: 'Save for review', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('Please try saving again.');
+  await page.getByRole('button', { name: 'Save for review', exact: true }).click();
+  await expect(
+    page.getByRole('button', { name: 'Remove from review', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Remove from review', exact: true })).toBeVisible();
+  await page.goto('/learn');
+  const queue = page.getByRole('region', { name: 'Saved for review' });
+  await expect(queue.getByRole('link', { name: 'Recognising a chemical reaction' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: 'test-results/review-queue-mobile.png', fullPage: true });
+  await queue.getByRole('link', { name: 'Recognising a chemical reaction' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Recognising a chemical reaction' }),
+  ).toBeVisible();
+  await page.goto('/learn');
+  await queue.getByRole('button', { name: 'Remove from review', exact: true }).click();
+  await expect(queue).toContainText('Nothing saved yet.');
+  await page.reload();
+  await expect(queue).toContainText('Nothing saved yet.');
+});
+
 test('email sign-in handles a wrong code and recovers the saved account', async ({ page }) => {
   let signedIn = false;
   let attempts = 0;

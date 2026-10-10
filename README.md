@@ -75,7 +75,7 @@ Apply migrations before import, then run `python -m backend.import_sources path/
 
 Each JSONL record requires `id`, `title`, `topic_id`, `class_level: 10`, `language: "en"`, `version`, `rights`, `rights_confirmed: true`, `review_status: "draft"` or `"reviewed"`, and `passages` (1–100 strings, each at most 2000 characters). Reviewed material also requires a named `reviewer`. These metadata fields document the approval process; they do not replace an actual educator/rights review.
 
-The current database migration is `0005`. Upgrading from `0001` adds source, checklist and email challenge tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
+The current database migration is `0006`. Upgrading from `0001` adds source, checklist and email challenge tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
 
 ## Supabase email sign-in and recovery
 
@@ -89,8 +89,12 @@ The current database migration is `0005`. Upgrading from `0001` adds source, che
 
 Learners can expand "Report an issue with this lesson", choose a category and submit a 10–2,000 character description. Reports are stored against the authenticated account and topic; invalid topics, blank messages and cross-site writes are rejected. The UI preserves failed submissions for retry and confirms saved reports. A per-account limit allows ten reports per hour; stronger concurrent/global abuse enforcement remains release work. Reports are saved locally in the configured database; staff triage and notifications are not implemented yet.
 
-Run migration `0005` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
+Run migration `0006` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
 
 ## Saved reflections — 10 October 2026
 
 Each lesson now includes a written answer field. Learners can save and revise up to 4,000 characters; their answer is restored when reopening the lesson and isolated from other accounts. Saving a reflection does not grade it or mark checklist steps complete. Migration `0005` adds the reflection table without changing existing lessons, scores or reports.
+
+## Bookmarks and review queue — 10 October 2026
+
+Choose "Save for review" on a lesson to keep that concept in the learning library's "Saved for review" list. The queue persists across reloads, is private to the account and lists recently saved concepts first. Open a saved concept to revisit it or remove it from either the lesson or the queue. Saving/removing does not change checklist completion or quiz scores. Migration `0006` adds bookmarks without altering learning records.

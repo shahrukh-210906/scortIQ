@@ -10,8 +10,8 @@ from urllib.parse import urlparse
 
 import httpx
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, ValidationError
-from sqlalchemy import select, text, update
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, ValidationError
+from sqlalchemy import delete, select, text, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session as DBSession
 
@@ -20,6 +20,7 @@ from .database import (
     Attempt,
     AuthChallenge,
     Base,
+    Bookmark,
     Feedback,
     Lesson,
     LessonStep,
@@ -62,7 +63,7 @@ async def lifespan(app: FastAPI):
         ):
             raise RuntimeError("Production identity and inference URLs must use HTTPS.")
         with engine.connect() as connection:
-            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0005":
+            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0006":
                 raise RuntimeError(
                     "Apply the supported database migration before starting production."
                 )
@@ -699,6 +700,37 @@ def submit_quiz(
     }
 
 
+class BookmarkInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    saved: StrictBool
+
+
+@app.post("/api/bookmarks/{topic_id}", dependencies=[Depends(require_same_origin)])
+def save_bookmark(
+    topic_id: str,
+    body: BookmarkInput,
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    if not topic_by_id(topic_id):
+        raise HTTPException(404, "Topic not found.")
+    if body.saved:
+        if not db.get(Bookmark, (user.id, topic_id)):
+            db.add(Bookmark(user_id=user.id, topic_id=topic_id, created_at=int(time.time())))
+            try:
+                db.commit()
+            except IntegrityError:
+                db.rollback()
+                if not db.get(Bookmark, (user.id, topic_id)):
+                    raise HTTPException(409, "Could not save this concept. Please try again.")
+    else:
+        db.execute(
+            delete(Bookmark).where(Bookmark.user_id == user.id, Bookmark.topic_id == topic_id)
+        )
+        db.commit()
+    return {"topic_id": topic_id, "saved": body.saved}
+
+
 @app.get("/api/progress")
 def progress(user: User = Depends(require_user), db: DBSession = Depends(get_db)):
     attempts = db.scalars(
@@ -724,6 +756,13 @@ def progress(user: User = Depends(require_user), db: DBSession = Depends(get_db)
             for a in attempts
         ],
         "started_topics": [lesson.topic_id for lesson in lessons],
+        "bookmarked_topics": list(
+            db.scalars(
+                select(Bookmark.topic_id)
+                .where(Bookmark.user_id == user.id)
+                .order_by(Bookmark.created_at.desc(), Bookmark.topic_id)
+            )
+        ),
         "completed_steps_by_topic": {
             lesson.topic_id: [step for step in LESSON_STEPS if (lesson.topic_id, step) in steps]
             for lesson in lessons

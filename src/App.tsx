@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import ContentFeedback from './ContentFeedback';
+import BookmarkButton from './BookmarkButton';
 import ReflectionAnswer from './ReflectionAnswer';
 import {
   Link,
@@ -81,7 +82,12 @@ const subjectIcons: Record<string, LucideIcon> = {
   Chemistry: FlaskConical,
   Biology: Leaf,
 };
-const emptyProgress: Progress = { attempts: [], started_topics: [], completed_steps_by_topic: {} };
+const emptyProgress: Progress = {
+  attempts: [],
+  started_topics: [],
+  completed_steps_by_topic: {},
+  bookmarked_topics: [],
+};
 function ErrorNotice({ message, retry }: { message: string; retry?: () => void }) {
   return (
     <div className="error" role="alert">
@@ -639,7 +645,14 @@ function Stat({
 }
 
 function Library() {
-  const { curriculum } = useLearning();
+  const { curriculum, progress, refresh } = useLearning();
+  const reviewTopics = (progress.bookmarked_topics ?? []).flatMap((id) =>
+    curriculum.chapters.flatMap((chapter) =>
+      chapter.topics
+        .filter((topic) => topic.id === id)
+        .map((topic) => ({ ...topic, chapterTitle: chapter.title })),
+    ),
+  );
   const [filter, setFilter] = useState('All subjects');
   const [query, setQuery] = useState('');
   const chapters = curriculum.chapters.filter(
@@ -656,6 +669,29 @@ function Library() {
         title="Your learning library"
         description="Pick a chapter. Follow a question. Build your understanding."
       />
+      <section className="panel review-queue" aria-labelledby="review-queue-title">
+        <h2 id="review-queue-title">Saved for review</h2>
+        <p>
+          Revisit the ideas you want to spend more time with. Remove them whenever you’re ready.
+        </p>
+        {reviewTopics.length ? (
+          <ul>
+            {reviewTopics.map((topic) => (
+              <li key={topic.id}>
+                <div>
+                  <Link to={`/lesson/${topic.id}`}>{topic.title}</Link>
+                  <p>{topic.chapterTitle}</p>
+                </div>
+                <BookmarkButton topicId={topic.id} saved refresh={refresh} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>
+            Nothing saved yet. Open a lesson and choose “Save for review” to add a concept here.
+          </p>
+        )}
+      </section>
       <div className="library-tools">
         <div className="filter-tabs" role="group" aria-label="Filter by subject">
           {['All subjects', 'Physics', 'Chemistry', 'Biology'].map((f) => (
@@ -857,7 +893,7 @@ function SourceList({ sources }: { sources: SourceRef[] }) {
 
 function LessonPage() {
   const { topicId } = useParams();
-  const { config, refresh } = useLearning();
+  const { config, progress, refresh } = useLearning();
   const [topic, setTopic] = useState<
     | (Topic & {
         chapter_id: string;
@@ -950,6 +986,11 @@ function LessonPage() {
         description="Read the idea, make a connection, then try explaining it yourself."
       />
       <LessonProgress completed={lesson.completed_steps} />
+      <BookmarkButton
+        topicId={topicId!}
+        saved={(progress.bookmarked_topics ?? []).includes(topicId!)}
+        refresh={refresh}
+      />
       {stepError && <ErrorNotice message={stepError} />}
       <div className="lesson-layout">
         <article className="panel lesson-content">

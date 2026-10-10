@@ -86,6 +86,41 @@ class LearningTests(unittest.TestCase):
         )
         self.assertEqual(self.client.post("/api/lessons/reactions-signs").json()["reflection"], "")
 
+    def test_bookmarks_are_idempotent_and_account_owned(self):
+        endpoint = "/api/bookmarks/reactions-signs"
+        for _ in range(2):
+            self.assertEqual(self.client.post(endpoint, json={"saved": True}).status_code, 200)
+        progress = self.client.get("/api/progress").json()
+        self.assertEqual(progress["bookmarked_topics"], ["reactions-signs"])
+        self.assertEqual(progress["started_topics"], [])
+        self.assertEqual(
+            self.client.post("/api/bookmarks/missing", json={"saved": True}).status_code, 404
+        )
+        self.assertEqual(self.client.post(endpoint, json={"saved": "false"}).status_code, 422)
+        self.assertEqual(
+            self.client.post(
+                endpoint, json={"saved": False}, headers={"origin": "https://other.test"}
+            ).status_code,
+            403,
+        )
+        self.client.post("/api/auth/local", json={"name": "Other learner"})
+        self.assertEqual(self.client.get("/api/progress").json()["bookmarked_topics"], [])
+        self.client.post(endpoint, json={"saved": False})
+        from sqlalchemy import select
+
+        from backend.app.database import Bookmark
+
+        with SessionLocal() as db:
+            self.assertIsNotNone(db.get(Bookmark, (self.user_id, "reactions-signs")))
+        for _ in range(2):
+            self.client.post(endpoint, json={"saved": True})
+            self.assertEqual(self.client.post(endpoint, json={"saved": False}).status_code, 200)
+        self.assertEqual(self.client.get("/api/progress").json()["bookmarked_topics"], [])
+        with SessionLocal() as db:
+            self.assertEqual(len(list(db.scalars(select(Bookmark)))), 1)
+        self.client.post("/api/auth/logout")
+        self.assertEqual(self.client.post(endpoint, json={"saved": True}).status_code, 401)
+
     def test_email_signin_recovery_rotation_and_replay(self):
         original_cookie = self.client.cookies.get("scortiq_session")
         account = {
