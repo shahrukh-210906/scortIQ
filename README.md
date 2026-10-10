@@ -77,7 +77,7 @@ Apply migrations before import, then run `python -m backend.import_sources path/
 
 Each JSONL record requires `id`, `title`, `topic_id`, `class_level: 10`, `language: "en"`, `version`, `rights`, `rights_confirmed: true`, `review_status: "draft"` or `"reviewed"`, and `passages` (1–100 strings, each at most 2000 characters). Reviewed material also requires a named `reviewer`. These metadata fields document the approval process; they do not replace an actual educator/rights review.
 
-The current database migration is `0007`. Upgrading from `0001` adds source, checklist and email challenge tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
+The current database migration is `0008`. Upgrading from `0001` adds source, checklist and email challenge tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
 
 ## Supabase email sign-in and recovery
 
@@ -91,7 +91,7 @@ The current database migration is `0007`. Upgrading from `0001` adds source, che
 
 Learners can expand "Report an issue with this lesson", choose a category and submit a 10–2,000 character description. Reports are stored against the authenticated account and topic; invalid topics, blank messages and cross-site writes are rejected. The UI preserves failed submissions for retry and confirms saved reports. A per-account limit allows ten reports per hour; stronger concurrent/global abuse enforcement remains release work. Reports are saved locally in the configured database; staff triage and notifications are not implemented yet.
 
-Run migration `0007` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
+Run migration `0008` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
 
 ## Saved reflections — 10 October 2026
 
@@ -108,3 +108,13 @@ Choose teaching language (English, Hindi or Hinglish) and exam-answer language (
 Study includes a searchable NCERT/CBSE 2026–27 map of all four subjects, 27 chapters and 185 planned topics. Expand a chapter to see its topics and official NCERT link. Planned topics are explicitly unavailable, with the existing pilot lessons remaining separately accessible. This preserves prior lesson IDs and saved learning. Supplementary formative units remain in the planning catalogue and are not yet included in the core study-map UI.
 
 Migration `0007` adds account language preferences without changing users or learning records. Validation: build, 24 backend checks, five browser journeys, formatter/linter checks and migration parity pass; browser coverage includes preference reload, four-subject browsing, search and mobile overflow.
+
+## Topic learning stages — 10 October 2026
+
+Pilot topics now open on AI learning and provide saved navigation through exam notes, a relevant activity when available, and a topic recall quiz. Students can revisit any stage. The AI stage retains its explicit unconfigured state until an inference endpoint is connected; no automated claim of learning or mastery is made. Existing notes checklists, reflections, source references, bookmarks and chapter quizzes remain accessible with their existing records.
+
+Exam notes include a sample question/answer, important terms, answer-writing steps and a reminder about common omissions. These are original draft teaching notes, not official marking schemes. The first Chemistry topic has a Hindi draft selected by the exam-answer preference; other pilot notes explicitly fall back to English. All topic recall questions are currently English drafts and require educator review.
+
+The three Chemistry topics include fixed-formula balancing practice with server-calculated atom counts, hints and smallest-positive-whole-number coefficient checking (1–20). Success is saved without changing quiz scores. Topics without an activity omit that stage. Every pilot topic has its own two-question recall quiz, with answer keys hidden until submission, server grading, duplicate-submit protection and saved latest results. Unsubmitted recall selections and unfinished activity coefficients are kept while switching stages in the current page, but are not restored after a full reload. Chapter practice remains a separate assessment; topic scores are not yet included in dashboard aggregates.
+
+Migration `0008` adds journey/activity records and topic recall attempts without changing existing learning tables. Validation: build, 26 backend checks, six browser journeys, formatting/linting and migration parity pass. Browser coverage includes Hindi notes, stage restoration, incorrect/correct atom counts, saved recall results, activity omission and prior learning flows. Mocked inference checks do not establish live tutoring quality.

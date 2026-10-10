@@ -1,7 +1,15 @@
 import os
 from pathlib import Path
 
-from sqlalchemy import ForeignKey, Integer, String, Text, UniqueConstraint, create_engine
+from sqlalchemy import (
+    BigInteger,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+    create_engine,
+)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./backend/.data/scortiq.db")
@@ -80,6 +88,22 @@ class Reflection(Base):
     lesson_id: Mapped[str] = mapped_column(ForeignKey("lessons.id"), primary_key=True)
     answer: Mapped[str] = mapped_column(Text)
     updated_at: Mapped[int] = mapped_column(Integer)
+
+
+class Journey(Base):
+    __tablename__ = "journeys"
+    lesson_id: Mapped[str] = mapped_column(ForeignKey("lessons.id"), primary_key=True)
+    active_stage: Mapped[str] = mapped_column(String(20), default="understand")
+    activity_completed: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class RecallAttempt(Base):
+    __tablename__ = "recall_attempts"
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    lesson_id: Mapped[str] = mapped_column(ForeignKey("lessons.id"), index=True)
+    answers: Mapped[str | None] = mapped_column(Text, nullable=True)
+    score: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    created_at: Mapped[int] = mapped_column(BigInteger)
 
 
 class Attempt(Base):

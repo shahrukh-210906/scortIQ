@@ -11,7 +11,7 @@ See `CLASS10_PRODUCT_PLAN.md` and `CLASS10_CURRICULUM.md`. This direction supers
 ## Priority implementation queue
 
 - [x] Persist teaching/exam-language preferences and add four-subject catalogue navigation with clear lesson availability.
-- [ ] Introduce topic stages: AI understanding, exam notes, optional activity and topic recall quiz.
+- [x] Introduce topic stages: AI understanding, exam notes, optional activity and topic recall quiz.
 - [ ] Complete one reviewed topic journey with real AI grounding and exam-writing notes in English/Hindi.
 - [ ] Add authorised teacher roles, classroom creation, invitations and membership.
 - [ ] Add daily topic assignments and assignment-aware student/teacher dashboards.

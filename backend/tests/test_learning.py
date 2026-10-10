@@ -166,6 +166,95 @@ class LearningTests(unittest.TestCase):
         self.assertEqual(len(topics), 185)
         self.assertTrue(all(t["availability"] == "planned" for t in topics))
 
+    def test_topic_journey_language_stage_activity_and_ownership(self):
+        lesson = self.client.post("/api/lessons/reactions-signs").json()
+        self.assertEqual(lesson["active_stage"], "understand")
+        lesson_id = lesson["id"]
+        self.client.patch("/api/me", json={"name": "Asha", "exam_language": "hi"})
+        content = self.client.get(f"/api/lessons/{lesson_id}/journey").json()
+        self.assertEqual(content["notes"]["language"], "hi")
+        self.assertEqual(content["notes"]["status"], "draft")
+        self.assertNotIn("atoms", content["activity"])
+        self.assertEqual(
+            self.client.post(
+                f"/api/lessons/{lesson_id}/stage", json={"stage": "notes"}
+            ).status_code,
+            200,
+        )
+        self.assertEqual(
+            self.client.post("/api/lessons/reactions-signs").json()["active_stage"], "notes"
+        )
+        endpoint = f"/api/lessons/{lesson_id}/activity"
+        self.assertFalse(
+            self.client.post(endpoint, json={"coefficients": [1, 1, 1]}).json()["correct"]
+        )
+        self.assertFalse(
+            self.client.post(endpoint, json={"coefficients": [4, 2, 4]}).json()["correct"]
+        )
+        self.assertTrue(
+            self.client.post(endpoint, json={"coefficients": [2, 1, 2]}).json()["correct"]
+        )
+        self.assertTrue(
+            self.client.post("/api/lessons/reactions-signs").json()["activity_completed"]
+        )
+        for invalid in [[0, 1, 2], [True, 1, 2], [21, 1, 2], [1, 2]]:
+            self.assertEqual(
+                self.client.post(endpoint, json={"coefficients": invalid}).status_code, 422
+            )
+        other_topic = self.client.post("/api/lessons/light-reflection").json()["id"]
+        self.assertEqual(
+            self.client.post(
+                f"/api/lessons/{other_topic}/stage", json={"stage": "activity"}
+            ).status_code,
+            422,
+        )
+        self.assertIsNone(self.client.get(f"/api/lessons/{other_topic}/journey").json()["activity"])
+        self.client.post("/api/auth/local", json={"name": "Other learner"})
+        self.assertEqual(self.client.get(f"/api/lessons/{lesson_id}/journey").status_code, 404)
+        self.assertEqual(
+            self.client.post(endpoint, json={"coefficients": [2, 1, 2]}).status_code, 404
+        )
+        self.assertEqual(
+            self.client.post(
+                f"/api/lessons/{lesson_id}/stage", json={"stage": "recall"}
+            ).status_code,
+            404,
+        )
+
+    def test_topic_recall_keys_grading_resume_and_isolation(self):
+        from backend.app.journey_content import TOPIC_QUESTIONS
+
+        lesson_id = self.client.post("/api/lessons/reactions-signs").json()["id"]
+        endpoint = f"/api/lessons/{lesson_id}/recall"
+        self.assertIsNone(self.client.get(endpoint).json()["result"])
+        quiz = self.client.post(endpoint).json()
+        self.assertEqual({q["id"] for q in quiz["questions"]}, {"cr1", "signs-physical"})
+        self.assertTrue(all("correct" not in q and "reason" not in q for q in quiz["questions"]))
+        submission = f"/api/recall/{quiz['id']}/submit"
+        self.assertEqual(
+            self.client.post(submission, json={"answers": {"cr1": 2}}).status_code, 422
+        )
+        self.assertIsNone(self.client.get(endpoint).json()["result"])
+        answers = {q["id"]: q["correct"] for q in TOPIC_QUESTIONS["reactions-signs"]}
+        result = self.client.post(submission, json={"answers": answers})
+        self.assertEqual(result.json()["score"], 2)
+        self.assertEqual(
+            self.client.post(submission, json={"answers": answers}).json(), result.json()
+        )
+        self.assertEqual(
+            self.client.post(submission, json={"answers": {**answers, "cr1": 0}}).status_code, 409
+        )
+        self.assertEqual(self.client.get(endpoint).json()["result"], result.json())
+        next_quiz = self.client.post(endpoint).json()
+        self.client.post(
+            f"/api/recall/{next_quiz['id']}/submit",
+            json={"answers": {"cr1": 0, "signs-physical": 0}},
+        )
+        self.assertEqual(self.client.get(endpoint).json()["result"]["score"], 0)
+        self.client.post("/api/auth/local", json={"name": "Other learner"})
+        self.assertEqual(self.client.get(endpoint).status_code, 404)
+        self.assertEqual(self.client.post(submission, json={"answers": answers}).status_code, 404)
+
     def test_email_signin_recovery_rotation_and_replay(self):
         original_cookie = self.client.cookies.get("scortiq_session")
         account = {

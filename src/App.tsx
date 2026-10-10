@@ -12,6 +12,7 @@ import LanguageFields from './LanguageFields';
 import CurriculumCatalogue from './CurriculumCatalogue';
 import BookmarkButton from './BookmarkButton';
 import ReflectionAnswer from './ReflectionAnswer';
+import { ExamNotes, EquationActivity, TopicRecall } from './TopicPractice';
 import {
   Link,
   NavLink,
@@ -61,6 +62,7 @@ import {
   type Topic,
   type User,
   type Languages,
+  type JourneyContent,
   type SourceRef,
 } from './api';
 import { EmailSignIn } from './EmailSignIn';
@@ -868,10 +870,10 @@ function LessonProgress({ completed }: { completed: string[] }) {
     <section className="lesson-progress" aria-label="Lesson checklist">
       <div className="lesson-progress-heading">
         <div>
-          <p className="eyebrow">YOUR LESSON JOURNEY</p>
+          <p className="eyebrow">YOUR NOTES CHECKLIST</p>
           <h2>
             {completed.length === 3
-              ? 'You’ve worked through the lesson.'
+              ? 'You’ve worked through the notes.'
               : 'A little clearer, one step at a time.'}
           </h2>
         </div>
@@ -916,7 +918,9 @@ function SourceList({ sources }: { sources: SourceRef[] }) {
 
 function LessonPage() {
   const { topicId } = useParams();
-  const { config, progress, refresh } = useLearning();
+  const { config, progress, refresh, user } = useLearning();
+  const [journey, setJourney] = useState<JourneyContent | null>(null);
+  const [stageBusy, setStageBusy] = useState(false);
   const [topic, setTopic] = useState<
     | (Topic & {
         chapter_id: string;
@@ -957,6 +961,9 @@ function LessonPage() {
       const session = await post<Lesson>(`/lessons/${topicId}`);
       if (generation !== requestGeneration.current) return;
       setLesson(session);
+      const contentJourney = await api<JourneyContent>(`/lessons/${session.id}/journey`);
+      if (generation !== requestGeneration.current) return;
+      setJourney(contentJourney);
       await refresh();
     } catch (e) {
       if (generation === requestGeneration.current) setError((e as Error).message);
@@ -998,15 +1005,34 @@ function LessonPage() {
       setSavingStep(false);
     }
   }
+  async function changeStage(stage: Lesson['active_stage']) {
+    if (!lesson || stageBusy) return;
+    setStageBusy(true);
+    setStepError('');
+    try {
+      await post(`/lessons/${lesson.id}/stage`, { stage });
+      setLesson((current) => (current ? { ...current, active_stage: stage } : null));
+    } catch (err) {
+      setStepError((err as Error).message);
+    } finally {
+      setStageBusy(false);
+    }
+  }
   if (error) return <ErrorNotice message={error} retry={() => void load()} />;
-  if (!topic || !lesson) return <Loading />;
+  if (!topic || !lesson || !journey) return <Loading />;
+  const stages: { id: Lesson['active_stage']; label: string }[] = [
+    { id: 'understand', label: '1. AI learning' },
+    { id: 'notes', label: '2. Exam notes' },
+    ...(journey.activity ? [{ id: 'activity' as const, label: '3. Activity' }] : []),
+    { id: 'recall', label: journey.activity ? '4. Recall quiz' : '3. Recall quiz' },
+  ];
   return (
     <>
       <Back to={`/chapter/${topic.chapter_id}`} label={topic.chapter_title} />
       <PageTitle
         eyebrow="A SMALL STEP TOWARDS UNDERSTANDING"
         title={topic.title}
-        description="Read the idea, make a connection, then try explaining it yourself."
+        description="Understand the idea, prepare an exam answer, practise and recall. Revisit any stage."
       />
       <LessonProgress completed={lesson.completed_steps} />
       <BookmarkButton
@@ -1015,8 +1041,22 @@ function LessonPage() {
         refresh={refresh}
       />
       {stepError && <ErrorNotice message={stepError} />}
-      <div className="lesson-layout">
-        <article className="panel lesson-content">
+      <nav className="topic-stage-nav" aria-label="Topic stages">
+        {stages.map((stage) => (
+          <button
+            key={stage.id}
+            className={lesson.active_stage === stage.id ? 'selected' : ''}
+            aria-current={lesson.active_stage === stage.id ? 'step' : undefined}
+            disabled={stageBusy}
+            onClick={() => void changeStage(stage.id)}
+          >
+            {stage.label}
+          </button>
+        ))}
+      </nav>
+      <div className="topic-stage-layout">
+        <article className="panel lesson-content" hidden={lesson.active_stage !== 'notes'}>
+          <ExamNotes notes={journey.notes} requestedLanguage={user.exam_language ?? 'en'} />
           <span className="pill">
             <BookOpen size={14} /> The core idea
           </span>
@@ -1098,11 +1138,16 @@ function LessonPage() {
           <p className="source-note">{topic.source}</p>
           <SourceList sources={topic.sources} />
           <ContentFeedback topicId={topicId!} />
-          <Link className="button primary" to={`/quiz/${topic.chapter_id}`}>
-            Check your understanding <ArrowRight size={17} />
-          </Link>
+          <button
+            className="button primary"
+            disabled={stageBusy}
+            onClick={() => void changeStage(journey.activity ? 'activity' : 'recall')}
+          >
+            {journey.activity ? 'Continue to activity' : 'Continue to recall quiz'}{' '}
+            <ArrowRight size={17} />
+          </button>
         </article>
-        <aside className="panel tutor-panel">
+        <aside className="panel tutor-panel" hidden={lesson.active_stage !== 'understand'}>
           <div className="panel-heading">
             <div className="tutor-title">
               <span className="stat-icon">
@@ -1167,7 +1212,39 @@ function LessonPage() {
           <p className="tutor-footnote">
             AI responses can be mistaken. Check important details against your learning material.
           </p>
+          <button
+            className="button primary"
+            disabled={stageBusy}
+            onClick={() => void changeStage('notes')}
+          >
+            Continue to exam notes <ArrowRight size={17} />
+          </button>
         </aside>
+        {journey.activity && (
+          <div hidden={lesson.active_stage !== 'activity'}>
+            <EquationActivity
+              lessonId={lesson.id}
+              activity={journey.activity}
+              completed={lesson.activity_completed}
+              onCompleted={() =>
+                setLesson((current) => (current ? { ...current, activity_completed: true } : null))
+              }
+            />
+            <button
+              className="button primary stage-next"
+              disabled={stageBusy}
+              onClick={() => void changeStage('recall')}
+            >
+              Continue to recall quiz <ArrowRight size={17} />
+            </button>
+          </div>
+        )}
+        <div hidden={lesson.active_stage !== 'recall'}>
+          <TopicRecall lessonId={lesson.id} />
+          <Link className="button secondary stage-next" to={`/quiz/${topic.chapter_id}`}>
+            Chapter practice quiz <ArrowRight size={17} />
+          </Link>
+        </div>
       </div>
     </>
   );

@@ -1,5 +1,62 @@
 import { test, expect } from '@playwright/test';
 
+test('topic stages resume with exam notes, checked equations and saved recall results', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/');
+  await page.getByLabel('Exam-answer language', { exact: true }).selectOption('hi');
+  await page.getByLabel('What should we call you?').fill('Topic learner');
+  await page.getByRole('button', { name: 'Start learning', exact: true }).click();
+  await page.goto('/lesson/reactions-signs');
+  await expect(page.getByRole('button', { name: '1. AI learning', exact: true })).toHaveAttribute(
+    'aria-current',
+    'step',
+  );
+  await page.getByRole('button', { name: 'Continue to exam notes', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Write it clearly in an exam' })).toBeVisible();
+  await expect(
+    page.getByText('बर्फ का पिघलना भौतिक परिवर्तन क्यों है?', { exact: true }),
+  ).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('button', { name: '2. Exam notes', exact: true })).toHaveAttribute(
+    'aria-current',
+    'step',
+  );
+  await page.getByRole('button', { name: 'Continue to activity', exact: true }).click();
+  await page.getByRole('button', { name: 'Check atom counts', exact: true }).click();
+  await expect(
+    page.getByRole('status').filter({ hasText: 'atom counts do not match' }),
+  ).toBeVisible();
+  await page.getByLabel('Coefficient for Mg', { exact: true }).fill('2');
+  await page.getByLabel('Coefficient for MgO', { exact: true }).fill('2');
+  await page.getByRole('button', { name: 'Check atom counts', exact: true }).click();
+  await expect(
+    page.getByRole('status').filter({ hasText: 'Balanced with the smallest' }),
+  ).toBeVisible();
+  await page.screenshot({ path: 'test-results/topic-activity-mobile.png', fullPage: true });
+  await page.getByRole('button', { name: 'Continue to recall quiz', exact: true }).click();
+  await page.getByRole('button', { name: 'Start topic recall', exact: true }).click();
+  await page.getByLabel('A white solid forming when two solutions mix', { exact: false }).check();
+  await page.getByLabel('No new substance forms', { exact: true }).check();
+  await page.getByRole('button', { name: 'Submit topic recall', exact: true }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Your latest topic score' })).toHaveText(
+    'Your latest topic score: 2 / 2',
+  );
+  await page.reload();
+  await expect(page.getByRole('button', { name: '4. Recall quiz', exact: true })).toHaveAttribute(
+    'aria-current',
+    'step',
+  );
+  await expect(page.getByRole('status').filter({ hasText: 'Your latest topic score' })).toHaveText(
+    'Your latest topic score: 2 / 2',
+  );
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.goto('/lesson/light-reflection');
+  await expect(page.getByRole('button', { name: '3. Activity', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '3. Recall quiz', exact: true })).toBeVisible();
+});
+
 test('language preferences persist and all four study subjects can be browsed', async ({
   page,
 }) => {
@@ -153,6 +210,7 @@ test('student can study, submit a quiz, reload progress and rename their profile
     page.getByRole('heading', { name: 'Recognising a chemical reaction' }),
   ).toBeVisible();
   await expect(page.getByRole('heading', { name: 'AI tutoring is on its way.' })).toBeVisible();
+  await page.getByRole('button', { name: 'Continue to exam notes', exact: true }).click();
   const lessonProgress = page.getByRole('progressbar', { name: 'Lesson steps completed' });
   await expect(lessonProgress).toHaveAttribute('value', '0');
   await expect(
@@ -168,7 +226,9 @@ test('student can study, submit a quiz, reload progress and rename their profile
     .fill('Water remains water when it freezes.');
   await page.getByRole('button', { name: 'Save my answer', exact: true }).click();
   await expect(page.getByText('Your answer is saved.', { exact: true })).toBeVisible();
-  await expect(page.getByText('It remains water; no new substance forms.')).toBeVisible();
+  await expect(page.locator('.revealed-answer')).toHaveText(
+    'It remains water; no new substance forms.',
+  );
   await page.getByRole('button', { name: 'I’ve reflected on the question' }).click();
   await expect(lessonProgress).toHaveAttribute('value', '3');
   await page.reload();
@@ -190,7 +250,8 @@ test('student can study, submit a quiz, reload progress and rename their profile
   ).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: 'test-results/lesson-progress-desktop.png', fullPage: false });
-  await page.getByRole('link', { name: 'Check your understanding' }).click();
+  await page.getByRole('button', { name: '4. Recall quiz', exact: true }).click();
+  await page.getByRole('link', { name: 'Chapter practice quiz' }).click();
   await page.getByRole('button', { name: 'Start practice', exact: true }).click();
   await page.getByLabel('A white solid forming when two solutions mix', { exact: false }).check();
   await page.getByLabel('2H₂ + O₂ → 2H₂O', { exact: false }).check();
@@ -228,6 +289,7 @@ test('mobile library navigation fits and filters correctly', async ({ page }) =>
     'value',
     '0',
   );
+  await page.getByRole('button', { name: 'Continue to exam notes', exact: true }).click();
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
   ).toBeTruthy();

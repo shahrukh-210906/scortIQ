@@ -23,9 +23,11 @@ from .database import (
     Base,
     Bookmark,
     Feedback,
+    Journey,
     Lesson,
     LessonStep,
     Preferences,
+    RecallAttempt,
     Reflection,
     Session,
     SessionLocal,
@@ -35,6 +37,7 @@ from .database import (
     get_db,
 )
 from .grounding import retrieve, seed_pilot_sources, topic_sources
+from .journey_content import ACTIVITIES, TOPIC_QUESTIONS, exam_notes
 
 ENV = os.getenv("APP_ENV", "development")
 if ENV not in {"development", "test", "production"}:
@@ -65,7 +68,7 @@ async def lifespan(app: FastAPI):
         ):
             raise RuntimeError("Production identity and inference URLs must use HTTPS.")
         with engine.connect() as connection:
-            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0007":
+            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0008":
                 raise RuntimeError(
                     "Apply the supported database migration before starting production."
                 )
@@ -360,12 +363,15 @@ class StepInput(BaseModel):
 def lesson_payload(db: DBSession, lesson: Lesson):
     saved = set(db.scalars(select(LessonStep.step).where(LessonStep.lesson_id == lesson.id)))
     reflection = db.get(Reflection, lesson.id)
+    journey = db.get(Journey, lesson.id)
     return {
         "id": lesson.id,
         "topic_id": lesson.topic_id,
         "messages": json.loads(lesson.messages),
         "completed_steps": [step for step in LESSON_STEPS if step in saved],
         "reflection": reflection.answer if reflection else "",
+        "active_stage": journey.active_stage if journey else "understand",
+        "activity_completed": bool(journey and journey.activity_completed),
     }
 
 
@@ -496,6 +502,199 @@ def topic(topic_id: str, db: DBSession = Depends(get_db)):
         "content_version": "pilot-1",
         "sources": topic_sources(db, topic_id, reviewed_only=PRODUCTION),
     }
+
+
+def owned_lesson(db: DBSession, user: User, lesson_id: str):
+    lesson = db.get(Lesson, lesson_id)
+    if not lesson or lesson.user_id != user.id:
+        raise HTTPException(404, "Lesson not found.")
+    return lesson
+
+
+class StageInput(BaseModel):
+    stage: Literal["understand", "notes", "activity", "recall"]
+
+
+@app.get("/api/lessons/{lesson_id}/journey")
+def get_journey(
+    lesson_id: str, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    lesson = owned_lesson(db, user, lesson_id)
+    _, topic = topic_by_id(lesson.topic_id)
+    language = user_payload(user, db)["exam_language"]
+    activity = ACTIVITIES.get(lesson.topic_id)
+    return {
+        "notes": exam_notes(topic, language),
+        "activity": {"formulas": activity["formulas"], "hint": activity["hint"]}
+        if activity
+        else None,
+        "content_status": "draft",
+    }
+
+
+@app.post("/api/lessons/{lesson_id}/stage", dependencies=[Depends(require_same_origin)])
+def change_stage(
+    lesson_id: str,
+    body: StageInput,
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    lesson = owned_lesson(db, user, lesson_id)
+    if body.stage == "activity" and lesson.topic_id not in ACTIVITIES:
+        raise HTTPException(422, "This topic does not have an activity.")
+    journey = db.get(Journey, lesson_id)
+    if not journey:
+        journey = Journey(lesson_id=lesson_id, active_stage=body.stage, activity_completed=0)
+        db.add(journey)
+    else:
+        journey.active_stage = body.stage
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(409, "Your learning stage changed in another window. Please try again.")
+    return {"active_stage": body.stage}
+
+
+class ActivityInput(BaseModel):
+    coefficients: list[StrictInt] = Field(min_length=3, max_length=3)
+
+
+@app.post("/api/lessons/{lesson_id}/activity", dependencies=[Depends(require_same_origin)])
+def check_activity(
+    lesson_id: str,
+    body: ActivityInput,
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    lesson = owned_lesson(db, user, lesson_id)
+    activity = ACTIVITIES.get(lesson.topic_id)
+    if not activity:
+        raise HTTPException(404, "Activity not found.")
+    if any(not 1 <= value <= 20 for value in body.coefficients):
+        raise HTTPException(422, "Use whole-number coefficients from 1 to 20.")
+    a, b, c = body.coefficients
+    elements = sorted(set().union(*[set(atoms) for atoms in activity["atoms"]]))
+    counts = [
+        {
+            "element": element,
+            "left": a * activity["atoms"][0].get(element, 0)
+            + b * activity["atoms"][1].get(element, 0),
+            "right": c * activity["atoms"][2].get(element, 0),
+        }
+        for element in elements
+    ]
+    from math import gcd
+
+    balanced = all(row["left"] == row["right"] for row in counts)
+    smallest = gcd(gcd(a, b), c) == 1
+    correct = balanced and smallest
+    if correct:
+        journey = db.get(Journey, lesson_id)
+        if not journey:
+            db.add(Journey(lesson_id=lesson_id, active_stage="activity", activity_completed=1))
+        else:
+            journey.activity_completed = 1
+        try:
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+            raise HTTPException(409, "Your activity changed in another window. Please retry.")
+    return {
+        "correct": correct,
+        "counts": counts,
+        "message": "Balanced with the smallest whole-number coefficients."
+        if correct
+        else "Balanced, but simplify the coefficients."
+        if balanced
+        else "The atom counts do not match yet. Try another coefficient.",
+    }
+
+
+def recall_result(attempt: RecallAttempt, topic_id: str):
+    answers = json.loads(attempt.answers)
+    questions = TOPIC_QUESTIONS[topic_id]
+    return {
+        "score": attempt.score,
+        "total": len(questions),
+        "review": [
+            {
+                "id": question["id"],
+                "prompt": question["prompt"],
+                "correct_answer": question["options"][question["correct"]],
+                "reason": question["reason"],
+                "is_correct": answers[question["id"]] == question["correct"],
+            }
+            for question in questions
+        ],
+    }
+
+
+@app.get("/api/lessons/{lesson_id}/recall")
+def resume_recall(
+    lesson_id: str, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    lesson = owned_lesson(db, user, lesson_id)
+    latest = db.scalar(
+        select(RecallAttempt)
+        .where(RecallAttempt.lesson_id == lesson_id, RecallAttempt.score.is_not(None))
+        .order_by(RecallAttempt.created_at.desc(), RecallAttempt.id.desc())
+    )
+    return {"result": recall_result(latest, lesson.topic_id) if latest else None}
+
+
+@app.post("/api/lessons/{lesson_id}/recall", dependencies=[Depends(require_same_origin)])
+def start_recall(
+    lesson_id: str, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    lesson = owned_lesson(db, user, lesson_id)
+    attempt = RecallAttempt(
+        id=secrets.token_hex(16), lesson_id=lesson_id, created_at=time.time_ns()
+    )
+    db.add(attempt)
+    db.commit()
+    return {
+        "id": attempt.id,
+        "questions": [
+            {k: v for k, v in question.items() if k not in {"correct", "reason"}}
+            for question in TOPIC_QUESTIONS[lesson.topic_id]
+        ],
+    }
+
+
+@app.post("/api/recall/{attempt_id}/submit", dependencies=[Depends(require_same_origin)])
+def submit_recall(
+    attempt_id: str,
+    body: QuizInput,
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    attempt = db.get(RecallAttempt, attempt_id)
+    if not attempt:
+        raise HTTPException(404, "Attempt not found.")
+    lesson = owned_lesson(db, user, attempt.lesson_id)
+    questions = TOPIC_QUESTIONS[lesson.topic_id]
+    if set(body.answers) != {q["id"] for q in questions} or any(
+        body.answers[q["id"]] not in range(len(q["options"])) for q in questions
+    ):
+        raise HTTPException(422, "Answer each question with a valid option.")
+    encoded = json.dumps(body.answers, sort_keys=True)
+    if attempt.score is not None:
+        if attempt.answers != encoded:
+            raise HTTPException(409, "This recall quiz has already been submitted.")
+    else:
+        score = sum(body.answers[q["id"]] == q["correct"] for q in questions)
+        changed = db.execute(
+            update(RecallAttempt)
+            .where(RecallAttempt.id == attempt_id, RecallAttempt.score.is_(None))
+            .values(score=score, answers=encoded)
+        )
+        if changed.rowcount != 1:
+            db.rollback()
+            raise HTTPException(409, "This quiz was submitted in another window. Please reload.")
+        db.commit()
+        db.refresh(attempt)
+    return recall_result(attempt, lesson.topic_id)
 
 
 @app.post("/api/lessons/{topic_id}", dependencies=[Depends(require_same_origin)])

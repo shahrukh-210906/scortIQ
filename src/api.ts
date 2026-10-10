@@ -45,6 +45,21 @@ export type Lesson = {
   messages: Message[];
   completed_steps: string[];
   reflection: string;
+  active_stage: 'understand' | 'notes' | 'activity' | 'recall';
+  activity_completed: boolean;
+};
+export type JourneyContent = {
+  notes: {
+    language: string;
+    status: string;
+    question: string;
+    model_answer: string;
+    key_terms: string[];
+    writing_steps: string[];
+    dont_forget: string;
+    marking_note: string;
+  };
+  activity: { formulas: string[]; hint: string } | null;
 };
 export type Quiz = {
   id: string;

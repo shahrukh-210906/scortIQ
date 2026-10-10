@@ -2435,3 +2435,113 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+.topic-stage-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+.topic-stage-nav button {
+  border: 1px solid #879b93;
+  background: white;
+  border-radius: 12px;
+  padding: 12px 18px;
+  min-height: 44px;
+  font: inherit;
+  color: #18392e;
+  cursor: pointer;
+}
+.topic-stage-nav .selected {
+  background: #245c4c;
+  color: white;
+}
+.topic-stage-layout [hidden] {
+  display: none !important;
+}
+.topic-stage-layout > .panel {
+  width: 100%;
+}
+.topic-stage-layout .tutor-panel {
+  min-height: 400px;
+}
+.exam-notes {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #d9e2df;
+}
+.exam-notes h3 {
+  margin: 20px 0 10px;
+}
+.exam-notes li {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+.topic-practice {
+  padding: 24px;
+}
+.topic-practice p {
+  line-height: 1.6;
+  margin: 16px 0;
+}
+.topic-practice table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px 0;
+}
+.topic-practice th,
+.topic-practice td {
+  border-bottom: 1px solid #d9e2df;
+  padding: 12px;
+  text-align: left;
+}
+.coefficient-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 24px 0;
+}
+.coefficient-inputs label {
+  display: grid;
+  gap: 10px;
+}
+.coefficient-inputs input {
+  width: 100%;
+  padding: 12px;
+  min-height: 44px;
+  border: 1px solid #879b93;
+  border-radius: 10px;
+  font: inherit;
+}
+.equation-display {
+  font-size: 24px;
+  font-weight: 600;
+}
+.recall-question {
+  padding: 16px;
+  border: 1px solid #879b93;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+.recall-question legend {
+  font-weight: 600;
+}
+.recall-question label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 0;
+}
+.recall-review {
+  margin: 24px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #d9e2df;
+}
+@media (max-width: 600px) {
+  .coefficient-inputs {
+    grid-template-columns: 1fr;
+  }
+  .topic-stage-nav button {
+    flex: 1 1 40%;
+  }
+}
