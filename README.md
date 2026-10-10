@@ -77,7 +77,7 @@ Apply migrations before import, then run `python -m backend.import_sources path/
 
 Each JSONL record requires `id`, `title`, `topic_id`, `class_level: 10`, `language: "en"`, `version`, `rights`, `rights_confirmed: true`, `review_status: "draft"` or `"reviewed"`, and `passages` (1–100 strings, each at most 2000 characters). Reviewed material also requires a named `reviewer`. These metadata fields document the approval process; they do not replace an actual educator/rights review.
 
-The current database migration is `0009`. Upgrading adds the learning, source, preference and classroom tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
+The current database migration is `0010`. Upgrading adds the learning, source, preference, classroom and assignment tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
 
 ## Supabase email sign-in and recovery
 
@@ -91,7 +91,7 @@ The current database migration is `0009`. Upgrading adds the learning, source, p
 
 Learners can expand "Report an issue with this lesson", choose a category and submit a 10–2,000 character description. Reports are stored against the authenticated account and topic; invalid topics, blank messages and cross-site writes are rejected. The UI preserves failed submissions for retry and confirms saved reports. A per-account limit allows ten reports per hour; stronger concurrent/global abuse enforcement remains release work. Reports are saved locally in the configured database; staff triage and notifications are not implemented yet.
 
-Run migration `0009` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
+Run migration `0010` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
 
 ## Saved reflections — 10 October 2026
 
@@ -125,4 +125,14 @@ Accounts start as students. Teacher approval is an operator action with database
 
 Approved teachers can create named classrooms, view their own student rosters, remove members and replace join codes. Students can join several classrooms and leave without losing personal learning progress. Codes contain 12 random hexadecimal characters, expire after seven days and are stored as hashes. The raw code appears only after creation/replacement, so replacing it is necessary if it was not saved. Previous codes stop working immediately after replacement. Removal alone does not prevent rejoining with a still-valid code. Revoking teacher approval disables classroom management and new joins; existing student memberships remain.
 
-Classroom lists and rosters are checked against the signed-in account. Students never receive other students' names or IDs. Invitations currently mean sharing a code yourself; the app does not send messages. Daily topic assignments, classroom analytics and teacher support settings are the next features. Migration `0009` adds teacher approval, classroom and membership tables. Validation includes 28 backend checks, seven browser journeys, build, format/lint checks and migration parity.
+Classroom lists and rosters are checked against the signed-in account. Students never receive other students' names or IDs. Invitations currently mean sharing a code yourself; the app does not send messages. Teacher support settings and richer classroom analytics remain upcoming. Migration `0009` adds teacher approval, classroom and membership tables. Validation at that milestone included 28 backend checks, seven browser journeys, build, format/lint checks and migration parity.
+
+## Daily topic assignments
+
+In Classrooms, approved teachers choose an available pilot topic, a study date and optional instructions. Tasks appear on classroom pages and both account dashboards. Dates are labelled Today/Upcoming/Earlier using India time; there is no automatic deadline, lockout or overdue penalty. Only the seven available draft lessons can be assigned. Planned NCERT catalogue topics remain unavailable until lesson content is implemented and reviewed. Teachers can withdraw a task; its record is archived and students' learning is retained.
+
+Students see their own saved practice and can open the assigned topic. Teachers see only current members of their own classrooms, with topic-specific checklist/activity/recall summaries, never chat messages or written reflections. Leaving or being removed immediately removes assignment access. New members see existing active tasks. Refresh or reopen the dashboard/classroom page to update progress; live notifications are not implemented.
+
+Practice complete means all three notes checklist steps are saved, an applicable equation activity has been solved and a topic recall quiz has been submitted. It does not require a passing score or an AI conversation and does not certify mastery. Progress uses each learner's latest saved topic work, including work completed before the assignment; daily assignments are not separate exam attempts. Current membership determines roster counts. Teacher-controlled support and formal marking remain later features.
+
+Migration `0010` adds assignments. Build, 30 backend checks, eight browser journeys, lint/format checks and migration parity pass. Coverage includes cross-classroom access, invalid/unavailable topics, date validation, removal, withdrawal, activity prerequisites and dashboard persistence. Supabase setup remains deferred.

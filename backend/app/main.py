@@ -4,7 +4,7 @@ import os
 import secrets
 import time
 from contextlib import asynccontextmanager
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urlparse
@@ -18,6 +18,7 @@ from sqlalchemy.orm import Session as DBSession
 
 from .content import CHAPTERS, QUESTIONS, topic_by_id
 from .database import (
+    Assignment,
     Attempt,
     AuthChallenge,
     Base,
@@ -71,7 +72,7 @@ async def lifespan(app: FastAPI):
         ):
             raise RuntimeError("Production identity and inference URLs must use HTTPS.")
         with engine.connect() as connection:
-            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0009":
+            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0010":
                 raise RuntimeError(
                     "Apply the supported database migration before starting production."
                 )
@@ -291,6 +292,161 @@ def leave_classroom(
 
 def digest(value: str):
     return hashlib.sha256(value.encode()).hexdigest()
+
+
+class AssignmentInput(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    topic_id: str = Field(min_length=1, max_length=80)
+    study_date: date
+    instructions: str = Field(default="", max_length=1000)
+
+
+@app.post(
+    "/api/classrooms/{classroom_id}/assignments",
+    dependencies=[Depends(require_same_origin)],
+    status_code=201,
+)
+def assign_topic(
+    classroom_id: str,
+    body: AssignmentInput,
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    owned_classroom(classroom_id, user, db)
+    if not topic_by_id(body.topic_id):
+        raise HTTPException(
+            422,
+            "Choose an available pilot lesson. Planned catalogue topics cannot be assigned yet.",
+        )
+    assignment = Assignment(
+        id=secrets.token_hex(16),
+        classroom_id=classroom_id,
+        topic_id=body.topic_id,
+        study_date=body.study_date.isoformat(),
+        instructions=body.instructions,
+        created_at=int(time.time()),
+        archived=0,
+    )
+    db.add(assignment)
+    db.commit()
+    return {"id": assignment.id}
+
+
+@app.delete("/api/assignments/{assignment_id}", dependencies=[Depends(require_same_origin)])
+def withdraw_assignment(
+    assignment_id: str, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    assignment = db.get(Assignment, assignment_id)
+    if not assignment:
+        raise HTTPException(404, "Assignment not found.")
+    owned_classroom(assignment.classroom_id, user, db)
+    assignment.archived = 1
+    db.commit()
+    return {"withdrawn": True}
+
+
+@app.get("/api/assignments")
+def assignments(user: User = Depends(require_user), db: DBSession = Depends(get_db)):
+    teacher = bool(db.get(Teacher, user.id))
+    query = select(Assignment, Classroom).join(Classroom).where(Assignment.archived == 0)
+    if teacher:
+        query = query.where(Classroom.teacher_id == user.id)
+    else:
+        query = query.join(Membership, Membership.classroom_id == Classroom.id).where(
+            Membership.user_id == user.id
+        )
+    rows = db.execute(
+        query.order_by(Assignment.study_date, Assignment.created_at, Assignment.id)
+    ).all()
+    room_ids = {room.id for _, room in rows}
+    roster = {}
+    if teacher and room_ids:
+        for membership, student in db.execute(
+            select(Membership, User)
+            .join(User, User.id == Membership.user_id)
+            .where(Membership.classroom_id.in_(room_ids))
+            .order_by(User.name, User.id)
+        ):
+            roster.setdefault(membership.classroom_id, []).append(student)
+    user_ids = (
+        {student.id for students in roster.values() for student in students}
+        if teacher
+        else {user.id}
+    )
+    topic_ids = {assignment.topic_id for assignment, _ in rows}
+    lessons = (
+        list(
+            db.scalars(
+                select(Lesson).where(Lesson.user_id.in_(user_ids), Lesson.topic_id.in_(topic_ids))
+            )
+        )
+        if rows
+        else []
+    )
+    lesson_ids = [lesson.id for lesson in lessons]
+    lesson_map = {(lesson.user_id, lesson.topic_id): lesson for lesson in lessons}
+    steps = {}
+    for step in db.scalars(select(LessonStep).where(LessonStep.lesson_id.in_(lesson_ids))):
+        steps.setdefault(step.lesson_id, set()).add(step.step)
+    journeys = {
+        journey.lesson_id: journey
+        for journey in db.scalars(select(Journey).where(Journey.lesson_id.in_(lesson_ids)))
+    }
+    recalls = {}
+    for recall in db.scalars(
+        select(RecallAttempt)
+        .where(RecallAttempt.lesson_id.in_(lesson_ids), RecallAttempt.score.is_not(None))
+        .order_by(RecallAttempt.created_at.desc(), RecallAttempt.id.desc())
+    ):
+        recalls.setdefault(recall.lesson_id, recall)
+
+    def saved_progress(student_id, topic_id):
+        lesson = lesson_map.get((student_id, topic_id))
+        lesson_id = lesson.id if lesson else None
+        recall = recalls.get(lesson_id)
+        journey = journeys.get(lesson_id)
+        notes = {"read", "example", "reflect"}.issubset(steps.get(lesson_id, set()))
+        activity_required = topic_id in ACTIVITIES
+        activity_done = bool(journey and journey.activity_completed)
+        return {
+            "started": bool(lesson),
+            "notes_completed": notes,
+            "activity_required": activity_required,
+            "activity_completed": activity_done,
+            "recall_submitted": bool(recall),
+            "score": recall.score if recall else None,
+            "total": len(TOPIC_QUESTIONS[topic_id]),
+            "practice_complete": notes
+            and (not activity_required or activity_done)
+            and bool(recall),
+        }
+
+    result = []
+    for assignment, room in rows:
+        chapter, topic = topic_by_id(assignment.topic_id)
+        item = {
+            "id": assignment.id,
+            "classroom_id": room.id,
+            "classroom_name": room.name,
+            "topic_id": assignment.topic_id,
+            "topic_title": topic["title"],
+            "subject": chapter["subject"],
+            "study_date": assignment.study_date,
+            "instructions": assignment.instructions,
+        }
+        if teacher:
+            item["students"] = [
+                {
+                    "id": student.id,
+                    "name": student.name,
+                    "progress": saved_progress(student.id, assignment.topic_id),
+                }
+                for student in roster.get(room.id, [])
+            ]
+        else:
+            item["progress"] = saved_progress(user.id, assignment.topic_id)
+        result.append(item)
+    return result
 
 
 class EmailInput(BaseModel):

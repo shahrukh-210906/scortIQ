@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { api, post, type User } from './api';
+import { api, post, type User, type Curriculum } from './api';
+import { AssignmentBoard, AssignmentForm } from './Assignments';
 
 type Classroom = {
   id: string;
@@ -10,7 +11,7 @@ type Classroom = {
   join_code?: string;
 };
 
-export default function Classrooms({ user }: { user: User }) {
+export default function Classrooms({ user, curriculum }: { user: User; curriculum: Curriculum }) {
   const teacher = user.role === 'teacher';
   const [rooms, setRooms] = useState<Classroom[]>([]);
   const [value, setValue] = useState('');
@@ -19,6 +20,7 @@ export default function Classrooms({ user }: { user: User }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [assignmentRevision, setAssignmentRevision] = useState(0);
   async function load() {
     setRooms(await api<Classroom[]>('/classrooms'));
   }
@@ -175,6 +177,14 @@ export default function Classrooms({ user }: { user: User }) {
               Leave classroom
             </button>
           )}
+          {teacher && (
+            <AssignmentForm
+              classroomId={room.id}
+              curriculum={curriculum}
+              onSaved={() => setAssignmentRevision((value) => value + 1)}
+            />
+          )}
+          <AssignmentBoard user={user} classroomId={room.id} revision={assignmentRevision} />
         </section>
       ))}
     </div>

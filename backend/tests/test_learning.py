@@ -43,6 +43,93 @@ class LearningTests(unittest.TestCase):
             db.add(Teacher(user_id=user_id))
             db.commit()
 
+    def test_assignments_scope_saved_progress_and_withdrawal(self):
+        self.approve_teacher(self.user_id)
+        teacher_cookie = self.client.cookies.get("scortiq_session")
+        room = self.client.post("/api/classrooms", json={"name": "Class 10"}).json()
+        path = f"/api/classrooms/{room['id']}/assignments"
+        body = {
+            "topic_id": "reactions-signs",
+            "study_date": "2026-10-10",
+            "instructions": "Review atom counts.",
+        }
+        task = self.client.post(path, json=body).json()
+        student = self.client.post("/api/auth/local", json={"name": "Student"}).json()
+        student_cookie = self.client.cookies.get("scortiq_session")
+        self.assertEqual(self.client.get("/api/assignments").json(), [])
+        self.assertEqual(self.client.post(path, json=body).status_code, 403)
+        self.client.post("/api/classrooms/join", json={"code": room["join_code"]})
+        item = self.client.get("/api/assignments").json()[0]
+        self.assertNotIn("students", item)
+        self.assertFalse(item["progress"]["started"])
+        self.assertEqual(self.client.delete(f"/api/assignments/{task['id']}").status_code, 403)
+        lesson = self.client.post("/api/lessons/reactions-signs").json()
+        for step in ["read", "example", "reflect"]:
+            self.assertEqual(
+                self.client.post(
+                    f"/api/lessons/{lesson['id']}/steps", json={"step": step}
+                ).status_code,
+                200,
+            )
+        recall = self.client.post(f"/api/lessons/{lesson['id']}/recall").json()
+        self.client.post(
+            f"/api/recall/{recall['id']}/submit",
+            json={"answers": {question["id"]: 0 for question in recall["questions"]}},
+        )
+        progress = self.client.get("/api/assignments").json()[0]["progress"]
+        self.assertTrue(progress["recall_submitted"])
+        self.assertFalse(progress["practice_complete"])
+        self.client.post(f"/api/lessons/{lesson['id']}/activity", json={"coefficients": [2, 1, 2]})
+        self.assertTrue(
+            self.client.get("/api/assignments").json()[0]["progress"]["practice_complete"]
+        )
+        self.client.cookies.set("scortiq_session", teacher_cookie)
+        roster = self.client.get("/api/assignments").json()[0]["students"]
+        self.assertEqual(roster[0]["id"], student["id"])
+        self.assertTrue(roster[0]["progress"]["practice_complete"])
+        self.assertNotIn("messages", roster[0]["progress"])
+        self.assertEqual(self.client.delete(f"/api/assignments/{task['id']}").status_code, 200)
+        self.client.cookies.set("scortiq_session", student_cookie)
+        self.assertEqual(self.client.get("/api/assignments").json(), [])
+        self.assertEqual(
+            self.client.post("/api/lessons/reactions-signs").json()["completed_steps"],
+            ["read", "example", "reflect"],
+        )
+
+    def test_assignment_validation_teacher_scope_and_membership_removal(self):
+        self.approve_teacher(self.user_id)
+        cookie = self.client.cookies.get("scortiq_session")
+        room = self.client.post("/api/classrooms", json={"name": "Class 10"}).json()
+        path = f"/api/classrooms/{room['id']}/assignments"
+        body = {"topic_id": "light-reflection", "study_date": "2026-10-12"}
+        for invalid in [
+            {"topic_id": "planned-topic"},
+            {"study_date": "2026-02-31"},
+            {"instructions": "x" * 1001},
+            {"students": ["other"]},
+        ]:
+            self.assertEqual(self.client.post(path, json={**body, **invalid}).status_code, 422)
+        self.assertEqual(
+            self.client.post(path, json=body, headers={"origin": "https://other.test"}).status_code,
+            403,
+        )
+        task = self.client.post(path, json=body).json()
+        other = self.client.post("/api/auth/local", json={"name": "Other teacher"}).json()
+        self.approve_teacher(other["id"])
+        self.assertEqual(self.client.get("/api/assignments").json(), [])
+        self.assertEqual(self.client.post(path, json=body).status_code, 404)
+        self.assertEqual(self.client.delete(f"/api/assignments/{task['id']}").status_code, 404)
+        student = self.client.post("/api/auth/local", json={"name": "Student"}).json()
+        student_cookie = self.client.cookies.get("scortiq_session")
+        self.client.post("/api/classrooms/join", json={"code": room["join_code"]})
+        self.assertEqual(len(self.client.get("/api/assignments").json()), 1)
+        self.client.cookies.set("scortiq_session", cookie)
+        self.client.delete(f"/api/classrooms/{room['id']}/members/{student['id']}")
+        self.client.cookies.set("scortiq_session", student_cookie)
+        self.assertEqual(self.client.get("/api/assignments").json(), [])
+        self.client.post("/api/auth/logout")
+        self.assertEqual(self.client.get("/api/assignments").status_code, 401)
+
     def test_classroom_membership_privacy_and_code_rotation(self):
         self.assertEqual(
             self.client.post("/api/classrooms", json={"name": "Class 10"}).status_code, 403

@@ -47,6 +47,17 @@ class Classroom(Base):
     code_expires: Mapped[int] = mapped_column(Integer)
 
 
+class Assignment(Base):
+    __tablename__ = "assignments"
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    classroom_id: Mapped[str] = mapped_column(ForeignKey("classrooms.id"), index=True)
+    topic_id: Mapped[str] = mapped_column(String(80))
+    study_date: Mapped[str] = mapped_column(String(10))
+    instructions: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[int] = mapped_column(Integer)
+    archived: Mapped[int] = mapped_column(Integer, default=0)
+
+
 class Membership(Base):
     __tablename__ = "memberships"
     classroom_id: Mapped[str] = mapped_column(ForeignKey("classrooms.id"), primary_key=True)

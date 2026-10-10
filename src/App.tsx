@@ -9,6 +9,7 @@ import {
 } from 'react';
 import ContentFeedback from './ContentFeedback';
 import Classrooms from './Classrooms';
+import { AssignmentBoard } from './Assignments';
 import LanguageFields from './LanguageFields';
 import CurriculumCatalogue from './CurriculumCatalogue';
 import BookmarkButton from './BookmarkButton';
@@ -228,7 +229,7 @@ export default function App() {
           <Route path="/lesson/:topicId" element={<TopicRoute />} />
           <Route path="/quiz/:chapterId" element={<QuizRoute />} />
           <Route path="/progress" element={<ProgressPage />} />
-          <Route path="/classrooms" element={<Classrooms user={user} />} />
+          <Route path="/classrooms" element={<Classrooms user={user} curriculum={curriculum} />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -554,6 +555,7 @@ function Dashboard() {
           }).format(new Date())}
         </span>
       </div>
+      <AssignmentBoard user={user} />
       <section className="hero-card">
         <div className="hero-copy">
           <span className="hero-badge">

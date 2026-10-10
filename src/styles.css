@@ -2586,3 +2586,60 @@ textarea:focus {
 .classroom-roster .text-button {
   min-height: 44px;
 }
+.assignment-board {
+  margin: 24px 0;
+}
+.assignment-board > .section-heading {
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.assignment-card {
+  margin-top: 16px;
+}
+.assignment-card h3 {
+  margin: 8px 0;
+}
+.assignment-card .button {
+  margin-top: 16px;
+}
+.assignment-progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 12px 0;
+  font-size: 14px;
+}
+.assignment-progress strong {
+  width: 100%;
+}
+.assignment-instructions {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin-top: 12px;
+}
+.assignment-students {
+  padding: 0;
+  list-style: none;
+}
+.assignment-students li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.assignment-form {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+.assignment-form select,
+.assignment-form textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+.assignment-board .text-button {
+  min-height: 44px;
+}

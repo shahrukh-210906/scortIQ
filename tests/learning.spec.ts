@@ -1,6 +1,80 @@
 import { test, expect } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 
+test('daily assignments appear on student dashboards and teachers see saved practice', async ({
+  page,
+  browser,
+}) => {
+  await page.goto('/');
+  const teacher = await (
+    await page.request.post('/api/auth/local', { data: { name: 'Assignment teacher' } })
+  ).json();
+  execFileSync(process.platform === 'win32' ? '.venv/Scripts/python.exe' : 'python', [
+    '-m',
+    'backend.manage_teacher',
+    'grant',
+    '--user-id',
+    teacher.id,
+  ]);
+  await page.goto('/classrooms');
+  await page.getByLabel('Classroom name').fill('Daily science');
+  await page.getByRole('button', { name: 'Create classroom', exact: true }).click();
+  await expect(page.locator('.classroom-code')).toBeVisible();
+  const code = await page.locator('.classroom-code').innerText();
+  await page.getByLabel('Topic to study', { exact: true }).selectOption('light-reflection');
+  await page
+    .getByLabel('Instructions (optional)', { exact: true })
+    .fill('Explain both laws in your own words.');
+  await page.getByRole('button', { name: 'Share study task', exact: true }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Study task shared' })).toBeVisible();
+  const context = await browser.newContext({ viewport: { width: 375, height: 812 } });
+  try {
+    const student = await context.newPage();
+    await student.goto('http://127.0.0.1:5173/');
+    await student.request.post('/api/auth/local', { data: { name: 'Assignment student' } });
+    await student.request.post('/api/classrooms/join', { data: { code } });
+    await student.reload();
+    const board = student.getByRole('region', { name: 'Assigned study', exact: true });
+    await expect(board.getByRole('heading', { name: 'Laws of reflection' })).toBeVisible();
+    await expect(board.getByText('Explain both laws in your own words.')).toBeVisible();
+    await expect(board.getByText('Not started', { exact: true })).toBeVisible();
+    await board.getByRole('link', { name: 'Start assigned topic' }).click();
+    await expect(
+      student.getByRole('button', { name: 'Continue to exam notes', exact: true }),
+    ).toBeVisible();
+    const lesson = await (await student.request.post('/api/lessons/light-reflection')).json();
+    for (const step of ['read', 'example', 'reflect']) {
+      expect(
+        (await student.request.post(`/api/lessons/${lesson.id}/steps`, { data: { step } })).ok(),
+      ).toBe(true);
+    }
+    const quiz = await (await student.request.post(`/api/lessons/${lesson.id}/recall`)).json();
+    const answers = Object.fromEntries(
+      quiz.questions.map((question: { id: string }) => [question.id, 0]),
+    );
+    expect(
+      (await student.request.post(`/api/recall/${quiz.id}/submit`, { data: { answers } })).ok(),
+    ).toBe(true);
+    await student.goto('http://127.0.0.1:5173/');
+    await expect(board.getByText('Practice complete', { exact: true })).toBeVisible();
+    expect(await student.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+    await student.screenshot({ path: 'test-results/assignments-mobile.png', fullPage: true });
+    await page.goto('/');
+    const teacherBoard = page.getByRole('region', { name: 'Assigned study', exact: true });
+    await expect(teacherBoard.getByText('1 / 1 students finished practice')).toBeVisible();
+    await expect(teacherBoard.getByText('Assignment student', { exact: true })).toBeVisible();
+    await page.screenshot({ path: 'test-results/assignments-teacher.png', fullPage: true });
+    await teacherBoard.getByRole('button', { name: 'Withdraw study task' }).click();
+    await expect(teacherBoard.getByRole('heading', { name: 'Laws of reflection' })).toHaveCount(0);
+    await student.reload();
+    await expect(board.getByRole('heading', { name: 'Laws of reflection' })).toHaveCount(0);
+  } finally {
+    await context.close();
+  }
+});
+
 test('approved teachers create classrooms and students join and leave on mobile', async ({
   page,
   browser,
