@@ -2,6 +2,8 @@
 
 Training has not been run. No trained weights or production dataset exist yet. Do not publish the seed application notes as reviewed training data.
 
+For a beginner-friendly path without paid API calls, see [the local AI and training guide](../FREE_AI_GUIDE.md). The app can use local Ollama inference before fine-tuning; the existing model and a trained adapter are different artifacts.
+
 1. Confirm a base model's license and benchmark its language and science performance.
 2. Produce teacher-reviewed, licensed multi-turn tutoring examples. Include misconceptions, graduated hints, valid JSON replies, and uncertainty responses.
 3. Create separate training/validation/test JSONL files split by chapter or question family. Keep test data out of both training and model-selection validation.

@@ -35,11 +35,12 @@ See `CLASS10_PRODUCT_PLAN.md` and `CLASS10_CURRICULUM.md`. This direction supers
 - [ ] Add authorized staff report triage and curriculum review tools.
 - [ ] Add reviewed content versions and richer retrieval with factual-support evaluation.
 - [ ] Build a frozen tutor benchmark and a reviewed training dataset.
+- [x] Connect existing local Ollama inference and document a no-paid-API training path.
 
 ## External setup and release work
 - [ ] Complete live Supabase code verification/recovery and connect the managed database (authentication credentials are configured locally).
 - [ ] Obtain educator/rights approval for curriculum and training material.
-- [ ] Train/evaluate a model and connect an approved Hugging Face endpoint.
+- [ ] Benchmark candidate local models, prepare reviewed data, train/evaluate an adapter if useful and deploy an approved inference runtime (Ollama baseline connected experimentally).
 - [ ] Configure staging/production hosting, monitoring, rate limits and backup recovery.
 - [ ] Complete privacy, account deletion, accessibility and load checks.
 

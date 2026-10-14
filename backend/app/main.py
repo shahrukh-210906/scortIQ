@@ -1440,8 +1440,8 @@ async def tutor_turn(
     teaching_language = user_payload(user, db)["teaching_language"]
     system += {
         "en": " Teach in clear English.",
-        "hi": " Teach in simple Hindi. Preserve equations, units and source IDs exactly.",
-        "hinglish": " Teach in simple conversational Hinglish using Roman Hindi and English scientific terms. Preserve equations, units and source IDs exactly.",
+        "hi": " Teach in simple Hindi. Write the JSON reply in Hindi using Devanagari, even when the student question, earlier replies and evidence are English. Keep scientific symbols, equations, units and citation IDs unchanged. Explain the supplied evidence in Hindi and ask one short guiding question in Hindi.",
+        "hinglish": " Teach in simple conversational Hinglish using Roman Hindi and English scientific terms. Write the JSON reply in a natural mix of Roman Hindi and English, even when earlier replies and the question are English. Use Roman Hindi sentence structure, such as 'kyun', 'kaise' and 'hota hai', with appropriate English scientific terms. Explain the supplied evidence and ask one short guiding question in Hinglish. Preserve equations, units and source IDs exactly.",
     }[teaching_language]
     support = effective_support(db, user.id, lesson.topic_id)
     if support["simple_language"]:

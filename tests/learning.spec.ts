@@ -237,7 +237,7 @@ test('teacher topic support saves, resumes and is visible only on the selected s
     await expect(support.getByText('Use simpler language', { exact: true })).toBeVisible();
     await expect(support.getByText('Offer extra guided practice', { exact: true })).toBeVisible();
     await expect(
-      support.getByText('These choices will guide AI tutoring when it is connected.'),
+      support.getByText(/These choices (will guide AI tutoring|guide your next AI reply)/),
     ).toBeVisible();
     expect(await student.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
@@ -590,6 +590,14 @@ test('email sign-in handles a wrong code and recovers the saved account', async 
 test('student can study, submit a quiz, reload progress and rename their profile', async ({
   page,
 }) => {
+  // Exercise the offline-tutor path even when local inference is configured.
+  await page.route('**/api/config', async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({
+      response,
+      json: { ...(await response.json()), inference_configured: false },
+    });
+  });
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/');
