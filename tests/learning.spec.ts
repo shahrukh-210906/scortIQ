@@ -1,6 +1,105 @@
 import { test, expect } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 
+test('written exams restore failed autosaves and keep submitted answers read-only on mobile', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/');
+  await page.request.post('/api/auth/local', {
+    data: { name: 'Writing learner', teaching_language: 'hinglish', exam_language: 'hi' },
+  });
+  await page.goto('/writing');
+  await page.getByLabel('Written exam topic', { exact: true }).selectOption('reactions-signs');
+  await page.getByRole('button', { name: 'Start written exam', exact: true }).click();
+  await expect(
+    page.getByText('बर्फ का पिघलना भौतिक परिवर्तन क्यों है?', { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Example answer', exact: true })).toHaveCount(0);
+  let failures = 1;
+  await page.route('**/api/writing/exams/*/answer', async (route) => {
+    if (failures-- > 0)
+      await route.fulfill({
+        status: 503,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'Test save unavailable. Please retry.' }),
+      });
+    else await route.continue();
+  });
+  const answer = 'बर्फ पिघलने पर पानी ही रहती है। कोई नया पदार्थ नहीं बनता।';
+  await page.getByLabel('Your written answer', { exact: true }).fill(answer);
+  await expect(page.getByRole('alert').filter({ hasText: 'Test save unavailable' })).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Submit written answer', exact: true }),
+  ).toBeDisabled();
+  await page.reload();
+  await expect(page.getByLabel('Your written answer', { exact: true })).toHaveValue(answer);
+  await expect(page.getByRole('status').filter({ hasText: 'Written answer saved.' })).toBeVisible();
+  await page.request.patch('/api/me', { data: { name: 'Writing learner', exam_language: 'en' } });
+  await page.reload();
+  await expect(page.getByText('Write your answer in Hindi.', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Submit written answer', exact: true }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Review your written answer', exact: true }),
+  ).toBeVisible();
+  await expect(page.getByLabel('Your written answer', { exact: true })).not.toBeEditable();
+  await expect(
+    page.getByText('No marks or AI feedback have been issued.', { exact: true }),
+  ).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: 'test-results/writing-review-mobile.png', fullPage: true });
+  await page.getByRole('link', { name: 'Back to written exams', exact: true }).click();
+  await page.getByRole('link', { name: 'Review written answer', exact: true }).click();
+  await expect(page.getByLabel('Your written answer', { exact: true })).toHaveValue(answer);
+});
+
+test('written drafts keep later typing during a save and reject stale-window overwrites', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.request.post('/api/auth/local', { data: { name: 'Draft learner' } });
+  const exam = await (
+    await page.request.post('/api/writing/exams', { data: { topic_id: 'light-reflection' } })
+  ).json();
+  await page.goto(`/writing/${exam.id}`);
+  const answerField = page.getByLabel('Your written answer', { exact: true });
+  await expect(answerField).toBeVisible();
+  expect(
+    (
+      await page.request.put(`/api/writing/exams/${exam.id}/answer`, {
+        data: { answer: 'Saved in another window', revision: 0 },
+      })
+    ).ok(),
+  ).toBe(true);
+  await answerField.fill('My separate unsaved draft');
+  await expect(page.getByRole('alert').filter({ hasText: 'another window' })).toBeVisible();
+  await expect(answerField).toHaveValue('My separate unsaved draft');
+  await page.reload();
+  await expect(answerField).toHaveValue('My separate unsaved draft');
+  await page.getByRole('button', { name: 'Load saved answer', exact: true }).click();
+  await expect(answerField).toHaveValue('Saved in another window');
+  let releaseSave: (() => void) | undefined;
+  const heldSave = new Promise<void>((resolve) => {
+    releaseSave = resolve;
+  });
+  let first = true;
+  await page.route('**/api/writing/exams/*/answer', async (route) => {
+    if (first) {
+      first = false;
+      await heldSave;
+    }
+    await route.continue();
+  });
+  await answerField.fill('First part of my answer');
+  await expect(page.getByRole('status').filter({ hasText: 'Saving written answer' })).toBeVisible();
+  await answerField.fill('First part of my answer, with a later explanation.');
+  releaseSave!();
+  await expect(page.getByRole('status').filter({ hasText: 'Written answer saved.' })).toBeVisible();
+  await page.reload();
+  await expect(answerField).toHaveValue('First part of my answer, with a later explanation.');
+  await page.screenshot({ path: 'test-results/writing-draft-desktop.png', fullPage: true });
+});
+
 test('teacher can review submitted topic attempts and question evidence on mobile', async ({
   page,
   browser,

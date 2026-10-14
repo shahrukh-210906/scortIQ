@@ -38,6 +38,7 @@ from .database import (
     Teacher,
     Usage,
     User,
+    WritingExam,
     engine,
     get_db,
 )
@@ -73,7 +74,7 @@ async def lifespan(app: FastAPI):
         ):
             raise RuntimeError("Production identity and inference URLs must use HTTPS.")
         with engine.connect() as connection:
-            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0011":
+            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0012":
                 raise RuntimeError(
                     "Apply the supported database migration before starting production."
                 )
@@ -1035,6 +1036,158 @@ def recall_result(attempt: RecallAttempt, topic_id: str):
             for question in questions
         ],
     }
+
+
+class WritingStartInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    topic_id: str = Field(min_length=1, max_length=80)
+
+
+class WritingAnswerInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    answer: str = Field(max_length=12000)
+    revision: StrictInt = Field(ge=0)
+
+
+def owned_writing_exam(exam_id: str, user: User, db: DBSession):
+    exam = db.get(WritingExam, exam_id)
+    if not exam or exam.user_id != user.id:
+        raise HTTPException(404, "Written practice exam not found.")
+    return exam
+
+
+def writing_exam_payload(exam: WritingExam):
+    paper = json.loads(exam.paper)
+    result = {
+        "id": exam.id,
+        "topic_id": exam.topic_id,
+        "topic_title": paper["topic_title"],
+        "exam_language": exam.exam_language,
+        "question_language": paper["language"],
+        "question": paper["question"],
+        "content_status": "draft",
+        "version": paper["version"],
+        "answer": exam.answer,
+        "revision": exam.revision,
+        "created_at": exam.created_at,
+        "submitted_at": exam.submitted_at,
+    }
+    if exam.submitted_at is not None:
+        result["review"] = {
+            key: paper[key]
+            for key in ("model_answer", "key_terms", "writing_steps", "dont_forget", "marking_note")
+        }
+    return result
+
+
+@app.get("/api/writing/exams")
+def writing_exams(user: User = Depends(require_user), db: DBSession = Depends(get_db)):
+    rows = db.scalars(
+        select(WritingExam)
+        .where(WritingExam.user_id == user.id)
+        .order_by(WritingExam.created_at.desc(), WritingExam.id.desc())
+        .limit(20)
+    )
+    return [
+        {
+            "id": row.id,
+            "topic_title": json.loads(row.paper)["topic_title"],
+            "exam_language": row.exam_language,
+            "created_at": row.created_at,
+            "submitted_at": row.submitted_at,
+        }
+        for row in rows
+    ]
+
+
+@app.post("/api/writing/exams", dependencies=[Depends(require_same_origin)], status_code=201)
+def start_writing_exam(
+    body: WritingStartInput, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    found = topic_by_id(body.topic_id)
+    if not found:
+        raise HTTPException(422, "Choose an available pilot topic.")
+    _, topic = found
+    language = user_payload(user, db)["exam_language"]
+    paper = {
+        **exam_notes(topic, language),
+        "topic_title": topic["title"],
+        "version": "pilot-writing-1",
+    }
+    exam = WritingExam(
+        id=secrets.token_hex(16),
+        user_id=user.id,
+        topic_id=body.topic_id,
+        exam_language=language,
+        paper=json.dumps(paper, ensure_ascii=False),
+        answer="",
+        revision=0,
+        created_at=int(time.time()),
+    )
+    db.add(exam)
+    db.commit()
+    return writing_exam_payload(exam)
+
+
+@app.get("/api/writing/exams/{exam_id}")
+def resume_writing_exam(
+    exam_id: str, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    return writing_exam_payload(owned_writing_exam(exam_id, user, db))
+
+
+def save_written_answer(exam: WritingExam, body: WritingAnswerInput, db: DBSession, submit=False):
+    if exam.submitted_at is not None:
+        if submit and exam.answer == body.answer:
+            return writing_exam_payload(exam)
+        raise HTTPException(409, "This answer is already submitted and cannot be edited.")
+    if submit and not body.answer.strip():
+        raise HTTPException(422, "Write an answer before submitting.")
+    if not submit and exam.answer == body.answer:
+        return writing_exam_payload(exam)
+    result = db.execute(
+        update(WritingExam)
+        .where(
+            WritingExam.id == exam.id,
+            WritingExam.revision == body.revision,
+            WritingExam.submitted_at.is_(None),
+        )
+        .values(
+            answer=body.answer,
+            revision=body.revision + 1,
+            submitted_at=int(time.time()) if submit else None,
+        )
+    )
+    if result.rowcount != 1:
+        db.rollback()
+        raise HTTPException(
+            409,
+            "This answer changed in another window. Your draft has been kept; load the saved answer before editing again.",
+        )
+    db.commit()
+    # The ORM retains this write's revision. Refreshing here could return another
+    # window's newer revision and cause the editor to overwrite it on its next save.
+    return writing_exam_payload(exam)
+
+
+@app.put("/api/writing/exams/{exam_id}/answer", dependencies=[Depends(require_same_origin)])
+def save_writing_exam(
+    exam_id: str,
+    body: WritingAnswerInput,
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    return save_written_answer(owned_writing_exam(exam_id, user, db), body, db)
+
+
+@app.post("/api/writing/exams/{exam_id}/submit", dependencies=[Depends(require_same_origin)])
+def submit_writing_exam(
+    exam_id: str,
+    body: WritingAnswerInput,
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    return save_written_answer(owned_writing_exam(exam_id, user, db), body, db, submit=True)
 
 
 @app.get("/api/classrooms/{classroom_id}/students/{student_id}/attempts")

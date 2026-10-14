@@ -11,6 +11,7 @@ import ContentFeedback from './ContentFeedback';
 import Classrooms from './Classrooms';
 import { AssignmentBoard } from './Assignments';
 import { StudentSupport } from './TeacherSupport';
+import WritingPractice, { WritingExamRoute } from './WritingPractice';
 import LanguageFields from './LanguageFields';
 import CurriculumCatalogue from './CurriculumCatalogue';
 import BookmarkButton from './BookmarkButton';
@@ -231,6 +232,11 @@ export default function App() {
           <Route path="/quiz/:chapterId" element={<QuizRoute />} />
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/classrooms" element={<Classrooms user={user} curriculum={curriculum} />} />
+          <Route
+            path="/writing"
+            element={<WritingPractice user={user} curriculum={curriculum} />}
+          />
+          <Route path="/writing/:examId" element={<WritingExamRoute />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -382,6 +388,7 @@ function Shell({ children }: { children: ReactNode }) {
     { to: '/learn', label: 'My learning', icon: BookOpen },
     { to: '/progress', label: 'My progress', icon: TrendingUp },
     { to: '/classrooms', label: 'Classrooms', icon: GraduationCap },
+    { to: '/writing', label: 'Written exams', icon: BookOpen },
   ];
   return (
     <div className="app-shell">

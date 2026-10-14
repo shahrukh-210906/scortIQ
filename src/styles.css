@@ -156,6 +156,19 @@ main:focus {
   flex-direction: column;
   padding: 34px 22px 20px;
   z-index: 20;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.sidebar > * {
+  flex-shrink: 0;
+}
+@media (max-height: 820px) {
+  .sidebar-note {
+    display: none;
+  }
+  .sidebar-brand {
+    margin-bottom: 24px;
+  }
 }
 .sidebar-brand {
   padding: 0 12px;
@@ -2733,4 +2746,68 @@ textarea:focus {
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 16px;
+}
+.writing-page > h1 {
+  margin: 12px 0;
+}
+.writing-page > .panel {
+  margin-top: 24px;
+}
+.writing-page select {
+  width: 100%;
+  min-height: 44px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  font: inherit;
+}
+.writing-history {
+  list-style: none;
+  padding: 0;
+}
+.writing-history li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.writing-history h3 {
+  font-size: 18px;
+}
+.writing-answer label {
+  display: block;
+  font-weight: 600;
+  margin: 16px 0 8px;
+}
+.writing-answer textarea {
+  width: 100%;
+  min-height: 240px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  resize: vertical;
+  font: inherit;
+}
+.written-question {
+  margin-top: 12px;
+  font-size: 18px;
+}
+.writing-answer .button {
+  margin-top: 12px;
+}
+.writing-review h3 {
+  margin: 16px 0 8px;
+}
+.writing-page .text-button {
+  min-height: 44px;
+}
+.writing-review p,
+.writing-page h1 {
+  overflow-wrap: anywhere;
 }

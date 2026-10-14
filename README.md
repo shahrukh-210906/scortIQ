@@ -77,7 +77,7 @@ Apply migrations before import, then run `python -m backend.import_sources path/
 
 Each JSONL record requires `id`, `title`, `topic_id`, `class_level: 10`, `language: "en"`, `version`, `rights`, `rights_confirmed: true`, `review_status: "draft"` or `"reviewed"`, and `passages` (1–100 strings, each at most 2000 characters). Reviewed material also requires a named `reviewer`. These metadata fields document the approval process; they do not replace an actual educator/rights review.
 
-The current database migration is `0011`. Upgrading adds the learning, source, preference, classroom, assignment and support tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
+The current database migration is `0012`. Upgrading adds the learning, source, preference, classroom, assignment, support and written-exam tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
 
 ## Supabase email sign-in and recovery
 
@@ -91,7 +91,7 @@ The current database migration is `0011`. Upgrading adds the learning, source, p
 
 Learners can expand "Report an issue with this lesson", choose a category and submit a 10–2,000 character description. Reports are stored against the authenticated account and topic; invalid topics, blank messages and cross-site writes are rejected. The UI preserves failed submissions for retry and confirms saved reports. A per-account limit allows ten reports per hour; stronger concurrent/global abuse enforcement remains release work. Reports are saved locally in the configured database; staff triage and notifications are not implemented yet.
 
-Run migration `0011` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; Supabase setup is deferred.
+Run migration `0012` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; local Supabase authentication is configured and live verification remains pending.
 
 ## Saved reflections — 10 October 2026
 
@@ -149,8 +149,18 @@ Support changes AI response guidance, not static notes, quiz scores or formal ma
 
 Classrooms includes Review topic quiz attempts for approved classroom owners. Select a current student and an active assigned topic to view submitted topic recall attempts, newest first, ten per page. Latest/best scores and the total submission count cover the full topic history. Expand an attempt to see the selected option, expected answer, correctness and the draft question explanation. Dates describe when the attempt started, in India time; the existing schema does not record submission times.
 
-History includes earlier personal practice on the assigned topic. Unsubmitted quizzes, other students, unassigned topics, chat messages and reflections are excluded. Removal, teacher-access revocation or withdrawal of all active assignments for that topic immediately blocks future history requests. Results use the current fixed pilot question set and are practice evidence rather than formal exam marks or a diagnosis. Chapter-wide quizzes and subjective exams are not included in this view. No database migration is needed; schema version remains `0011`.
+History includes earlier personal practice on the assigned topic. Unsubmitted quizzes, other students, unassigned topics, chat messages and reflections are excluded. Removal, teacher-access revocation or withdrawal of all active assignments for that topic immediately blocks future history requests. Results use the current fixed pilot question set and are practice evidence rather than formal exam marks or a diagnosis. Chapter-wide quizzes and subjective exams are not included in this view. This review feature added no migration and was introduced at schema version `0011`.
 
 Validation: build, 35 backend checks, ten browser journeys and format/lint checks. Backend checks cover ordered pagination, incomplete-attempt exclusion and access changes; browser coverage includes the empty state, wrong-answer evidence, reload, mobile overflow and student UI isolation.
 
 15 October setup status: local Supabase authentication credentials are configured in ignored `backend/.env`; the public authentication settings check and email-code send request succeeded. Live code verification/recovery remains pending. Learning data is still stored in local SQLite. The local demo profile is separate from verified email accounts.
+
+## Written practice exams
+
+Written exams is available independently of lessons or classroom assignments. Choose one of the seven available pilot topics to start a single-question written practice attempt. The account's exam-answer language and original draft question/guidance are captured at creation; changing settings or source notes does not change an existing attempt. The first Chemistry topic has a Hindi question/example, while other Hindi-answer attempts explicitly show the current English question/guidance fallback. There is no timer, official mark allocation or reviewed rubric.
+
+Answers autosave after a short typing pause, with visible pending/saving/saved states. A browser draft backup, when storage is available, recovers text after interrupted saves or navigation; server-saved answers resume across sessions for the same account. Keep the page open until Saved when browser storage is unavailable. Revision checks stop stale windows from overwriting saved text. Conflicts keep the browser draft visible and require explicitly loading the saved answer; copy the draft before doing so if needed. Later typing during an in-flight save is preserved and saved in a following request.
+
+Submitting requires a nonblank answer and locks the attempt. Repeated identical submission is safe; editing a submitted attempt is rejected. The example answer, relevant terms and writing checklist become visible only after submission. This is draft self-review guidance, not personalised AI feedback or formal scoring. Teachers cannot access these independent written answers through the classroom recall-history endpoint. A new attempt can be started for further practice. The recent list shows the latest 20 exams; older exams remain accessible by their saved URLs.
+
+Migration `0012` adds writing exams with question snapshots, saved revisions and submission timestamps. Build, 37 backend checks, 12 browser journeys, formatting/lint and migration parity pass. Checks include ownership, stale writes, immutable submission, Hindi language persistence, failed-save recovery and typing during an in-flight save. Sidebar navigation now scrolls when necessary and omits the decorative card on shorter screens so Settings remains accessible. Educator-reviewed rubrics, evaluated AI feedback and assigned exam marking/review remain next.

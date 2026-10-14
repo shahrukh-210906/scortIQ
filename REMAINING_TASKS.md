@@ -17,7 +17,8 @@ See `CLASS10_PRODUCT_PLAN.md` and `CLASS10_CURRICULUM.md`. This direction supers
 - [x] Add daily topic assignments and assignment-aware student/teacher dashboards.
 - [x] Add teacher support settings per student/topic and apply them to the AI tutor policy.
 - [x] Expand classroom analytics with topic recall attempt history and question-level evidence for teacher review.
-- [ ] Add subjective practice exams, answer auto-save, reviewed rubrics and provisional AI feedback.
+- [x] Add independent written practice exams, answer autosave, resume and immutable submission with draft self-review guidance.
+- [ ] Add educator-reviewed writing rubrics and evaluated provisional AI feedback.
 - [ ] Add teacher review/approval of assigned exam marks and correction history.
 - [ ] Review all catalogue topics, resolve assessment-scope ambiguity and expand content safely.
 

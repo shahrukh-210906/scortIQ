@@ -58,6 +58,121 @@ class LearningTests(unittest.TestCase):
         self.use_session(teacher_cookie)
         return room, student, lesson, teacher_cookie, student_cookie
 
+    def test_written_exam_snapshot_language_save_and_locked_submission(self):
+        self.client.patch("/api/me", json={"name": "Asha", "exam_language": "hi"})
+        exam = self.client.post("/api/writing/exams", json={"topic_id": "reactions-signs"}).json()
+        self.assertEqual(exam["exam_language"], "hi")
+        self.assertEqual(exam["question_language"], "hi")
+        self.assertNotIn("review", exam)
+        endpoint = f"/api/writing/exams/{exam['id']}"
+        self.client.patch("/api/me", json={"name": "Asha", "exam_language": "en"})
+        self.assertEqual(self.client.get(endpoint).json()["exam_language"], "hi")
+        self.assertEqual(
+            self.client.post(
+                endpoint + "/submit", json={"answer": "  ", "revision": 0}
+            ).status_code,
+            422,
+        )
+        answer = "बर्फ पिघलने पर नया पदार्थ नहीं बनता।"
+        saved = self.client.put(endpoint + "/answer", json={"answer": answer, "revision": 0}).json()
+        self.assertEqual(saved["revision"], 1)
+        self.assertEqual(self.client.get(endpoint).json()["answer"], answer)
+        self.assertNotIn("review", saved)
+        submitted = self.client.post(
+            endpoint + "/submit", json={"answer": answer, "revision": 1}
+        ).json()
+        self.assertIsNotNone(submitted["submitted_at"])
+        self.assertIn("model_answer", submitted["review"])
+        self.assertNotIn("score", submitted)
+        self.assertEqual(
+            self.client.post(endpoint + "/submit", json={"answer": answer, "revision": 1}).json(),
+            submitted,
+        )
+        self.assertEqual(
+            self.client.put(
+                endpoint + "/answer", json={"answer": "Change", "revision": 2}
+            ).status_code,
+            409,
+        )
+        self.assertEqual(
+            self.client.post(
+                endpoint + "/submit", json={"answer": "Change", "revision": 2}
+            ).status_code,
+            409,
+        )
+        self.assertEqual(
+            self.client.get("/api/writing/exams").json()[0]["submitted_at"],
+            submitted["submitted_at"],
+        )
+        fallback = self.client.post(
+            "/api/writing/exams", json={"topic_id": "light-reflection"}
+        ).json()
+        self.assertEqual(fallback["question_language"], "en")
+        # Existing attempts retain their question even if the draft source changes.
+        with patch.object(main, "exam_notes", return_value={"question": "Changed source"}):
+            self.assertEqual(self.client.get(endpoint).json()["question"], exam["question"])
+
+    def test_written_exam_conflicts_validation_and_ownership(self):
+        exam = self.client.post("/api/writing/exams", json={"topic_id": "reactions-signs"}).json()
+        endpoint = f"/api/writing/exams/{exam['id']}"
+        first = self.client.put(endpoint + "/answer", json={"answer": "First draft", "revision": 0})
+        self.assertEqual(first.status_code, 200)
+        self.assertEqual(
+            self.client.put(
+                endpoint + "/answer", json={"answer": "Stale tab", "revision": 0}
+            ).status_code,
+            409,
+        )
+        self.assertEqual(
+            self.client.post(
+                endpoint + "/submit", json={"answer": "Stale tab", "revision": 0}
+            ).status_code,
+            409,
+        )
+        self.assertEqual(self.client.get(endpoint).json()["answer"], "First draft")
+        self.assertEqual(
+            self.client.put(
+                endpoint + "/answer", json={"answer": "First draft", "revision": 0}
+            ).json()["revision"],
+            1,
+        )
+        for invalid in [
+            {"answer": "x" * 12001, "revision": 1},
+            {"answer": "x", "revision": True},
+            {"answer": "x", "revision": -1},
+            {"answer": "x", "revision": 1, "score": 100},
+        ]:
+            self.assertEqual(self.client.put(endpoint + "/answer", json=invalid).status_code, 422)
+        self.assertEqual(
+            self.client.post("/api/writing/exams", json={"topic_id": "planned-topic"}).status_code,
+            422,
+        )
+        self.assertEqual(
+            self.client.put(
+                endpoint + "/answer",
+                json={"answer": "x", "revision": 1},
+                headers={"origin": "https://other.test"},
+            ).status_code,
+            403,
+        )
+        self.client.post("/api/auth/local", json={"name": "Other learner"})
+        self.assertEqual(self.client.get("/api/writing/exams").json(), [])
+        self.assertEqual(self.client.get(endpoint).status_code, 404)
+        self.assertEqual(
+            self.client.put(
+                endpoint + "/answer", json={"answer": "overwrite", "revision": 1}
+            ).status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.post(
+                endpoint + "/submit", json={"answer": "overwrite", "revision": 1}
+            ).status_code,
+            404,
+        )
+        self.client.post("/api/auth/logout")
+        self.assertEqual(self.client.get(endpoint).status_code, 401)
+
     def test_teacher_attempt_evidence_pagination_and_unsubmitted_exclusion(self):
         room, student, lesson, teacher_cookie, student_cookie = self.support_fixture()
         self.client.post(

@@ -124,6 +124,19 @@ class Lesson(Base):
     __table_args__ = (UniqueConstraint("user_id", "topic_id"),)
 
 
+class WritingExam(Base):
+    __tablename__ = "writing_exams"
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    topic_id: Mapped[str] = mapped_column(String(80))
+    exam_language: Mapped[str] = mapped_column(String(10))
+    paper: Mapped[str] = mapped_column(Text)
+    answer: Mapped[str] = mapped_column(Text, default="")
+    revision: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[int] = mapped_column(Integer)
+    submitted_at: Mapped[int | None] = mapped_column(Integer, nullable=True)
+
+
 class Reflection(Base):
     __tablename__ = "reflections"
     lesson_id: Mapped[str] = mapped_column(ForeignKey("lessons.id"), primary_key=True)
