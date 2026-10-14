@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { api, post, type User, type Curriculum } from './api';
 import { AssignmentBoard, AssignmentForm } from './Assignments';
 import TeacherSupport from './TeacherSupport';
+import TeacherAttempts from './TeacherAttempts';
 
 type Classroom = {
   id: string;
@@ -193,6 +194,13 @@ export default function Classrooms({ user, curriculum }: { user: User; curriculu
             />
           )}
           <AssignmentBoard user={user} classroomId={room.id} revision={assignmentRevision} />
+          {teacher && (
+            <TeacherAttempts
+              classroomId={room.id}
+              students={room.students ?? []}
+              revision={assignmentRevision}
+            />
+          )}
         </section>
       ))}
     </div>

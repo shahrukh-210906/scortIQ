@@ -10,9 +10,9 @@ from typing import Literal
 from urllib.parse import urlparse
 
 import httpx
-from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, ValidationError
-from sqlalchemy import delete, select, text, update
+from sqlalchemy import delete, func, select, text, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session as DBSession
 
@@ -1034,6 +1034,71 @@ def recall_result(attempt: RecallAttempt, topic_id: str):
             }
             for question in questions
         ],
+    }
+
+
+@app.get("/api/classrooms/{classroom_id}/students/{student_id}/attempts")
+def teacher_attempt_history(
+    classroom_id: str,
+    student_id: str,
+    topic_id: str = Query(min_length=1, max_length=80),
+    offset: int = Query(default=0, ge=0, le=100000),
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    owned_classroom(classroom_id, user, db)
+    if not db.get(Membership, (classroom_id, student_id)):
+        raise HTTPException(404, "Student not found in this classroom.")
+    # Teachers can review only currently assigned topics, not unrelated personal study.
+    assigned = db.scalar(
+        select(Assignment.id)
+        .where(
+            Assignment.classroom_id == classroom_id,
+            Assignment.topic_id == topic_id,
+            Assignment.archived == 0,
+        )
+        .limit(1)
+    )
+    if not assigned or not topic_by_id(topic_id):
+        raise HTTPException(404, "This topic is not currently assigned in this classroom.")
+    student = db.get(User, student_id)
+    lesson = db.scalar(
+        select(Lesson).where(Lesson.user_id == student_id, Lesson.topic_id == topic_id)
+    )
+    conditions = (
+        RecallAttempt.lesson_id == (lesson.id if lesson else ""),
+        RecallAttempt.score.is_not(None),
+    )
+    count, best_score = db.execute(
+        select(func.count(RecallAttempt.id), func.max(RecallAttempt.score)).where(*conditions)
+    ).one()
+    query = (
+        select(RecallAttempt)
+        .where(*conditions)
+        .order_by(RecallAttempt.created_at.desc(), RecallAttempt.id.desc())
+    )
+    latest = db.scalar(query.limit(1))
+    rows = list(db.scalars(query.offset(offset).limit(10)))
+    attempts = []
+    questions = TOPIC_QUESTIONS[topic_id]
+    for attempt in rows:
+        answers = json.loads(attempt.answers)
+        result = recall_result(attempt, topic_id)
+        for question, review in zip(questions, result["review"], strict=True):
+            review["selected_answer"] = question["options"][answers[question["id"]]]
+        attempts.append(
+            {"id": attempt.id, "started_at": attempt.created_at // 1_000_000_000, **result}
+        )
+    return {
+        "student_name": student.name,
+        "topic_title": topic_by_id(topic_id)[1]["title"],
+        "count": count,
+        "best_score": best_score,
+        "latest_score": latest.score if latest else None,
+        "total_questions": len(questions),
+        "offset": offset,
+        "page_size": 10,
+        "attempts": attempts,
     }
 
 

@@ -58,6 +58,83 @@ class LearningTests(unittest.TestCase):
         self.use_session(teacher_cookie)
         return room, student, lesson, teacher_cookie, student_cookie
 
+    def test_teacher_attempt_evidence_pagination_and_unsubmitted_exclusion(self):
+        room, student, lesson, teacher_cookie, student_cookie = self.support_fixture()
+        self.client.post(
+            f"/api/classrooms/{room['id']}/assignments",
+            json={"topic_id": "reactions-signs", "study_date": "2026-10-15"},
+        )
+        endpoint = f"/api/classrooms/{room['id']}/students/{student['id']}/attempts?topic_id=reactions-signs"
+        self.assertEqual(self.client.get(endpoint).json()["count"], 0)
+        self.use_session(student_cookie)
+        self.client.post(f"/api/lessons/{lesson['id']}/recall")
+        attempt_ids = []
+        for index in range(12):
+            quiz = self.client.post(f"/api/lessons/{lesson['id']}/recall").json()
+            attempt_ids.append(quiz["id"])
+            response = self.client.post(
+                f"/api/recall/{quiz['id']}/submit",
+                json={"answers": {q["id"]: index % 2 for q in quiz["questions"]}},
+            )
+            self.assertEqual(response.status_code, 200)
+        self.use_session(teacher_cookie)
+        result = self.client.get(endpoint).json()
+        self.assertEqual(result["count"], 12)
+        self.assertEqual(len(result["attempts"]), 10)
+        self.assertEqual(
+            [row["id"] for row in result["attempts"]], list(reversed(attempt_ids))[:10]
+        )
+        self.assertEqual(result["best_score"], 1)
+        self.assertEqual(result["latest_score"], 1)
+        question = result["attempts"][0]["review"][0]
+        self.assertEqual(
+            question["selected_answer"], main.TOPIC_QUESTIONS["reactions-signs"][0]["options"][1]
+        )
+        self.assertIn("correct_answer", question)
+        self.assertIn("reason", question)
+        self.assertNotIn("messages", result)
+        older = self.client.get(endpoint + "&offset=10").json()
+        self.assertEqual([row["id"] for row in older["attempts"]], list(reversed(attempt_ids))[10:])
+        self.assertEqual(older["count"], 12)
+        self.assertEqual(self.client.get(endpoint + "&offset=-1").status_code, 422)
+
+    def test_teacher_attempt_history_scope_revocation_and_withdrawal(self):
+        from backend.app.database import Teacher
+
+        room, student, lesson, teacher_cookie, student_cookie = self.support_fixture()
+        endpoint = f"/api/classrooms/{room['id']}/students/{student['id']}/attempts?topic_id=reactions-signs"
+        self.assertEqual(self.client.get(endpoint).status_code, 404)
+        task = self.client.post(
+            f"/api/classrooms/{room['id']}/assignments",
+            json={"topic_id": "reactions-signs", "study_date": "2026-10-15"},
+        ).json()
+        self.assertEqual(self.client.get(endpoint).status_code, 200)
+        self.assertEqual(
+            self.client.get(endpoint.replace("reactions-signs", "light-reflection")).status_code,
+            404,
+        )
+        self.use_session(student_cookie)
+        self.assertEqual(self.client.get(endpoint).status_code, 403)
+        other = self.client.post("/api/auth/local", json={"name": "Other teacher"}).json()
+        self.approve_teacher(other["id"])
+        self.assertEqual(self.client.get(endpoint).status_code, 404)
+        self.use_session(teacher_cookie)
+        with SessionLocal() as db:
+            db.delete(db.get(Teacher, self.user_id))
+            db.commit()
+        self.assertEqual(self.client.get(endpoint).status_code, 403)
+        self.approve_teacher(self.user_id)
+        self.client.delete(f"/api/assignments/{task['id']}")
+        self.assertEqual(self.client.get(endpoint).status_code, 404)
+        self.client.post(
+            f"/api/classrooms/{room['id']}/assignments",
+            json={"topic_id": "reactions-signs", "study_date": "2026-10-15"},
+        )
+        self.client.delete(f"/api/classrooms/{room['id']}/members/{student['id']}")
+        self.assertEqual(self.client.get(endpoint).status_code, 404)
+        self.client.post("/api/auth/logout")
+        self.assertEqual(self.client.get(endpoint).status_code, 401)
+
     def test_support_validation_scope_and_removal(self):
         room, student, lesson, teacher_cookie, student_cookie = self.support_fixture()
         path = f"/api/classrooms/{room['id']}/support"

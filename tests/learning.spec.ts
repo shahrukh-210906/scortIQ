@@ -1,6 +1,92 @@
 import { test, expect } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 
+test('teacher can review submitted topic attempts and question evidence on mobile', async ({
+  page,
+  browser,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/');
+  const teacher = await (
+    await page.request.post('/api/auth/local', { data: { name: 'Review teacher' } })
+  ).json();
+  execFileSync(process.platform === 'win32' ? '.venv/Scripts/python.exe' : 'python', [
+    '-m',
+    'backend.manage_teacher',
+    'grant',
+    '--user-id',
+    teacher.id,
+  ]);
+  const room = await (
+    await page.request.post('/api/classrooms', { data: { name: 'Evidence class' } })
+  ).json();
+  await page.request.post(`/api/classrooms/${room.id}/assignments`, {
+    data: { topic_id: 'reactions-signs', study_date: '2026-10-15' },
+  });
+  const context = await browser.newContext();
+  try {
+    const student = await context.newPage();
+    await student.goto('http://127.0.0.1:5173/');
+    const profile = await (
+      await student.request.post('/api/auth/local', { data: { name: 'Review student' } })
+    ).json();
+    await student.request.post('/api/classrooms/join', { data: { code: room.join_code } });
+    const lesson = await (await student.request.post('/api/lessons/reactions-signs')).json();
+    await page.goto('/classrooms');
+    await page.getByText('Review topic quiz attempts', { exact: true }).click();
+    await page.getByLabel('Student to review', { exact: true }).selectOption(profile.id);
+    await page
+      .getByLabel('Assigned topic to review', { exact: true })
+      .selectOption('reactions-signs');
+    await page.getByRole('button', { name: 'Review attempts', exact: true }).click();
+    const evidence = page.getByRole('region', { name: 'Student quiz evidence', exact: true });
+    await expect(
+      evidence.getByText('No submitted recall quizzes yet.', { exact: false }),
+    ).toBeVisible();
+    await student.request.post(`/api/lessons/${lesson.id}/recall`);
+    for (const choice of [0, 1]) {
+      const quiz = await (await student.request.post(`/api/lessons/${lesson.id}/recall`)).json();
+      const answers = Object.fromEntries(
+        quiz.questions.map((question: { id: string }) => [question.id, choice]),
+      );
+      expect(
+        (await student.request.post(`/api/recall/${quiz.id}/submit`, { data: { answers } })).ok(),
+      ).toBe(true);
+    }
+    await page.getByRole('button', { name: 'Review attempts', exact: true }).click();
+    await expect(evidence.getByText('2 submitted recall attempts', { exact: true })).toBeVisible();
+    await evidence
+      .getByText(/Recall score 1 \/ 2/)
+      .first()
+      .click();
+    const expandedAttempt = evidence.locator('.attempt-evidence[open]');
+    await expect(expandedAttempt.getByText('Student chose: Water evaporating')).toBeVisible();
+    await expect(expandedAttempt.getByText('Needs another look', { exact: true })).toBeVisible();
+    await expect(
+      expandedAttempt.getByText('Expected answer: A white solid forming when two solutions mix'),
+    ).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+    await page.screenshot({ path: 'test-results/teacher-attempts-mobile.png', fullPage: true });
+    await page.reload();
+    await page.getByText('Review topic quiz attempts', { exact: true }).click();
+    await page.getByLabel('Student to review', { exact: true }).selectOption(profile.id);
+    await page
+      .getByLabel('Assigned topic to review', { exact: true })
+      .selectOption('reactions-signs');
+    await page.getByRole('button', { name: 'Review attempts', exact: true }).click();
+    await expect(evidence.getByText('2 submitted recall attempts', { exact: true })).toBeVisible();
+    await student.goto('http://127.0.0.1:5173/classrooms');
+    await expect(
+      student.getByRole('heading', { name: 'Evidence class', exact: true }),
+    ).toBeVisible();
+    await expect(student.getByText('Review topic quiz attempts', { exact: true })).toHaveCount(0);
+  } finally {
+    await context.close();
+  }
+});
+
 test('teacher topic support saves, resumes and is visible only on the selected student topic', async ({
   page,
   browser,

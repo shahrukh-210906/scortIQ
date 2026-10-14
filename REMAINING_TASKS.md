@@ -1,6 +1,6 @@
 # Remaining tasks
 
-Updated 10 October 2026. Supabase configuration is deferred at the user's request.
+Updated 15 October 2026. Supabase authentication is configured locally and the email-code send request succeeded; code verification/recovery and cloud database setup remain pending.
 
 ## Revised product direction
 
@@ -16,7 +16,7 @@ See `CLASS10_PRODUCT_PLAN.md` and `CLASS10_CURRICULUM.md`. This direction supers
 - [x] Add authorised teacher roles, classroom creation, invitations and membership.
 - [x] Add daily topic assignments and assignment-aware student/teacher dashboards.
 - [x] Add teacher support settings per student/topic and apply them to the AI tutor policy.
-- [ ] Expand classroom analytics with attempt history and question-level evidence for teacher review.
+- [x] Expand classroom analytics with topic recall attempt history and question-level evidence for teacher review.
 - [ ] Add subjective practice exams, answer auto-save, reviewed rubrics and provisional AI feedback.
 - [ ] Add teacher review/approval of assigned exam marks and correction history.
 - [ ] Review all catalogue topics, resolve assessment-scope ambiguity and expand content safely.
@@ -36,7 +36,7 @@ See `CLASS10_PRODUCT_PLAN.md` and `CLASS10_CURRICULUM.md`. This direction supers
 - [ ] Build a frozen tutor benchmark and a reviewed training dataset.
 
 ## External setup and release work
-- [ ] Configure and live-test Supabase email sign-in/recovery (deferred).
+- [ ] Complete live Supabase code verification/recovery and connect the managed database (authentication credentials are configured locally).
 - [ ] Obtain educator/rights approval for curriculum and training material.
 - [ ] Train/evaluate a model and connect an approved Hugging Face endpoint.
 - [ ] Configure staging/production hosting, monitoring, rate limits and backup recovery.
