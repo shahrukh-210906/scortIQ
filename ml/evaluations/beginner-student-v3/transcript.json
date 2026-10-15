@@ -1,0 +1,132 @@
+{
+  "tested_utc": "2026-10-15T16:25:56.139312+00:00",
+  "method": "Same real v1 questions, fresh synthetic accounts; actual trained local model; no mocks.",
+  "runs": [
+    {
+      "language": "en",
+      "turns": [
+        {
+          "student": "I know nothing about this. What is light and what does reflection mean? Please use everyday words.",
+          "http_status": 200,
+          "reply": "Okay, let’s break this down. Light is like when you turn on a torch – it lets you see things around you. Reflection happens when that light hits something shiny, like a mirror, and bounces back. Think about shining a torch onto a mirror; the light doesn't just disappear, does it? It bounces back to your eye!",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "What is a ray? Is it an actual thing I can touch?",
+          "http_status": 200,
+          "reply": "A ray is an arrow line we DRAW to show which way light travels. Think of a torch beam: we draw an arrow pointing away from the torch to show its direction. The drawn ray is not a solid stick you can pick up. Would that arrow point away from the torch or towards it?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "What does normal mean? Does it mean ordinary?",
+          "http_status": 200,
+          "reply": "Here, normal does not mean ordinary. Imagine the mirror lying flat like a tabletop, with a pencil standing straight up where the light hits. The normal is a pretend guide line in that pencil’s direction; the pencil is only an example.\n\nIs our guide line along the tabletop or standing up from it?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "I do not know what perpendicular or 90 degrees means. Explain without using more science words.",
+          "http_status": 200,
+          "reply": "Okay, let’s tackle this! Imagine you have a notebook with a square corner – like an ‘L’ shape. One edge runs across the page, and the other goes up at a right angle to it. That meeting point is called a perpendicular. A 90-degree turn is exactly that – a perfect right angle, just like that square corner. Can you find an L-shaped corner on a notebook or a door?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "I am still confused. Please give me one tiny example and ask a very easy question.",
+          "http_status": 200,
+          "reply": "Look at the corner of a notebook: one edge runs across and the other goes up, making an L shape. Lines meeting like that are called perpendicular. That square corner measures 90 degrees; degrees are just a way to describe a turn. Can you find an L-shaped corner on a notebook or a door?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": true
+        },
+        {
+          "student": "I think the angle is measured from the mirror surface. Am I right?",
+          "http_status": 200,
+          "reply": "That’s a really good start! But remember, we're using an imaginary line – the normal – as our starting point. The normal stands straight out from the mirror surface, perpendicular to it. So, angles are measured *from* that normal, not directly from the mirror’s face.\n\nWhich is our starting line: the tabletop or the upright pencil?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "I still do not understand why my answer was wrong. Explain the word normal first.",
+          "http_status": 200,
+          "reply": "Okay, let's rewind a little. The ‘normal’ isn’t about being ordinary; it’s an imaginary line we draw *perpendicular* to the mirror surface. Think of it like this: if you had a pencil standing straight up on a tabletop, the normal is the direction that pencil is pointing. It’s our reference point for measuring angles. Does that make more sense now?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        }
+      ],
+      "wrong_checkpoint_phase": 0,
+      "unique_replies_before_wrong": 6
+    },
+    {
+      "language": "hinglish",
+      "turns": [
+        {
+          "student": "Mujhe kuch bhi nahi pata. Light aur reflection kya hota hai? Bilkul basic se samjhao.",
+          "http_status": 200,
+          "reply": "Aapka sawal bahut accha hai! Imagine you’re shining a torch (dil se) on a mirror. The light goes *towards* the mirror, and then it bounces back – that bounce is reflection. Reflection mein angle of incidence aur angle of reflection barabar hote hain. Dono angles normal se measure hote hain. Normal surface ke perpendicular imaginary line hai.  Kyoun, kaise, ya kya hota hai? Do you understand this simple example?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "Ray kya hoti hai? Kya main ise touch kar sakta hoon?",
+          "http_status": 200,
+          "reply": "Aapka sawaal bahut accha hai! Ray ek arrow line hai jo hum draw karte hain - yeh dikha ke light kaunse taraf ja rahi hai. Imagine a torch beam: we draw an arrow pointing away from the torch to show its direction. The drawn ray is not a solid stick you can pick up. Would that arrow point away from the torch or towards it?  It's just a way of showing us the path of light, like an arrow! You cannot touch it - it’s only on paper.",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "Normal matlab kya? Jaise normal aadmi?",
+          "http_status": 200,
+          "reply": "Normal matlab ordinary nahi hota. Imagine the mirror lying flat like a tabletop, with a pencil standing straight up where the light hits. The normal is a pretend guide line in that pencil’s direction; the pencil is only an example.\n\nYeh line table par leti hai ya seedhi khadi hai?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "Perpendicular aur 90 degree bhi nahi pata. Bina mushkil words ke samjhao.",
+          "http_status": 200,
+          "reply": "Okay, let’s break it down simply! Imagine you have a square - it has four corners, right? One corner is exactly like an ‘L’ shape – one side goes up and the other goes across. That corner is always 90 degrees. It's a perfect turn!  Perpendicular means lines that make this exact 'L' shape; they meet at a 90-degree angle. Can you draw a little ‘L’ on your notebook? Do you see how it makes a 90-degree turn?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "Abhi bhi samajh nahi aaya. Ek chhota daily life example do aur easy sawaal pucho.",
+          "http_status": 200,
+          "reply": "Notebook ka kona dekho: ek edge aadi hai aur doosri usse seedhi upar jaati hai, jaise L shape. Aise milne wali lines ko perpendicular kehte hain. Is kone ki turn ko 90 degrees bolte hain; abhi bas L shape yaad rakho. Notebook ya darwaze par aisa kona dhoondh sakte ho?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": true
+        },
+        {
+          "student": "Mujhe lagta hai angle mirror ki surface se naapte hain. Sahi hai?",
+          "http_status": 200,
+          "reply": "Nahin, woh sahi nahi hai! Angle mirror ki surface se naapte nahi hoti. Angle normal se measure hoti hai - yeh ek imaginary line hai jo mirror se perpendicular (90 degrees) hota hai. Imagine the pencil again: we measure the angle of reflection from the pencil's direction, not the mirror’s face. Do you see how that makes more sense now?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "Mera answer galat kyun hai? Pehle normal shabd ka meaning samjhao.",
+          "http_status": 200,
+          "reply": "Aapka jawab galat kyun hai iske liye main aapko ek cheez dikhaunga! Imagine a mirror lying flat like a tabletop, with a pencil standing straight up where the light hits. The normal is a pretend guide line in that pencil's direction; the pencil is only an example. It’s not about the mirror surface directly – it’s about this imaginary line we create because of the mirror.  It’s like a helper line, okay? Do you understand why focusing on the mirror surface alone was confusing you?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        }
+      ],
+      "wrong_checkpoint_phase": 0,
+      "unique_replies_before_wrong": 6
+    }
+  ]
+}

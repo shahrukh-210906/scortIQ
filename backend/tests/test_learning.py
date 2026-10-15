@@ -1201,8 +1201,10 @@ class LearningTests(unittest.TestCase):
             self.assertIn("Personalised explanation style:", prompt)
             self.assertEqual(response.json()["messages"][1]["teaching_style"], "step_by_step")
         resumed = self.client.post("/api/lessons/reactions-signs").json()
-        self.assertIn("Magnesium", resumed["messages"][1]["content"])
-        self.assertEqual(resumed["messages"][1]["response_mode"], "source_guided")
+        self.assertEqual(
+            resumed["messages"][1]["content"], "What new substance do you think forms?"
+        )
+        self.assertEqual(resumed["messages"][1]["response_mode"], "model")
 
     def test_invalid_model_reply_does_not_pollute_history(self):
         lesson = self.client.post("/api/lessons/reactions-signs").json()

@@ -46,3 +46,9 @@ Prepared a private ZeroGPU Space with the actual Gemma adapter, allowlisted uplo
 
 Cloud deployment is pending: the detected Hugging Face account `shahrukh2196` currently has a read-only local token. A write-scoped login and eligible ZeroGPU account are needed to create/upload the private Space. Hosted GPU compatibility and Docker build remain unverified; Docker is not installed locally. No cloud URL has been created. Instructions: `deploy/README.md`.
 
+# Conversational teaching repair — 15 October 2026
+
+Removed unconditional replacement of valid model replies by static lesson paragraphs. Added patient conversational guidance, original beginner prerequisite facts, schema-constrained citation IDs, repeated-reply rejection and question-specific reflection recovery in English/Hindi/Hinglish. Clarifications remain inside the current saved phase; checked reflection arithmetic and strict reviewed-only production retrieval remain in place. Narrow regression checks reject observed irrelevant beginner claims and ensure the small understanding question refers to an example actually explained. They do not certify general factual accuracy.
+
+Validation: 61 backend tests and the browser Socratic-gating journey passed. Repeated real English/Hinglish beginner tests are saved under `ml/evaluations/beginner-student-v2` through `v6`; intermediate failures are retained. The actual model still makes scientific/language mistakes, so the pilot remains experimental and some replies intentionally use labelled authored sources. This is conversational behavior work, not another training run or neural reinforcement learning.
+

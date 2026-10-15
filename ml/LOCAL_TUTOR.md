@@ -6,7 +6,9 @@ The app controls four saved steps: problem, solution, topic, application. Every 
 
 ## What produces the answers
 
-Raw model tests still contained scientific errors after training. For the seven existing pilot topics, the app therefore assembles explanations from exact versioned lesson sources and authored English, Hindi and Hinglish renderings. The model helps order relevant sources. Reflection calculations use checked arithmetic. Chat labels disclose these responses as **From your lesson sources** or **Checked calculation**. Changed or unrelated material cannot reuse these renderings. This is a source-guided pilot, not a fully fine-tuned NCERT curriculum. Educator review remains pending.
+The conversational tutor now retains valid model replies instead of replacing every turn with fixed lesson text. It receives lesson sources, conversation history, prerequisite vocabulary and a patient older-sibling teaching instruction. For beginner reflection questions, context narrows to the requested idea, and the understanding check stays tied to an example actually explained. Original draft prerequisite notes remain excluded from production until reviewed.
+
+Raw model tests still contain scientific and language errors. Narrow regression guards reject observed beginner digressions and unusable replies; these are not a general factual verifier. On failure, the pilot uses labelled lesson-source explanations. Reflection's beginner fallback answers the particular word or misconception, and can change its example after confusion. Reflection calculations still use checked arithmetic. Other pilot fallback content remains phase-based. Chat labels distinguish **From your lesson sources** and **Checked calculation** from normal model replies. This remains an experimental seven-topic pilot, not a fully fine-tuned NCERT curriculum. Educator review is pending. See `evaluations/beginner-student-v1` and subsequent runs for actual failures and improvements.
 
 Private student feedback adapts explanation-style selection separately. Student chats do not retrain model weights; the supervised adapter is not reinforcement learning.
 

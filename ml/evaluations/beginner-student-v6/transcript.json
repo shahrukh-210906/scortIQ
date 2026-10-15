@@ -1,0 +1,58 @@
+{
+  "tested_utc": "2026-10-15T16:32:42.274484+00:00",
+  "method": "Six final real release smoke turns, fresh accounts, final narrow anchor and language guards. Prior full 14-turn runs retained separately.",
+  "runs": [
+    {
+      "language": "en",
+      "turns": [
+        {
+          "student": "What is a ray? Can I touch it?",
+          "reply": "A ray is like an arrow we draw to show light's path, much like the beam of a torch. We draw the arrow pointing away from the torch to indicate its direction. Importantly, a ray isn’t something you can actually touch – it’s just a line we use for our drawings.\n\nWould that arrow point away from the torch or towards it?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "What does normal mean? Does it mean ordinary?",
+          "reply": "Here, normal does not mean ordinary. Imagine the mirror lying flat like a tabletop, with a pencil standing straight up where the light hits. The normal is a pretend guide line in that pencil's direction; the pencil is only an example.\n\nIs our guide line along the tabletop or standing up from it?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        }
+      ]
+    },
+    {
+      "language": "hinglish",
+      "turns": [
+        {
+          "student": "Mujhe kuch bhi nahi pata. Light aur reflection kya hota hai?",
+          "reply": "Koi baat nahi, bilkul shuru se samajhte hain. Torch se light nikalti hai, jisse cheezein dikhti hain. Wahi light mirror se takra kar wapas aati hai; isko reflection kehte hain. Mirror par torch ki light pade toh woh wahin rukegi ya wapas aayegi?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": true
+        },
+        {
+          "student": "Perpendicular aur 90 degree bhi nahi pata.",
+          "reply": "Notebook ka kona dekho: ek edge aadi hai aur doosri usse seedhi upar jaati hai, jaise L shape. Aise milne wali lines ko perpendicular kehte hain. Is kone ki turn ko 90 degrees bolte hain; abhi bas L shape yaad rakho.\n\nNotebook ya darwaze par aisa kona dhoondh sakte ho?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "Abhi bhi samajh nahi aaya. Ek doosra example do.",
+          "reply": "Chalo, ek aur example lete hain! Imagine karo aapke paas ek table hai aur uspar ek book hai. Ab, book ka front cover seedha upar rakho, taaki woh stand kar de, aur back cover table par hi rahe. Dekhoge toh pata chalega ki covers ek L shape mein ban rahi hain – yeh 90 degrees ke turn ko istemaal karein!\n\nKaunsa cover khada hai: front ya back?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "Mera answer galat kyun hai? Pehle normal shabd ka meaning samjhao.",
+          "reply": "Aapka jawab galat kyun hai, iska matlab yeh hai ki aapko 'normal' shabd ka sahi matlab nahi pata. Pilot notes mein, ‘normal’ ka matlab aam ya ordinary nahi hota. Imagine karo mirror table ki tarah leta hua hai aur light lagne wali jagah ek pencil seedhi khadi hai. Pencil ki direction mein jo imaginary guide line sochte hain, wahi normal hai; asli pencil rakhna zaroori nahi.\n\nYeh line table par leti hai ya seedhi khadi hai?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        }
+      ]
+    }
+  ]
+}
