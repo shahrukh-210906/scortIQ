@@ -1,0 +1,131 @@
+{
+  "tested_utc": "2026-10-15T15:57:46.813663+00:00",
+  "topic": "light-reflection",
+  "method": "Real HTTP conversation with connected preview; isolated synthetic beginner profiles; no mocked model responses.",
+  "runs": [
+    {
+      "language": "en",
+      "turns": [
+        {
+          "student": "I know nothing about this. What is light and what does reflection mean? Please use everyday words.",
+          "http_status": 200,
+          "reply": "First, let's identify the rule we need to understand the problem.\n\nA ray arrives at 30° to the normal. We want to find its reflection angle. First identify the reference line: the normal is perpendicular to the surface, and the angle is measured from that line.\n\nWhich part of this explanation helps you answer the understanding check?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": false
+        },
+        {
+          "student": "What is a ray? Is it an actual thing I can touch?",
+          "http_status": 200,
+          "reply": "First, let's identify the rule we need to understand the problem.\n\nA ray arrives at 30° to the normal. We want to find its reflection angle. First identify the reference line: the normal is perpendicular to the surface, and the angle is measured from that line.\n\nWhich part of this explanation helps you answer the understanding check?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": false
+        },
+        {
+          "student": "What does normal mean? Does it mean ordinary?",
+          "http_status": 200,
+          "reply": "First, let's identify the rule we need to understand the problem.\n\nA ray arrives at 30° to the normal. We want to find its reflection angle. First identify the reference line: the normal is perpendicular to the surface, and the angle is measured from that line.\n\nWhich part of this explanation helps you answer the understanding check?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": false
+        },
+        {
+          "student": "I do not know what perpendicular or 90 degrees means. Explain without using more science words.",
+          "http_status": 200,
+          "reply": "First, let's identify the rule we need to understand the problem.\n\nA ray arrives at 30° to the normal. We want to find its reflection angle. First identify the reference line: the normal is perpendicular to the surface, and the angle is measured from that line.\n\nWhich part of this explanation helps you answer the understanding check?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": false
+        },
+        {
+          "student": "I am still confused. Please give me one tiny example and ask a very easy question.",
+          "http_status": 200,
+          "reply": "First, let's identify the rule we need to understand the problem.\n\nA ray arrives at 30° to the normal. We want to find its reflection angle. First identify the reference line: the normal is perpendicular to the surface, and the angle is measured from that line.\n\nWhich part of this explanation helps you answer the understanding check?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": false
+        },
+        {
+          "student": "I think the angle is measured from the mirror surface. Am I right?",
+          "http_status": 200,
+          "reply": "First, let's identify the rule we need to understand the problem.\n\nA ray arrives at 30° to the normal. We want to find its reflection angle. First identify the reference line: the normal is perpendicular to the surface, and the angle is measured from that line.\n\nWhich part of this explanation helps you answer the understanding check?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": false
+        },
+        {
+          "student": "I still do not understand why my answer was wrong. Explain the word normal first.",
+          "http_status": 200,
+          "reply": "Let's slow down and try a different way. We will stay on this step.\n\nA ray arrives at 30° to the normal. We want to find its reflection angle. First identify the reference line: the normal is perpendicular to the surface, and the angle is measured from that line.\n\nThe angle of incidence equals the angle of reflection. Both angles are measured from the normal, an imaginary line perpendicular to the surface. The incident ray, reflected ray and normal lie in the same plane.\n\nWhich part of this explanation helps you answer the understanding check?",
+          "phase": 0,
+          "mode": "source_guided"
+        }
+      ],
+      "wrong_checkpoint_phase": 0,
+      "unique_replies_before_wrong": 1
+    },
+    {
+      "language": "hinglish",
+      "turns": [
+        {
+          "student": "Mujhe kuch bhi nahi pata. Light aur reflection kya hota hai? Bilkul basic se samjhao.",
+          "http_status": 200,
+          "reply": "Pehle samjho ki problem ke liye kaunsa rule chahiye.\n\nRay normal se 30° par aa rahi hai. Humein reflection angle nikaalna hai. Pehle reference line pehchano: normal surface ke perpendicular hota hai aur angle isi line se naapte hain.\n\nIs explanation ka kaunsa hissa tumhe understanding check solve karne mein madad karta hai?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": false
+        },
+        {
+          "student": "Ray kya hoti hai? Kya main ise touch kar sakta hoon?",
+          "http_status": 200,
+          "reply": "Pehle samjho ki problem ke liye kaunsa rule chahiye.\n\nRay normal se 30° par aa rahi hai. Humein reflection angle nikaalna hai. Pehle reference line pehchano: normal surface ke perpendicular hota hai aur angle isi line se naapte hain.\n\nIs explanation ka kaunsa hissa tumhe understanding check solve karne mein madad karta hai?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": true
+        },
+        {
+          "student": "Normal matlab kya? Jaise normal aadmi?",
+          "http_status": 200,
+          "reply": "Pehle samjho ki problem ke liye kaunsa rule chahiye.\n\nRay normal se 30° par aa rahi hai. Humein reflection angle nikaalna hai. Pehle reference line pehchano: normal surface ke perpendicular hota hai aur angle isi line se naapte hain.\n\nIs explanation ka kaunsa hissa tumhe understanding check solve karne mein madad karta hai?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": true
+        },
+        {
+          "student": "Perpendicular aur 90 degree bhi nahi pata. Bina mushkil words ke samjhao.",
+          "http_status": 200,
+          "reply": "Pehle samjho ki problem ke liye kaunsa rule chahiye.\n\nRay normal se 30° par aa rahi hai. Humein reflection angle nikaalna hai. Pehle reference line pehchano: normal surface ke perpendicular hota hai aur angle isi line se naapte hain.\n\nIs explanation ka kaunsa hissa tumhe understanding check solve karne mein madad karta hai?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": true
+        },
+        {
+          "student": "Abhi bhi samajh nahi aaya. Ek chhota daily life example do aur easy sawaal pucho.",
+          "http_status": 200,
+          "reply": "Pehle samjho ki problem ke liye kaunsa rule chahiye.\n\nRay normal se 30° par aa rahi hai. Humein reflection angle nikaalna hai. Pehle reference line pehchano: normal surface ke perpendicular hota hai aur angle isi line se naapte hain.\n\nIs explanation ka kaunsa hissa tumhe understanding check solve karne mein madad karta hai?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": true
+        },
+        {
+          "student": "Mujhe lagta hai angle mirror ki surface se naapte hain. Sahi hai?",
+          "http_status": 200,
+          "reply": "Pehle samjho ki problem ke liye kaunsa rule chahiye.\n\nRay normal se 30° par aa rahi hai. Humein reflection angle nikaalna hai. Pehle reference line pehchano: normal surface ke perpendicular hota hai aur angle isi line se naapte hain.\n\nIs explanation ka kaunsa hissa tumhe understanding check solve karne mein madad karta hai?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": true
+        },
+        {
+          "student": "Mera answer galat kyun hai? Pehle normal shabd ka meaning samjhao.",
+          "http_status": 200,
+          "reply": "Thoda dheere chalte hain aur doosre tareeke se samajhte hain. Abhi isi step par rahenge.\n\nRay normal se 30° par aa rahi hai. Humein reflection angle nikaalna hai. Pehle reference line pehchano: normal surface ke perpendicular hota hai aur angle isi line se naapte hain.\n\nReflection mein angle of incidence aur angle of reflection barabar hote hain. Dono angles normal se measure hote hain. Normal surface ke perpendicular imaginary line hai. Incident ray, reflected ray aur normal ek hi plane mein hote hain.\n\nIs explanation ka kaunsa hissa tumhe understanding check solve karne mein madad karta hai?",
+          "phase": 0,
+          "mode": "source_guided"
+        }
+      ],
+      "wrong_checkpoint_phase": 0,
+      "unique_replies_before_wrong": 1
+    }
+  ]
+}
