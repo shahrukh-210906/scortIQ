@@ -183,3 +183,7 @@ A real 12-step QLoRA experiment on Qwen2.5 1.5B saved a local adapter using orig
 ## Socratic learning sequence
 
 The connected tutor now follows problem → solution → topic → application, with saved server-checked comprehension gates. Wrong answers require another explanation and cannot advance; all four checks unlock notes and practice. See [the guided tutoring behavior and its limits](SOCRATIC_TUTORING.md).
+# Connected local tutoring pilot
+
+The current development setup uses a locally trained Gemma 3 4B adapter with source-guided English, Hindi and Hinglish explanations, plus four saved comprehension checks before notes unlock. Start the GPU tutor with `./start-local-ai.ps1`; see [setup and limitations](ml/LOCAL_TUTOR.md). Seven pilot topics are supported; full reviewed curriculum coverage remains pending. No paid inference API is required.
+

@@ -1,0 +1,13 @@
+# Attribution and changes
+
+Public-source examples derive from **databricks/databricks-dolly-15k**, Copyright (2023) Databricks, Inc., and Wikipedia editors/contributors, under **CC BY-SA 3.0 Unported**: https://creativecommons.org/licenses/by-sa/3.0/ . Source: https://huggingface.co/datasets/databricks/databricks-dolly-15k , original revision `bdd27f4d94b9c1f951818a7da7fd7aeea5dbff1a`.
+
+Hindi translations and aligned English records are provided by **AI4Bharat**, IndicInstruct / Airavata, https://huggingface.co/datasets/ai4bharat/indic-instruct-data-v0.1 , pinned revision `82cd1437a0a59eec714dfa9521b6efcdc907de00`, using only the **dolly** subset, not other datasets with other licenses. Credit: Sushant Gala and collaborators, *Airavata: Introducing Hindi Instruction-tuned LLM* (2024), https://arxiv.org/abs/2401.15006 . Original Dolly records and its derivatives retain CC BY-SA 3.0; this file does not relicense that text.
+
+Changes by ScortIQ (2026): select bounded-length closed QA, exclude inappropriate/out-of-scope keywords, prioritize science questions, exclude frozen benchmark topic families, retain high back-translation chrF rows, pair English evidence/questions with English or Hindi target answers, wrap targets as JSON with source IDs, and append a generic comprehension question. Dataset selection is automated, not educator approval. Public derivatives in these JSONL files are distributed under the same **CC BY-SA 3.0** license. Upstream machine translation and factual errors can remain.
+
+Rows labelled `original-socratic-v1` are original ScortIQ examples for electricity, acids/bases, algebra, heredity and related Class 10 concepts, supplied under **CC0 1.0**: https://creativecommons.org/publicdomain/zero/1.0/ . These teach the four requested phases and retry behavior. They do not include real student data.
+
+The selected mixture contains 682 training and 71 validation records. Groups sharing a source context or original question family stay in the same split. One generic retry utterance (`I do not understand. Just move on.`) appears in both splits against different evidence; validation is consequently a behavior/format metric, not an independent novel-dialogue test. The frozen 42-case pilot benchmark is not used for training and remains separate. No claim is made that these public datasets are NCERT-approved or cover the complete CBSE curriculum.
+
+The downloaded **aditi-syn-v1** dataset and **OpenBookQA/SciQ** were inspected or researched but **not used** in this training run. Aditi had inconsistent language labels in inspected examples; the selected bilingual source gave clearer paired provenance. No student chats, feedback or exam answers were exported.

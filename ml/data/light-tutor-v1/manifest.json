@@ -1,0 +1,26 @@
+{
+  "model": "unsloth/Qwen3-8B-bnb-4bit",
+  "model_revision": "1deaf68f694c40dbce295da300851729d759b21a",
+  "counts": {
+    "train": {
+      "total": 120,
+      "languages": {
+        "en": 40,
+        "hi": 40,
+        "hinglish": 40
+      }
+    },
+    "validation": {
+      "total": 17,
+      "languages": {
+        "en": 6,
+        "hi": 6,
+        "hinglish": 5
+      }
+    }
+  },
+  "source": "../public-tutor-v1",
+  "seed": 71,
+  "max_tokens": 384,
+  "status": "unreviewed experimental light style tuning; not educator approval"
+}

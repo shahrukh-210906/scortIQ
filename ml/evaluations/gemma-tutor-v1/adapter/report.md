@@ -1,0 +1,480 @@
+# Draft local teaching benchmark
+
+Run: 2026-10-15T07:33:07.713933+00:00
+Model: `gemma3-4b-light-tuned-native-template`
+Suite SHA-256: `5e3ef7d59fbaecc13fa12bb325adafd3a943082d1754c9496508201746b9164c`
+Completed case requests: 42/42.
+
+App accepted 42/42 replies. Factual grades: **not assessed; human review pending**.
+
+Mechanical flags are review aids, not correctness or fluency scores. One run is stochastic; repeat before comparing models.
+
+| Language | Accepted | Language signal | One question mark |
+|---|---:|---:|---:|
+| en | 14/14 | 14 | 10 |
+| hi | 14/14 | 14 | 9 |
+| hinglish | 14/14 | 13 | 7 |
+
+## Replies for review
+
+### pilot-v1-melting-en
+Why is melting ice a physical change? Explain the reason and ask me one guiding question.
+
+Expected: It remains water; no new substance forms.; Only the physical state changes.
+
+Reply (untrusted model output):
+
+```text
+Melting ice is considered a physical change because it remains water; no new substance forms. A physical change alters the form or appearance of a substance, but not its chemical composition. It’s like changing the shape of clay – you still have clay.
+```
+
+### pilot-v1-melting-hi
+Why is melting ice a physical change? Explain the reason and ask me one guiding question.
+
+Expected: It remains water; no new substance forms.; Only the physical state changes.
+
+Reply (untrusted model output):
+
+```text
+बर्फ का पिघलना भौतिक परिवर्तन क्यों है, इसका कारण यह है कि बर्फ में पानी ही रहता है, कोई नया पदार्थ नहीं बनता। यह उसी पदार्थ के रूप में रहता है। भौतिक परिवर्तन में पदार्थ की रासायनिक संरचना नहीं बदलती है।
+```
+
+### pilot-v1-melting-hinglish
+Why is melting ice a physical change? Explain the reason and ask me one guiding question.
+
+Expected: It remains water; no new substance forms.; Only the physical state changes.
+
+Reply (untrusted model output):
+
+```text
+Barf ka pighalna physical change kyun hai? Woh paani hi rehti hai; koi naya substance nahi banta. Physical changes, like melting ice, just involve changing the form or appearance of a substance – it doesn't create something new. The water remains water because its chemical composition hasn’t altered. Kaise pata hai tumhein yeh samajh mein aa gaya ki physical change kya hota hai?
+```
+
+### pilot-v1-bubbles-en
+I think every liquid that bubbles is undergoing a chemical reaction. Is that correct? Explain using boiling water.
+
+Expected: Bubbles alone do not prove a chemical reaction.; Boiling water is a physical state change; it remains water.
+
+Reply (untrusted model output):
+
+```text
+That's an interesting thought! Bubbles appearing in liquids can be caused by both physical and chemical changes. Boiling water, as described in passage pilot-reactions-signs-v1:0, produces bubbles due to a *physical* change – the water changing state from liquid to gas (steam). Can you describe what happens when you boil water, focusing on whether a new substance is formed?
+```
+
+### pilot-v1-bubbles-hi
+I think every liquid that bubbles is undergoing a chemical reaction. Is that correct? Explain using boiling water.
+
+Expected: Bubbles alone do not prove a chemical reaction.; Boiling water is a physical state change; it remains water.
+
+Reply (untrusted model output):
+
+```text
+नहीं, यह सही नहीं है। केवल बुलबुले आना हमेशा रासायनिक अभिक्रिया का मतलब नहीं होता। जैसे पानी गर्म करने पर उबलता है, तो बुलबुले बनते हैं, लेकिन यह एक भौतिक परिवर्तन है - पानी भाप में बदल जाता है, और यह अभी भी पानी ही रहता है। रासायनिक अभिक्रिया में नए पदार्थ बनते हैं।
+```
+
+### pilot-v1-bubbles-hinglish
+I think every liquid that bubbles is undergoing a chemical reaction. Is that correct? Explain using boiling water.
+
+Expected: Bubbles alone do not prove a chemical reaction.; Boiling water is a physical state change; it remains water.
+
+Reply (untrusted model output):
+
+```text
+That’s an interesting thought! But it's not quite right. Remember, just because something bubbles doesn't automatically mean it’s a chemical reaction. Boiling water produces bubbles due to the change of state – liquid water turning into steam (a gas). This is a *physical* change, as the substance remains water, according to passage pilot-reactions-signs-v1:2.  Can you tell me, kaise bolte paani mein bhi bubbles aate hain, par woh physical change hai?
+```
+
+### pilot-v1-water-coefficients-en
+Balance H2 + O2 -> H2O and explain how the atoms match without changing formulas.
+
+Expected: 2H2 + O2 -> 2H2O.; Both sides have four hydrogen atoms and two oxygen atoms; change coefficients only.
+
+Reply (untrusted model output):
+
+```text
+Let's break down balancing equations! Remember, we need to make sure there are the same number of each type of atom on both sides of the equation. In the reaction H2 + O2 -> H2O, let’s look at the hydrogen atoms first. There are two H atoms on the left (H2) and we want two H atoms on the right (H2O). Now, consider the oxygen atoms – there are two O atoms on the left and one O atom on the right. To balance this, what could you do to the H2O molecule?
+```
+
+### pilot-v1-water-coefficients-hi
+Balance H2 + O2 -> H2O and explain how the atoms match without changing formulas.
+
+Expected: 2H2 + O2 -> 2H2O.; Both sides have four hydrogen atoms and two oxygen atoms; change coefficients only.
+
+Reply (untrusted model output):
+
+```text
+समीकरण को संतुलित करने के लिए, हमें यह सुनिश्चित करना होगा कि दोनों तरफ़ परमाणुओं की संख्या बराबर हो। इस मामले में, हमारे पास H₂O समीकरण है: 2H₂ + O₂ → 2H₂O। हम देख सकते हैं कि एक तरफ़ दो हाइड्रोजन परमाणु और एक ऑक्सीजन परमाणु है, जबकि दूसरी तरफ़ दो हाइड्रोजन परमाणु और दो ऑक्सीजन परमाणु हैं।  क्या आप बता सकते हैं कि हमें पानी के लिए कितने अणु चाहिए ताकि दोनों तरफ़ समान संख्या में ऑक्सीजन परमाणु हों?
+```
+
+### pilot-v1-water-coefficients-hinglish
+Balance H2 + O2 -> H2O and explain how the atoms match without changing formulas.
+
+Expected: 2H2 + O2 -> 2H2O.; Both sides have four hydrogen atoms and two oxygen atoms; change coefficients only.
+
+Reply (untrusted model output):
+
+```text
+नमस्ते! Let's balance the equation H₂ + O₂ → H₂O.  As we see in passage pilot-reactions-balance-v1:1, both sides of the equation must have the same number of each type of atom.  Right now, we have 2 hydrogen atoms on the left (H₂) and 2 hydrogen atoms on the right (H₂O). We also have 1 oxygen atom on the left (O₂) and 1 oxygen atom on the right (H₂O).  Can you tell me, kaise do oxygen atoms ko balance kar sakte hain?
+```
+
+### pilot-v1-subscripts-en
+Can I balance water formation by replacing H2O with H2O2? Explain why or why not.
+
+Expected: No; changing subscripts changes the substance.; H2O2 is hydrogen peroxide; use coefficients instead.
+
+Reply (untrusted model output):
+
+```text
+No, you cannot change the formula to H₂O₂ to balance water formation. According to the lesson evidence, changing subscripts changes the identity of the substance itself. For example, H₂O₂ is hydrogen peroxide, a different compound than H₂O. Can you explain what it means for an equation to be balanced?
+```
+
+### pilot-v1-subscripts-hi
+Can I balance water formation by replacing H2O with H2O2? Explain why or why not.
+
+Expected: No; changing subscripts changes the substance.; H2O2 is hydrogen peroxide; use coefficients instead.
+
+Reply (untrusted model output):
+
+```text
+पानी बनाने के समीकरण को संतुलित करने के लिए H₂O को H₂O₂ में बदलने की कोशिश नहीं करनी चाहिए। ऐसा करने से पदार्थ बदल जाएगा, क्योंकि H₂O₂ हाइड्रोजन परॉक्साइड है, पानी नहीं। सूत्र के भीतर के अंकों को कभी नहीं बदलना चाहिए, केवल गुणांकों को बदला जा सकता है।
+```
+
+### pilot-v1-subscripts-hinglish
+Can I balance water formation by replacing H2O with H2O2? Explain why or why not.
+
+Expected: No; changing subscripts changes the substance.; H2O2 is hydrogen peroxide; use coefficients instead.
+
+Reply (untrusted model output):
+
+```text
+नमस्ते! Water formation balance karne ke liye, hum H₂O ko H₂O₂ mein change nahi kar sakte. Subscript badalne se substance badal jata hai, jaise H₂O₂ hydrogen peroxide hota hai, water nahi.  It's important to remember that changing subscripts changes the *name* of the substance itself.  Do you understand why we can’t alter the subscripts within a chemical formula?
+```
+
+### pilot-v1-one-reactant-en
+What type of reaction has one reactant breaking into multiple products? Explain the pattern.
+
+Expected: Decomposition.; One reactant breaks into two or more products.
+
+Reply (untrusted model output):
+
+```text
+A decomposition reaction fits your description! According to the text, a decomposition reaction involves "one reactant breaks into two or more products." This means that a single substance undergoes a change and splits apart to form different substances.
+```
+
+### pilot-v1-one-reactant-hi
+What type of reaction has one reactant breaking into multiple products? Explain the pattern.
+
+Expected: Decomposition.; One reactant breaks into two or more products.
+
+Reply (untrusted model output):
+
+```text
+विघटन अभिक्रिया (Vihgatan Abhiyuktī) में, एक अभिकारक टूटकर दो या अधिक उत्पाद बनाता है। यह अभिक्रिया के प्रकारों में से एक है जहाँ एक ही पदार्थ कई पदार्थों में बदल जाता है।  उदाहरण के लिए, CaO + H₂O → Ca(OH)₂ में, कैल्शियम ऑक्साइड (CaO) जल (H₂O) के साथ मिलकर कैल्शियम हाइड्रॉक्साइड (Ca(OH)₂) बनाता है। क्या आप बता सकते हैं कि संयोजन अभिक्रिया में क्या होता है?
+```
+
+### pilot-v1-one-reactant-hinglish
+What type of reaction has one reactant breaking into multiple products? Explain the pattern.
+
+Expected: Decomposition.; One reactant breaks into two or more products.
+
+Reply (untrusted model output):
+
+```text
+Aap puch rahe hain ki kaunsa reaction ek reactant se multiple products banata hai, kya? According to the notes, a decomposition reaction is characterized by this very pattern.  In a decomposition reaction, one reactant breaks down into two or more products – like CaO + H₂O → Ca(OH)₂. Kaise hota hai ye? Let’s think about it: does the equation show one starting material splitting into several different things?
+```
+
+### pilot-v1-lime-water-en
+I think CaO + H2O -> Ca(OH)2 is decomposition because water is involved. Am I right? Explain.
+
+Expected: It is combination, not decomposition.; Two reactants combine into one product.
+
+Reply (untrusted model output):
+
+```text
+That's a good thought about the involvement of water! However, based on the provided information, this reaction is actually a combination reaction. The excerpt states that a combination reaction involves two or more reactants forming one product – in this case, CaO and H₂O combine to form Ca(OH)₂.
+```
+
+### pilot-v1-lime-water-hi
+I think CaO + H2O -> Ca(OH)2 is decomposition because water is involved. Am I right? Explain.
+
+Expected: It is combination, not decomposition.; Two reactants combine into one product.
+
+Reply (untrusted model output):
+
+```text
+नहीं, आपने सही नहीं कहा। दी गई जानकारी के अनुसार, CaO + H₂O → Ca(OH)₂ एक संयोजन अभिक्रिया है। संयोजन अभिक्रिया में दो या अधिक अभिकारकों से एक उत्पाद बनता है। विघटन अभिक्रिया में विपरीत होता है, जहाँ एक अभिकारक कई उत्पादों में टूट जाता है। क्या आप बता सकते हैं कि संयोजन अभिक्रिया में क्या होता है?
+```
+
+### pilot-v1-lime-water-hinglish
+I think CaO + H2O -> Ca(OH)2 is decomposition because water is involved. Am I right? Explain.
+
+Expected: It is combination, not decomposition.; Two reactants combine into one product.
+
+Reply (untrusted model output):
+
+```text
+नमस्ते! आपका विचार दिलचस्प है, लेकिन यह थोड़ा ग़लत है। Let's break it down. According to the provided notes, a decomposition reaction involves *one* reactant breaking into *multiple* products.  Look at passage ID ‘pilot-reactions-types-v1:0’: “Decomposition mein ek reactant tootkar multiple products banata hai.” Can you tell me, kaise does this reaction (CaO + H₂O → Ca(OH)₂) fit that description?
+```
+
+### pilot-v1-normal-angle-en
+A light ray arrives at 30 degrees to the normal. What is its angle of reflection, and why?
+
+Expected: 30 degrees.; Incidence and reflection angles are equal and measured from the normal.
+
+Reply (untrusted model output):
+
+```text
+According to the provided information, the angle of incidence equals the angle of reflection. This is because both angles are measured from the normal, which is an imaginary line perpendicular to the mirror surface. Can you remind yourself what a 'normal' is in relation to reflection?
+```
+
+### pilot-v1-normal-angle-hi
+A light ray arrives at 30 degrees to the normal. What is its angle of reflection, and why?
+
+Expected: 30 degrees.; Incidence and reflection angles are equal and measured from the normal.
+
+Reply (untrusted model output):
+
+```text
+प्रकाश किरण अभिलंब से 30 डिग्री पर आ रही है। परावर्तन के नियम के अनुसार, आपतन कोण और परावर्तन कोण बराबर होते हैं। इसलिए, परावर्तन कोण भी 30 डिग्री होगा। यह इसलिए है क्योंकि अभिलंब एक काल्पनिक रेखा है जो दर्पण की सतह पर लंबवत होती है, और दोनों कोणों को इसी रेखा से मापा जाता है।
+```
+
+### pilot-v1-normal-angle-hinglish
+A light ray arrives at 30 degrees to the normal. What is its angle of reflection, and why?
+
+Expected: 30 degrees.; Incidence and reflection angles are equal and measured from the normal.
+
+Reply (untrusted model output):
+
+```text
+नमस्ते! Let's break this down. According to the notes, the law of reflection states that the angle of incidence equals the angle of reflection.  Both angles are measured from the normal – which is an imaginary line that’s always perpendicular (90 degrees) to the mirror surface. So, if the incident ray hits at 30 degrees to the normal, the reflected ray will also reflect back at 30 degrees. Kaise hota hai?  Can you tell me, what does it mean for the 'normal' to be perpendicular to the surface?
+```
+
+### pilot-v1-surface-angle-en
+A light ray makes 20 degrees with the mirror surface. I say its angle of incidence is 20 degrees. Is that right? Explain the calculation.
+
+Expected: The angle of incidence is 70 degrees, not 20 degrees.; The normal is perpendicular to the surface, so 90 - 20 = 70.
+
+Reply (untrusted model output):
+
+```text
+That's a good start! The key thing to remember about angles of reflection and incidence is that they are always measured from the *normal* – which is an imaginary line perpendicular to the mirror surface. Can you remind yourself what the normal does in this situation?
+```
+
+### pilot-v1-surface-angle-hi
+A light ray makes 20 degrees with the mirror surface. I say its angle of incidence is 20 degrees. Is that right? Explain the calculation.
+
+Expected: The angle of incidence is 70 degrees, not 20 degrees.; The normal is perpendicular to the surface, so 90 - 20 = 70.
+
+Reply (untrusted model output):
+
+```text
+नहीं, यह सही नहीं है। पाठ में बताया गया है कि आपतन कोण और परावर्तन कोण दोनों अभिलंब से मापे जाते हैं। अभिलंब दर्पण की सतह पर लंबवत रेखा होती है। यदि किरण दर्पण से 20° बनाती है, तो आपतन कोण भी 20° होगा।
+```
+
+### pilot-v1-surface-angle-hinglish
+A light ray makes 20 degrees with the mirror surface. I say its angle of incidence is 20 degrees. Is that right? Explain the calculation.
+
+Expected: The angle of incidence is 70 degrees, not 20 degrees.; The normal is perpendicular to the surface, so 90 - 20 = 70.
+
+Reply (untrusted model output):
+
+```text
+Namaste! Your initial thought is good – you’re correctly identifying the incident angle. But, let's look at how we actually calculate it using the laws of reflection. According to the evidence, the angle of incidence *always* equals the angle of reflection.  The normal is an imaginary line that’s perpendicular (90 degrees) to the mirror surface. So, if the ray makes a 20° angle with the surface, it also makes a 20° angle with the normal. Kaise hota hai? Can you draw a quick diagram showing the incident ray, the reflected ray, and the normal? This will help us visualize the situation.
+```
+
+### pilot-v1-mirror-distance-en
+An object is 2 metres in front of a plane mirror. Where is its image, and is it upright?
+
+Expected: 2 metres behind the mirror.; The image is virtual, upright and the same size as the object.
+
+Reply (untrusted model output):
+
+```text
+According to the lesson evidence, a plane mirror forms a virtual, upright image of the same size as the object. The image appears as far behind the mirror as the object is in front. So, if an object is 2 meters away from the mirror, its image will be 2 meters behind it.
+```
+
+### pilot-v1-mirror-distance-hi
+An object is 2 metres in front of a plane mirror. Where is its image, and is it upright?
+
+Expected: 2 metres behind the mirror.; The image is virtual, upright and the same size as the object.
+
+Reply (untrusted model output):
+
+```text
+वस्तु को समतल दर्पण के सामने 2 मीटर पर रखा गया है। सबूत के अनुसार, दर्पण में वस्तु का प्रतिबिंब दर्पण के पीछे 2 मीटर दूर होगा। इसके अतिरिक्त, समतल दर्पण में बनने वाला प्रतिबिंब सीधा होता है। क्या आप बता सकते हैं कि प्रतिबिंब की ऊँचाई (height) वस्तु की ऊँचाई के समान है या अलग?
+```
+
+### pilot-v1-mirror-distance-hinglish
+An object is 2 metres in front of a plane mirror. Where is its image, and is it upright?
+
+Expected: 2 metres behind the mirror.; The image is virtual, upright and the same size as the object.
+
+Reply (untrusted model output):
+
+```text
+नमस्ते! Let's think about this. According to the information we have, a plane mirror creates a virtual, upright image that’s the same size as the object. The image appears as far behind the mirror as the object is in front of it. So, if the object is 2 meters away, its image will be 2 meters behind the mirror.  Kyoun kaise hota hai?
+```
+
+### pilot-v1-screen-en
+I think a plane mirror image can be caught on a screen because I can see it. Is this correct? Explain.
+
+Expected: No; a plane mirror forms a virtual image.; Rays only appear to meet behind the mirror rather than actually meeting there.
+
+Reply (untrusted model output):
+
+```text
+That's a really good observation – you *can* see the image formed by a plane mirror! However, the way we perceive that image is different from how light actually behaves. The excerpt states that a plane mirror creates a virtual image, which means it doesn’t project light rays like a real image would. Can you tell me what a 'virtual' image is in your own words?
+```
+
+### pilot-v1-screen-hi
+I think a plane mirror image can be caught on a screen because I can see it. Is this correct? Explain.
+
+Expected: No; a plane mirror forms a virtual image.; Rays only appear to meet behind the mirror rather than actually meeting there.
+
+Reply (untrusted model output):
+
+```text
+आपकी बात सही नहीं है। समतल दर्पण के आभासी प्रतिबिंब को पर्दे पर प्राप्त नहीं किया जा सकता क्योंकि किरणें केवल प्रतीत होती हैं कि वे दर्पण के पीछे से आ रही हैं। जैसा कि ‘pilot-light-images-v1:2’ में बताया गया है, किरणों का मार्ग पर्दे पर नहीं पड़ता। क्या आप मुझे बता सकते हैं कि आभासी प्रतिबिंब कैसे बनता है?
+```
+
+### pilot-v1-screen-hinglish
+I think a plane mirror image can be caught on a screen because I can see it. Is this correct? Explain.
+
+Expected: No; a plane mirror forms a virtual image.; Rays only appear to meet behind the mirror rather than actually meeting there.
+
+Reply (untrusted model output):
+
+```text
+नमस्ते! आपकी बात सुनकर अच्छा लगा। आपने ये कहा कि आप plane mirror ke image ko screen par dekh sakte hain kyunki aap usko dekhte hain. But, according to the evidence, a plane mirror only creates a virtual image. The rays of light don’t actually get captured like a real image; instead, they appear to come from behind the mirror.  Can you tell me, kaise plane mirror virtual image banata hai?
+```
+
+### pilot-v1-chlorophyll-en
+What does chlorophyll do during photosynthesis? Explain its role rather than only naming it.
+
+Expected: Chlorophyll absorbs light energy.; This energy is used to make carbohydrates from carbon dioxide and water.
+
+Reply (untrusted model output):
+
+```text
+Chlorophyll plays a crucial role in photosynthesis by absorbing light energy. This absorbed light energy is then used to convert carbon dioxide and water into carbohydrates, which are the plant's food source. Think of it like a solar panel for plants – it captures sunlight! Does that make sense?
+```
+
+### pilot-v1-chlorophyll-hi
+What does chlorophyll do during photosynthesis? Explain its role rather than only naming it.
+
+Expected: Chlorophyll absorbs light energy.; This energy is used to make carbohydrates from carbon dioxide and water.
+
+Reply (untrusted model output):
+
+```text
+क्लोरोफिल प्रकाश संश्लेषण में एक महत्वपूर्ण भूमिका निभाता है। यह हरे पौधों में पाया जाता है और इसका मुख्य काम सूर्य के प्रकाश को अवशोषित करना है। इस प्रकाश ऊर्जा का उपयोग पौधे कार्बन डाइऑक्साइड और पानी से कार्बोहाइड्रेट बनाने के लिए करते हैं, जैसा कि पाठ में बताया गया है। ऑक्सीजन भी इस प्रक्रिया में निकलती है। क्या आप बता सकते हैं कि प्रकाश संश्लेषण के दौरान पौधे किस चीज़ को लेते हैं?
+```
+
+### pilot-v1-chlorophyll-hinglish
+What does chlorophyll do during photosynthesis? Explain its role rather than only naming it.
+
+Expected: Chlorophyll absorbs light energy.; This energy is used to make carbohydrates from carbon dioxide and water.
+
+Reply (untrusted model output):
+
+```text
+नमस्ते! Chlorophyll, एक बहुत महत्वपूर्ण भूमिका निभाता है। जैसा कि दस्तावेज़ #pilot-life-nutrition-v1:2 में बताया गया है, यह प्रकाश ऊर्जा को अवशोषित करता है - यह प्रकाश संश्लेषण के लिए आवश्यक है। दस्तावेज़ #pilot-life-nutrition-v1:0 बताता है कि पौधे प्रकाश ऊर्जा का उपयोग कार्बन डाइऑक्साइड और पानी से कार्बोहाइड्रेट बनाने के लिए करते हैं, और यह कि क्लोरोफिल इस प्रक्रिया में प्रकाश ऊर्जा को अवशोषित करता है जिससे ऑक्सीजन भी निकलती है।  क्या आप बता सकते हैं कि प्रकाश संश्लेषण में क्लोरोफिल की ऊर्जा अवशोषण कैसे मदद करती है?
+```
+
+### pilot-v1-gas-direction-en
+During photosynthesis, do green plants take in oxygen and release carbon dioxide? Explain the correct gas direction for photosynthesis.
+
+Expected: Photosynthesis uses carbon dioxide and releases oxygen.; Light energy and water are involved in carbohydrate production.
+
+Reply (untrusted model output):
+
+```text
+Let's think about what happens during photosynthesis according to the provided information. The passage states that green plants use light energy to make carbohydrates from carbon dioxide and water. It also mentions chlorophyll absorbing light and releasing oxygen. Does this suggest a flow of gases?
+```
+
+### pilot-v1-gas-direction-hi
+During photosynthesis, do green plants take in oxygen and release carbon dioxide? Explain the correct gas direction for photosynthesis.
+
+Expected: Photosynthesis uses carbon dioxide and releases oxygen.; Light energy and water are involved in carbohydrate production.
+
+Reply (untrusted model output):
+
+```text
+प्रकाश संश्लेषण के दौरान, हरे पौधे कार्बन डाइऑक्साइड लेते हैं और ऑक्सीजन छोड़ते हैं। यह सही दिशा है। प्रकाश संश्लेषण में, पौधे क्लोरोफिल का उपयोग करके प्रकाश ऊर्जा को अवशोषित करते हैं, जिससे पानी और कार्बन डाइऑक्साइड से कार्बोहाइड्रेट बनते हैं। इस प्रक्रिया में, ऑक्सीजन एक उप-उत्पाद के रूप में निकलती है। क्या आप बता सकते हैं कि प्रकाशसंश्लेषण के दौरान जल (पानी) की भूमिका क्या है?
+```
+
+### pilot-v1-gas-direction-hinglish
+During photosynthesis, do green plants take in oxygen and release carbon dioxide? Explain the correct gas direction for photosynthesis.
+
+Expected: Photosynthesis uses carbon dioxide and releases oxygen.; Light energy and water are involved in carbohydrate production.
+
+Reply (untrusted model output):
+
+```text
+नमस्ते! Photosynthesis mein, green plants carbon dioxide aur water se carbohydrates banate hain, aur process mein oxygen release karte hain.  (Hello! During photosynthesis, green plants make carbohydrates from carbon dioxide and water, and they release oxygen.) Chlorophyll light energy absorb karta hai – yeh bahut zaroori hota hai. (Chlorophyll absorbs light energy - this is very important).  Let’s think about it: kaise carbon dioxide plants ke andar jata hai? (How does carbon dioxide enter the plant?)
+```
+
+### pilot-v1-cell-energy-en
+What is cellular respiration, and how is it different from breathing?
+
+Expected: Respiration breaks down food inside cells to release usable energy.; Breathing moves air into and out of the body.
+
+Reply (untrusted model output):
+
+```text
+Cellular respiration is the process where cells break down food to release usable energy. According to the text, this happens inside cells, while breathing exchanges air. Can you tell me what substances are involved in the chemical process of cellular respiration?
+```
+
+### pilot-v1-cell-energy-hi
+What is cellular respiration, and how is it different from breathing?
+
+Expected: Respiration breaks down food inside cells to release usable energy.; Breathing moves air into and out of the body.
+
+Reply (untrusted model output):
+
+```text
+कोशिकीय श्वसन एक रासायनिक प्रक्रिया है जो कोशिकाओं के अंदर होती है। यह भोजन से ऊर्जा निकालने का तरीका है। श्वास लेने में हवा का आदान-प्रदान होता है, जबकि कोशिकीय श्वसन कोशिकाओं के भीतर होता है। क्या आप बता सकते हैं कि वायवीय श्वसन में ऑक्सीजन का उपयोग क्यों किया जाता है?
+```
+
+### pilot-v1-cell-energy-hinglish
+What is cellular respiration, and how is it different from breathing?
+
+Expected: Respiration breaks down food inside cells to release usable energy.; Breathing moves air into and out of the body.
+
+Reply (untrusted model output):
+
+```text
+नमस्ते! Cellular respiration hota hai cells mein food se energy release karna.  It's a chemical process where cells break down food, like glucose, to get usable energy – just like a tiny power plant inside each cell! Breathing, on the other hand, is about exchanging air; it’s how we take in oxygen and get rid of carbon dioxide.  Kyoun hai, cellular respiration happens *inside* the cells, while breathing happens *outside* our bodies.
+```
+
+### pilot-v1-faster-breathing-en
+If I breathe faster, is the movement of air itself cellular respiration? Explain the distinction during exercise.
+
+Expected: No; air movement is breathing, not the chemical process of respiration.; Muscles need more energy during exercise; cellular respiration releases energy from food.
+
+Reply (untrusted model output):
+
+```text
+That's a really insightful question! It seems like breathing faster and cellular respiration might be linked, but they are actually different processes. Breathing involves exchanging air – taking in oxygen and releasing carbon dioxide – while cellular respiration is the chemical process *inside* cells where energy is released from food. Let’s consider what happens during exercise; does this help clarify the difference?
+```
+
+### pilot-v1-faster-breathing-hi
+If I breathe faster, is the movement of air itself cellular respiration? Explain the distinction during exercise.
+
+Expected: No; air movement is breathing, not the chemical process of respiration.; Muscles need more energy during exercise; cellular respiration releases energy from food.
+
+Reply (untrusted model output):
+
+```text
+नहीं, श्वास लेने की गति में हवा का चलना कोशिकीय श्वसन नहीं है। श्वास लेना हवा को अंदर और बाहर ले जाने की प्रक्रिया है, जबकि कोशिकीय श्वसन कोशिकाओं के भीतर भोजन से ऊर्जा निकालने की एक रासायनिक प्रक्रिया है। व्यायाम के दौरान, मांसपेशियों को अधिक ऊर्जा की आवश्यकता होती है, इसलिए श्वास दर और हृदय गति बढ़ जाती है क्योंकि शरीर अधिक ऊर्जा का उपयोग कर रहा होता है। क्या आप बता सकते हैं कि व्यायाम के समय श्वास लेने और कोशिकीय श्वसन के बीच क्या अंतर है?
+```
+
+### pilot-v1-faster-breathing-hinglish
+If I breathe faster, is the movement of air itself cellular respiration? Explain the distinction during exercise.
+
+Expected: No; air movement is breathing, not the chemical process of respiration.; Muscles need more energy during exercise; cellular respiration releases energy from food.
+
+Reply (untrusted model output):
+
+```text
+नमस्ते! Let's break this down. Breathing and cellular respiration are different processes, even though they both happen when you’re active. Breathing exchanges air – it’s how we take in oxygen which is needed for cellular respiration. Cellular respiration itself is the chemical process *inside* cells where energy is released from food.  So, faster breathing just means your body is taking in more oxygen to fuel cellular respiration. During exercise, muscles need more energy, causing both breathing and heart rate to increase. Kaise hota hai?  Can you tell me, कैसे breathing और cellular respiration अलग हैं?
+```

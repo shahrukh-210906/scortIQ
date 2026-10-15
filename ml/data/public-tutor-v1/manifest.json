@@ -1,0 +1,35 @@
+{
+  "dataset_revision": "82cd1437a0a59eec714dfa9521b6efcdc907de00",
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "seed": 42,
+  "counts": {
+    "train": {
+      "total": 682,
+      "languages": {
+        "hi": 301,
+        "en": 326,
+        "hinglish": 55
+      },
+      "datasets": {
+        "ai4bharat/indic-instruct-data-v0.1:dolly": 517,
+        "original-socratic-v1": 165
+      }
+    },
+    "validation": {
+      "total": 71,
+      "languages": {
+        "en": 34,
+        "hi": 32,
+        "hinglish": 5
+      },
+      "datasets": {
+        "ai4bharat/indic-instruct-data-v0.1:dolly": 56,
+        "original-socratic-v1": 15
+      }
+    }
+  },
+  "review_status": "automatic selection and agent inspection; no educator approval",
+  "license": "Public Dolly-derived rows CC-BY-SA-3.0; original rows CC0-1.0",
+  "max_tokens": 768
+}

@@ -7,6 +7,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 import tempfile
 import time
 from collections import Counter
@@ -189,12 +190,27 @@ def write_reports(output, metadata, results):
 
 
 def main():
+    sys.path.insert(0, str(ROOT))
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--suite", type=Path, default=DEFAULT_SUITE)
     parser.add_argument("--model", default="llama3.1:latest")
+    parser.add_argument("--runtime", choices=["ollama", "llama-cpp"], default="ollama")
+    parser.add_argument("--adapter-scale", type=float, choices=[0.0, 1.0])
+    parser.add_argument("--label", help="Candidate label, separate from the provider's model alias")
+    parser.add_argument(
+        "--artifact", type=Path, help="Local evaluated artifact for SHA-256 identity"
+    )
     parser.add_argument("--endpoint", default="http://127.0.0.1:11434")
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--validate-only", action="store_true")
+    parser.add_argument(
+        "--token-file", type=Path, help="Private local provider token; never saved in results"
+    )
+    parser.add_argument(
+        "--complete-guided",
+        action="store_true",
+        help="Evaluate final follow-up answers after all four guided checks",
+    )
     args = parser.parse_args()
     suite, digest = load_suite(args.suite)
     from backend.app.content import CHAPTERS
@@ -233,39 +249,84 @@ def main():
     import httpx
 
     endpoint = args.endpoint.rstrip("/")
-    with httpx.Client(timeout=180, trust_env=False) as provider:
-        version = provider.get(endpoint + "/api/version")
-        version.raise_for_status()
-        tags = provider.get(endpoint + "/api/tags")
-        tags.raise_for_status()
-        model = next((item for item in tags.json()["models"] if item["name"] == args.model), None)
-        if not model:
-            raise ValueError("Model is not installed. This runner will not download one.")
-        print("Warming the installed model…", flush=True)
-        warm = provider.post(
-            endpoint + "/api/generate",
-            json={
-                "model": args.model,
-                "prompt": "Hello",
-                "stream": False,
-                "options": {"num_predict": 1},
-            },
-        )
+    token = args.token_file.read_text().strip() if args.token_file else "local-ollama"
+    with httpx.Client(
+        timeout=180, trust_env=False, headers={"Authorization": "Bearer " + token}
+    ) as provider:
+        if args.runtime == "ollama":
+            version = provider.get(endpoint + "/api/version")
+            version.raise_for_status()
+            runtime_settings = version.json()
+            tags = provider.get(endpoint + "/api/tags")
+            tags.raise_for_status()
+            model = next(
+                (item for item in tags.json()["models"] if item["name"] == args.model), None
+            )
+            if not model:
+                raise ValueError("Model is not installed. This runner will not download one.")
+            print("Warming the installed model…", flush=True)
+            warm = provider.post(
+                endpoint + "/api/generate",
+                json={
+                    "model": args.model,
+                    "prompt": "Hello",
+                    "stream": False,
+                    "options": {"num_predict": 1},
+                },
+            )
+        else:
+            provider.get(endpoint + "/health").raise_for_status()
+            if args.adapter_scale is not None:
+                provider.post(
+                    endpoint + "/lora-adapters", json=[{"id": 0, "scale": args.adapter_scale}]
+                ).raise_for_status()
+            settings = provider.get(endpoint + "/props")
+            settings.raise_for_status()
+            adapters = provider.get(endpoint + "/lora-adapters")
+            adapters.raise_for_status()
+            runtime_settings = {
+                "version": "llama.cpp-b11640",
+                "props": settings.json(),
+                "adapters": adapters.json(),
+            }
+            if not args.artifact:
+                raise ValueError("Specify the evaluated GGUF artifact for reproducible identity.")
+            with args.artifact.open("rb") as stream:
+                model = {"digest": hashlib.file_digest(stream, "sha256").hexdigest()}
+            print("Warming the local GGUF model…", flush=True)
+            warm = provider.post(
+                endpoint + "/v1/chat/completions",
+                json={
+                    "model": args.model,
+                    "messages": [{"role": "user", "content": "Hello"}],
+                    "max_tokens": 1,
+                    "temperature": 0,
+                },
+            )
         warm.raise_for_status()
     metadata = {
         "started_utc": datetime.now(timezone.utc).isoformat(),
-        "model": args.model,
+        "model": args.label or args.model,
+        "provider_model_alias": args.model,
         "model_digest": model["digest"],
-        "runtime_version": version.json()["version"],
+        "runtime_version": runtime_settings["version"],
+        "runtime_settings": runtime_settings,
         "suite_sha256": digest,
         "suite_version": suite["version"],
         "expected_cases": len(suite["cases"]),
         "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "review_status": "draft; human review pending",
         "temperature": 0.3,
-        "max_tokens": 400,
+        "max_tokens": 600,
+        "guided_phase": "completed-follow-up" if args.complete_guided else "initial-problem",
         "app_source_sha256": hashlib.sha256(
             (ROOT / "backend/app/main.py").read_bytes()
+        ).hexdigest(),
+        "language_support_sha256": hashlib.sha256(
+            (ROOT / "backend/app/language_support.py").read_bytes()
+        ).hexdigest(),
+        "source_guidance_sha256": hashlib.sha256(
+            (ROOT / "backend/app/source_guidance.py").read_bytes()
         ).hexdigest(),
         "git_commit": subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
@@ -279,7 +340,7 @@ def main():
             APP_ENV="test",
             DATABASE_URL="sqlite:///" + str(Path(temporary) / "benchmark.db").replace("\\", "/"),
             HF_ENDPOINT_URL=endpoint,
-            HF_TOKEN="local-ollama",
+            HF_TOKEN=token,
             HF_MODEL_ID=args.model,
             SUPABASE_URL="",
             SUPABASE_PUBLISHABLE_KEY="",
@@ -287,7 +348,7 @@ def main():
         from fastapi.testclient import TestClient
 
         from backend.app import main as application
-        from backend.app.database import SessionLocal, engine
+        from backend.app.database import SessionLocal, SocraticState, engine
         from backend.app.grounding import retrieve
 
         try:
@@ -301,6 +362,13 @@ def main():
                     lesson = client.post(f"/api/lessons/{case['topic_id']}")
                     lesson.raise_for_status()
                     with SessionLocal() as db:
+                        if args.complete_guided:
+                            db.add(
+                                SocraticState(
+                                    lesson_id=lesson.json()["id"], phase=4, taught_phase=-1
+                                )
+                            )
+                            db.commit()
                         evidence = retrieve(db, case["topic_id"], case["question"])
                     started = time.monotonic()
                     response = client.post(
@@ -319,6 +387,7 @@ def main():
                         result.update(
                             reply=body["reply"],
                             citations=[source["id"] for source in body["sources"]],
+                            response_mode=body["messages"][-1].get("response_mode", "model"),
                         )
                         result["checks"] = automatic_checks(
                             body["reply"],

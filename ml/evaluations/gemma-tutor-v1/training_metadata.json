@@ -1,0 +1,48 @@
+{
+  "base_model": "unsloth/gemma-3-4b-it-bnb-4bit",
+  "revision": "eb03c885bc2cc913fe792994bc766006f14ad72d",
+  "train_count": 120,
+  "validation_count": 17,
+  "status": "requires independent evaluation",
+  "method": "QLoRA supervised fine-tuning; not reinforcement learning",
+  "approved_for_app": false,
+  "experimental_unreviewed": true,
+  "train_sha256": "898c8f52b64babfabec53b31d9b4dbcc71b7095b6a03b8260ce8c6c1989a2296",
+  "validation_sha256": "44851bcc679f014139ef8b6d74b0365bd515665ea7a90672be3897f215973388",
+  "baseline_validation": {
+    "eval_loss": 4.262844562530518,
+    "eval_model_preparation_time": 0.003,
+    "eval_runtime": 4.2418,
+    "eval_samples_per_second": 4.008,
+    "eval_steps_per_second": 4.008
+  },
+  "adapter_validation": {
+    "eval_loss": 4.207528114318848,
+    "eval_model_preparation_time": 0.003,
+    "eval_runtime": 5.1571,
+    "eval_samples_per_second": 3.296,
+    "eval_steps_per_second": 3.296
+  },
+  "training_metrics": {
+    "train_runtime": 126.4869,
+    "train_samples_per_second": 0.949,
+    "train_steps_per_second": 0.237,
+    "total_flos": 710833630152960.0,
+    "train_loss": 15.959995524088542
+  },
+  "max_length": 384,
+  "epochs": 1.0,
+  "max_steps": -1,
+  "completed_steps": 30,
+  "completed_epochs": 1.0,
+  "seed": 42,
+  "learning_rate": 1e-05,
+  "completion_only_loss": true,
+  "gradient_accumulation_steps": 4,
+  "rank": 4,
+  "target_modules": "all-linear",
+  "enable_thinking": true,
+  "vision_text": true,
+  "target_regex": "(?:model\\.)?language_model.*(q_proj|v_proj)",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU"
+}

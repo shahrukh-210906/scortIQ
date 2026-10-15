@@ -1,0 +1,1 @@
+This is a further subset of ../public-tutor-v1. Its full ATTRIBUTION.md and per-row licenses apply: public Dolly/AI4Bharat derivatives CC BY-SA 3.0, original ScortIQ dialogues CC0 1.0. Changes: shorter system instructions, balanced language counts and length filtering. No student data. See ../public-tutor-v1/ATTRIBUTION.md for source credits and caveats.

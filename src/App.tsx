@@ -1063,7 +1063,7 @@ function LessonPage() {
       <PageTitle
         eyebrow="A SMALL STEP TOWARDS UNDERSTANDING"
         title={topic.title}
-        description="Understand the idea, prepare an exam answer, practise and recall. Revisit any stage."
+        description="Work through guided understanding, then prepare an exam answer, practise and recall."
       />
       <LessonProgress completed={lesson.completed_steps} />
       <BookmarkButton
@@ -1219,12 +1219,12 @@ function LessonPage() {
                 <MessageCircle size={30} />
                 <h3>
                   {config.inference_configured
-                    ? 'Ask the next question.'
+                    ? 'Let’s understand the problem.'
                     : 'AI tutoring is on its way.'}
                 </h3>
                 <p>
                   {config.inference_configured
-                    ? 'Share what you think, or ask about the part that feels unclear.'
+                    ? 'Choose Explain this step to begin. You can also ask about any part that feels unclear.'
                     : 'The Hugging Face model hasn’t been connected yet. Your lesson and practice quiz are ready to explore.'}
                 </p>
               </div>
@@ -1232,6 +1232,8 @@ function LessonPage() {
             {lesson.messages.map((m, i) => (
               <div className={`chat-message ${m.role}`} key={i}>
                 <small>{m.role === 'user' ? 'You' : 'ScortIQ'}</small>
+                {m.response_mode === 'source_guided' && <small>From your lesson sources</small>}
+                {m.response_mode === 'checked_calculation' && <small>Checked calculation</small>}
                 <p>{m.content}</p>
                 {m.sources && <SourceList sources={m.sources} />}
                 {lesson.adaptation_enabled && m.role === 'assistant' && m.teaching_style && (

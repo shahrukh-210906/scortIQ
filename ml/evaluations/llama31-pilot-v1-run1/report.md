@@ -234,7 +234,7 @@ Expected: 30 degrees.; Incidence and reflection angles are equal and measured fr
 Reply (untrusted model output):
 
 ```text
-Pratibimba ki kshamta ka niyam hai ki pratikiran kee koon hai aakarshak kee koon. 
+Pratibimba ki kshamta ka niyam hai ki pratikiran kee koon hai aakarshak kee koon.
 ```
 
 ### pilot-v1-normal-angle-hinglish

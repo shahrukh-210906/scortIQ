@@ -49,6 +49,7 @@ export type Message = {
   sources?: SourceRef[];
   teaching_style?: string;
   helpful_feedback?: boolean;
+  response_mode?: 'model' | 'source_guided' | 'checked_calculation';
 };
 export type Lesson = {
   socratic: SocraticProgress;

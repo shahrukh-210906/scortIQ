@@ -56,3 +56,9 @@ Commit and push each completed task separately after relevant validation. Report
 - [ ] Produce educator-reviewed, licensed Class 10 examples; improve Hindi/Hinglish and guiding-question behavior before considering deployment.
 - [ ] Independently evaluate factual accuracy and the actual serving artifact. Current synthetic validation loss does not certify teaching quality.
 - [x] Add the requested four-step Socratic sequence with explanation-before-check, failed-answer retry, persistence and server-enforced progression.
+# Local tutor update — 15 October 2026
+
+Completed: local Gemma QLoRA training, private local runtime connection, four saved comprehension-gated teaching steps, English/Hindi/Hinglish pilot source guidance, checked reflection calculations and visible source-response labels. Verification: 54 backend tests, 14 browser journeys and production build passed.
+
+Remaining: educator review of the seven pilot topics and public training examples; full reviewed CBSE 2026–27 topic content; broader unseen factual and language evaluation; improved provider reliability (final pilot run accepted 41/42 requests). Fine-tuning alone remains insufficient for factual accuracy. See `ml/LOCAL_TUTOR.md`.
+

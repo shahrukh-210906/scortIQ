@@ -1197,12 +1197,12 @@ class LearningTests(unittest.TestCase):
             self.assertEqual(provider.post.await_count, 1)
             prompt = provider.post.call_args.kwargs["json"]["messages"][0]["content"]
             self.assertIn("Teach in simple conversational Hinglish", prompt)
+            self.assertIn("Faithful draft language renderings", prompt)
             self.assertIn("Personalised explanation style:", prompt)
             self.assertEqual(response.json()["messages"][1]["teaching_style"], "step_by_step")
         resumed = self.client.post("/api/lessons/reactions-signs").json()
-        self.assertEqual(
-            resumed["messages"][1]["content"], "What new substance do you think forms?"
-        )
+        self.assertIn("Magnesium", resumed["messages"][1]["content"])
+        self.assertEqual(resumed["messages"][1]["response_mode"], "source_guided")
 
     def test_invalid_model_reply_does_not_pollute_history(self):
         lesson = self.client.post("/api/lessons/reactions-signs").json()

@@ -1,5 +1,7 @@
 # ScortIQ tutor training
 
+Current development pilot: **Gemma 3 4B with a locally trained adapter and source-guided Socratic explanations**. See [setup](LOCAL_TUTOR.md) and [measured results and limitations](evaluations/gemma-tutor-v1/REPORT.md). The earlier experiments below remain for provenance. Full reviewed NCERT training and educator approval are still pending.
+
 A small experimental QLoRA run has completed on Qwen2.5 1.5B using 72 original synthetic examples. [Results and reproduction](evaluations/behavior-experiment-v1/report.md) include validation metrics and raw samples. The adapter improved JSON formatting in three inspection samples but failed the requested Hindi/Hinglish language and guiding-question instructions, so it is not deployed. No production training dataset exists yet. Do not publish the seed application notes as reviewed training data.
 
 For a beginner-friendly path without paid API calls, see [the local AI and training guide](../FREE_AI_GUIDE.md). The app can use local Ollama inference before fine-tuning; the existing model and a trained adapter are different artifacts.

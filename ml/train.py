@@ -75,7 +75,21 @@ def main():
     parser.add_argument("--epochs", type=float, default=2)
     parser.add_argument("--max-length", type=int, default=2048)
     parser.add_argument("--max-steps", type=int, default=-1)
+    parser.add_argument("--learning-rate", type=float, default=2e-4)
+    parser.add_argument("--accumulation", type=int, default=16)
+    parser.add_argument("--completion-only", action="store_true")
+    parser.add_argument("--rank", type=int, default=8)
+    parser.add_argument("--target-modules", default="all-linear")
+    parser.add_argument("--no-thinking", action="store_true")
+    parser.add_argument(
+        "--vision-text",
+        action="store_true",
+        help="Text-only training through a multimodal causal model",
+    )
+    parser.add_argument("--target-regex", help="Optional exact PEFT module-name regex")
     args = parser.parse_args()
+    if args.accumulation < 1 or not 0 < args.learning_rate < 1:
+        parser.error("Use positive accumulation and learning-rate between 0 and 1.")
     if args.epochs <= 0 or args.max_length < 128 or args.max_steps == 0 or args.max_steps < -1:
         parser.error(
             "Use positive epochs, max-length >=128, and max-steps -1 or a positive integer."
@@ -98,7 +112,12 @@ def main():
     import torch
     from datasets import Dataset
     from peft import LoraConfig
-    from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+    from transformers import (
+        AutoModelForCausalLM,
+        AutoModelForImageTextToText,
+        AutoTokenizer,
+        BitsAndBytesConfig,
+    )
     from trl import SFTConfig, SFTTrainer
 
     if not torch.cuda.is_available():
@@ -106,7 +125,8 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(args.model, revision=args.revision)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
-    model = AutoModelForCausalLM.from_pretrained(
+    model_class = AutoModelForImageTextToText if args.vision_text else AutoModelForCausalLM
+    model = model_class.from_pretrained(
         args.model,
         revision=args.revision,
         quantization_config=BitsAndBytesConfig(
@@ -115,14 +135,23 @@ def main():
         device_map={"": 0},
     )
     model.config.use_cache = False
+    if args.completion_only:
+        for row in train + validation:
+            tokens = tokenizer.apply_chat_template(
+                row["messages"],
+                tokenize=True,
+                **({"enable_thinking": False} if args.no_thinking else {}),
+            )
+            if len(tokens) > args.max_length:
+                raise ValueError(f"Example {row['id']} would be truncated ({len(tokens)} tokens).")
     config = SFTConfig(
         output_dir=args.output,
         num_train_epochs=args.epochs,
         max_steps=args.max_steps,
         per_device_train_batch_size=1,
         per_device_eval_batch_size=1,
-        gradient_accumulation_steps=16,
-        learning_rate=2e-4,
+        gradient_accumulation_steps=args.accumulation,
+        learning_rate=args.learning_rate,
         max_length=args.max_length,
         gradient_checkpointing=True,
         logging_steps=10,
@@ -134,18 +163,55 @@ def main():
         dataloader_num_workers=0,
         dataset_num_proc=1,
         gradient_checkpointing_kwargs={"use_reentrant": False},
+        completion_only_loss=args.completion_only,
+        save_total_limit=2,
     )
     trainer = SFTTrainer(
         model=model,
         processing_class=tokenizer,
         args=config,
-        train_dataset=Dataset.from_list([{"messages": r["messages"]} for r in train]),
-        eval_dataset=Dataset.from_list([{"messages": r["messages"]} for r in validation]),
+        train_dataset=Dataset.from_list(
+            [
+                {
+                    "prompt": r["messages"][:-1],
+                    "completion": r["messages"][-1:],
+                    **(
+                        {"chat_template_kwargs": {"enable_thinking": False}}
+                        if args.no_thinking
+                        else {}
+                    ),
+                }
+                if args.completion_only
+                else {"messages": r["messages"]}
+                for r in train
+            ]
+        ),
+        eval_dataset=Dataset.from_list(
+            [
+                {
+                    "prompt": r["messages"][:-1],
+                    "completion": r["messages"][-1:],
+                    **(
+                        {"chat_template_kwargs": {"enable_thinking": False}}
+                        if args.no_thinking
+                        else {}
+                    ),
+                }
+                if args.completion_only
+                else {"messages": r["messages"]}
+                for r in validation
+            ]
+        ),
         peft_config=LoraConfig(
-            r=8,
-            lora_alpha=16,
+            r=args.rank,
+            lora_alpha=args.rank * 2,
             lora_dropout=0.05,
-            target_modules="all-linear",
+            target_modules=args.target_regex
+            or (
+                "all-linear"
+                if args.target_modules == "all-linear"
+                else args.target_modules.split(",")
+            ),
             task_type="CAUSAL_LM",
         ),
     )
@@ -176,6 +242,14 @@ def main():
                 "completed_steps": trainer.state.global_step,
                 "completed_epochs": trainer.state.epoch,
                 "seed": config.seed,
+                "learning_rate": args.learning_rate,
+                "completion_only_loss": args.completion_only,
+                "gradient_accumulation_steps": args.accumulation,
+                "rank": args.rank,
+                "target_modules": args.target_modules,
+                "enable_thinking": not args.no_thinking,
+                "vision_text": args.vision_text,
+                "target_regex": args.target_regex,
                 "gpu": torch.cuda.get_device_name(0),
             },
             indent=2,

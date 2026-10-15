@@ -1,0 +1,101 @@
+{
+  "turn_status": 200,
+  "turn": {
+    "reply": "Pehle samjho ki problem ke liye kaunsa rule chahiye.\n\nRay normal se 30° par aa rahi hai. Humein reflection angle nikaalna hai. Pehle reference line pehchano: normal surface ke perpendicular hota hai aur angle isi line se naapte hain.\n\nIs explanation ka kaunsa hissa tumhe understanding check solve karne mein madad karta hai?",
+    "sources": [
+      {
+        "id": "pilot-light-reflection-v1:0",
+        "title": "Laws of reflection",
+        "version": "pilot-1",
+        "review_status": "draft",
+        "reviewer": null,
+        "rights": "Original ScortIQ project notes; internal pilot only",
+        "excerpt": "The angle of incidence equals the angle of reflection. Both angles are measured from the normal, an imaginary line perpendicular to the surface. The incident ray, reflected ray and normal lie in the same plane."
+      },
+      {
+        "id": "pilot-light-reflection-v1:1",
+        "title": "Laws of reflection",
+        "version": "pilot-1",
+        "review_status": "draft",
+        "reviewer": null,
+        "rights": "Original ScortIQ project notes; internal pilot only",
+        "excerpt": "A ray arriving at 30° to the normal leaves at 30° to the normal."
+      }
+    ],
+    "messages": [
+      {
+        "role": "user",
+        "content": "Explain this problem simply."
+      },
+      {
+        "role": "assistant",
+        "content": "Pehle samjho ki problem ke liye kaunsa rule chahiye.\n\nRay normal se 30° par aa rahi hai. Humein reflection angle nikaalna hai. Pehle reference line pehchano: normal surface ke perpendicular hota hai aur angle isi line se naapte hain.\n\nIs explanation ka kaunsa hissa tumhe understanding check solve karne mein madad karta hai?",
+        "sources": [
+          {
+            "id": "pilot-light-reflection-v1:0",
+            "title": "Laws of reflection",
+            "version": "pilot-1",
+            "review_status": "draft",
+            "reviewer": null,
+            "rights": "Original ScortIQ project notes; internal pilot only",
+            "excerpt": "The angle of incidence equals the angle of reflection. Both angles are measured from the normal, an imaginary line perpendicular to the surface. The incident ray, reflected ray and normal lie in the same plane."
+          },
+          {
+            "id": "pilot-light-reflection-v1:1",
+            "title": "Laws of reflection",
+            "version": "pilot-1",
+            "review_status": "draft",
+            "reviewer": null,
+            "rights": "Original ScortIQ project notes; internal pilot only",
+            "excerpt": "A ray arriving at 30° to the normal leaves at 30° to the normal."
+          }
+        ],
+        "response_mode": "source_guided"
+      }
+    ],
+    "adaptation_enabled": false,
+    "socratic": {
+      "phase": 0,
+      "label": "Understand the problem",
+      "phases": [
+        "Understand the problem",
+        "Work through the solution",
+        "Connect the topic",
+        "Apply the idea"
+      ],
+      "complete": false,
+      "ready": true,
+      "question": "From which line are incidence and reflection angles measured?",
+      "options": [
+        "The mirror surface",
+        "The normal",
+        "Any horizontal line"
+      ],
+      "checkpoint_language": "en"
+    }
+  },
+  "wrong_checkpoint_status": 200,
+  "wrong_checkpoint": {
+    "correct": false,
+    "feedback": "The normal is perpendicular to the reflecting surface. Ask the tutor to explain this step differently before retrying.",
+    "socratic": {
+      "phase": 0,
+      "label": "Understand the problem",
+      "phases": [
+        "Understand the problem",
+        "Work through the solution",
+        "Connect the topic",
+        "Apply the idea"
+      ],
+      "complete": false,
+      "ready": false,
+      "question": "From which line are incidence and reflection angles measured?",
+      "options": [
+        "The mirror surface",
+        "The normal",
+        "Any horizontal line"
+      ],
+      "checkpoint_language": "en"
+    }
+  }
+}

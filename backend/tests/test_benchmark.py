@@ -16,6 +16,20 @@ from ml.benchmark import (
 
 
 class BenchmarkTests(unittest.TestCase):
+    def test_public_tutor_group_splits_keep_source_families_separate(self):
+        from ml.train import read_dataset
+
+        root = Path(__file__).resolve().parents[2] / "ml/data/public-tutor-v1"
+        train = read_dataset(str(root / "train.jsonl"), allow_unreviewed=True)
+        validation = read_dataset(str(root / "validation.jsonl"), allow_unreviewed=True)
+        self.assertEqual((len(train), len(validation)), (682, 71))
+        self.assertFalse({r["split_group"] for r in train} & {r["split_group"] for r in validation})
+        self.assertFalse({r["source_id"] for r in train} & {r["source_id"] for r in validation})
+        self.assertEqual({r["language"] for r in train}, {"en", "hi", "hinglish"})
+        self.assertTrue(all(r["reviewed"] is False for r in train + validation))
+        suite, _ = load_suite()
+        validate_holdout(train + validation, suite)
+
     def test_behavior_experiment_requires_explicit_unreviewed_opt_in(self):
         from ml.train import read_dataset
 

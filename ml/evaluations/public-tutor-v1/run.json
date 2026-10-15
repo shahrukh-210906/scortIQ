@@ -1,0 +1,9 @@
+{
+  "adapter_sha256": "4c09dfa2a65609e906596a3941972f64d0581391ea0b1aecc2b69d173df47f89",
+  "adapter_bytes": 66126768,
+  "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+  "base_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "method": "QLoRA supervised fine-tuning with completion-only loss",
+  "data_license": "CC-BY-SA-3.0 public derivatives; CC0-1.0 original examples",
+  "deployment_status": "evaluation pending"
+}
