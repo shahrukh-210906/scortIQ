@@ -52,3 +52,9 @@ Removed unconditional replacement of valid model replies by static lesson paragr
 
 Validation: 61 backend tests and the browser Socratic-gating journey passed. Repeated real English/Hinglish beginner tests are saved under `ml/evaluations/beginner-student-v2` through `v6`; intermediate failures are retained. The actual model still makes scientific/language mistakes, so the pilot remains experimental and some replies intentionally use labelled authored sources. This is conversational behavior work, not another training run or neural reinforcement learning.
 
+# Beginner chemistry — 15 October 2026
+
+Extended question-specific source recovery and focused conversation context to `reactions-balance`. Original draft English/Hindi/Hinglish help covers atoms, molecules, symbols, subscripts, coefficients, reaction sides and why formulas stay unchanged. Repeated counting confusion uses drawn groups rather than repeating the same rule. Whole-number `nH₂O` counts from 1 through 1000 use checked arithmetic; decimal/negative coefficients, hydrogen peroxide, mixed formulas and full equations are outside this small counter.
+
+Validation: 65 backend tests and the browser Socratic-gating journey passed. Nine-turn live chemistry conversations are preserved under `ml/evaluations/chemistry-beginner-v1` and `v2`; the first run exposed contradictory formula advice, which now triggers a labelled source explanation. Draft notes stay excluded from production; no additional model training or cloud deployment occurred.
+

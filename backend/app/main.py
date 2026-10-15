@@ -1641,7 +1641,9 @@ async def tutor_turn(
     # A beginner's vocabulary question must not compete with later equations/laws.
     teaching_evidence = (
         prerequisite
-        if lesson.topic_id == "light-reflection" and state.phase == 0 and prerequisite
+        if lesson.topic_id in {"light-reflection", "reactions-balance"}
+        and state.phase == 0
+        and prerequisite
         else evidence
     )
     system = (
@@ -1796,7 +1798,9 @@ async def tutor_turn(
         preferred_ids,
     )
     response_mode = "model"
-    if guided and guided[2] == "checked_calculation":
+    if fallback and fallback[2] == "checked_calculation":
+        reply, cited_sources, response_mode = fallback
+    elif guided and guided[2] == "checked_calculation":
         reply, cited_sources, response_mode = guided
     elif provider_unavailable:
         reply, cited_sources, response_mode = fallback

@@ -1,0 +1,81 @@
+{
+  "tested_utc": "2026-10-15T16:57:36.179344+00:00",
+  "method": "Nine live student-style turns on reactions-balance; synthetic accounts; real local model; no mocks.",
+  "runs": [
+    {
+      "language": "hinglish",
+      "turns": [
+        {
+          "student": "Mujhe kuch bhi nahi pata, bilkul shuru se samjhao.",
+          "reply": "Chalo paani se shuru karte hain, jo tum pehle se jaante ho. Scientists H₂O likhkar dikhate hain ki paani ka ek molecule kin atoms se bana hai; in words ko dheere-dheere samjhenge. Abhi equation solve nahi karni, pehle in groups ko padhna aur ginna seekhenge. Paani ke liye H₂O pehle dekha hai?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": true
+        },
+        {
+          "student": "Atom kya hota hai?",
+          "reply": "Atom kisi element ki bahut chhoti unit hai, jo sirf aankhon se nahi dikhti. Hydrogen aur oxygen alag elements hain, isliye unke atoms bhi alag kinds ke hain. Drawing mein alag coloured dots se unhe pehchaan sakte hain; asli atoms coloured toy balls nahi hain.\n\nHydrogen aur oxygen ke dots same kind dikhayenge ya alag kinds?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "Molecule aur atom mein kya difference hai?",
+          "reply": "Atom ek element ki sabse chhoti unit hota hai, jo sirf dekh kar samjha ja sakta hai. Molecule ise kuch atoms ka jodkar bana hota hai. Imagine karo, ek building mein bahut se bricks hote hain - har brick ek atom hota hai aur bricks ka group ek molecule hota hai. Ek water molecule (H₂O) mein do hydrogen atoms (H) aur ek oxygen atom (O) jod kar banana hota hai.\n\nPaani ke ek group mein hydrogen ke kitne atoms hain?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "H2O mein chhota 2 kya hai?",
+          "reply": "H₂O mein chhota 2 sirf H ke saath hai: paani ke ek molecule mein do hydrogen atoms hain. O ke baad chhota number nahi hai, toh oxygen ka count ek hai. Ek water group ko H, H aur O samjho.\n\nIs ek group mein oxygen ek hai ya do?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "7H2O mein H aur O atoms kitne hain?",
+          "reply": "7H₂O mein paani ke 7 poore molecules hain. Har molecule mein 2 H atoms aur 1 O atom hai, isliye H = 7 × 2 = 14, aur O = 7 × 1 = 7. Aage ka number poore formula ko multiply karta hai. Chhota 2 kiski counting mein aata hai: hydrogen ya oxygen?",
+          "phase": 0,
+          "mode": "checked_calculation",
+          "provider_unavailable": false
+        },
+        {
+          "student": "Abhi bhi samajh nahi aaya. Doosra example do.",
+          "reply": "Rule ratne ke bajay drawing dekhte hain. Ek water group [H H O] hai; do groups [H H O] [H H O] hain. Pehle sirf H gino: pehle box mein do aur doosre mein do, total chaar. Ab sirf O gino: dono boxes mein milakar kitne O dikhte hain?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": true
+        },
+        {
+          "student": "Kya H2O ko H2O2 kar sakte hain equation balance karne ke liye?",
+          "reply": "Equation balance karne ke liye H₂O ka chhota 2 nahi badalte, kyunki formula badalne se substance badal jaata hai. H₂O paani hai, lekin H₂O₂ alag substance hydrogen peroxide hai. Balance karte waqt sirf formulas ke AAGE bade numbers badalte hain. Kya badal sakte hain: aage ka bada number ya H₂O ke andar chhota number?",
+          "phase": 0,
+          "mode": "source_guided",
+          "provider_unavailable": true
+        }
+      ],
+      "wrong_checkpoint_phase": 0
+    },
+    {
+      "language": "en",
+      "turns": [
+        {
+          "student": "What is a coefficient?",
+          "reply": "Before balancing an equation, you need to identify how many of each type of atom are on both sides of the chemical reaction. Think about it like this: in the example 2H₂O, the '2' tells us we have two *groups* of H₂O molecules. It’s not just that there are two hydrogen atoms; it’s that there are two whole water molecules present.\n\nDoes the big 2 multiply only H, or the entire H₂O group?",
+          "phase": 0,
+          "mode": "model",
+          "provider_unavailable": false
+        },
+        {
+          "student": "How many H and O atoms are in 19H2O?",
+          "reply": "In 19H₂O there are 19 whole water molecules. Each has 2 H atoms and 1 O atom, so H = 19 × 2 = 38, and O = 19 × 1 = 19. The front number multiplies the whole formula. Which count uses the small 2: hydrogen or oxygen?",
+          "phase": 0,
+          "mode": "checked_calculation",
+          "provider_unavailable": false
+        }
+      ],
+      "wrong_checkpoint_phase": 0
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 
 import re
 
+from .chemistry_support import CHEMISTRY_HELP, checked_water_count, chemistry_focus
+
 REFLECTION_HELP = {
     "corner_retry": {
         "en": "Let's try a different example. Put a book on a table and lift its front cover until it stands straight up while the back cover stays flat. The covers now make an L shape: that is the square turn called 90 degrees. Lines in those two directions are perpendicular. Which cover is standing up: the front or the back?",
@@ -75,7 +77,20 @@ FACTS = {
 def prerequisite_source(topic_id, question="", history=()):
     if topic_id not in FACTS:
         return []
-    focus = reflection_focus(question, history) if topic_id == "light-reflection" else None
+    help_text = (
+        REFLECTION_HELP
+        if topic_id == "light-reflection"
+        else CHEMISTRY_HELP
+        if topic_id == "reactions-balance"
+        else None
+    )
+    focus = (
+        reflection_focus(question, history)
+        if topic_id == "light-reflection"
+        else chemistry_focus(question, history)
+        if topic_id == "reactions-balance"
+        else None
+    )
     return [
         {
             "id": f"pilot-prerequisites-{topic_id}-v1:{focus or '0'}",
@@ -84,27 +99,39 @@ def prerequisite_source(topic_id, question="", history=()):
             "review_status": "draft",
             "reviewer": "",
             "rights": "Original authored pilot notes; educator review pending.",
-            "excerpt": REFLECTION_HELP[focus]["en"] if focus else FACTS[topic_id],
+            "excerpt": help_text[focus]["en"] if help_text else FACTS[topic_id],
         }
     ]
 
 
 def beginner_fallback(topic_id, language, question, history, evidence):
-    if topic_id != "light-reflection" or language not in REFLECTION_HELP["intro"]:
+    if (
+        topic_id not in {"light-reflection", "reactions-balance"}
+        or language not in REFLECTION_HELP["intro"]
+    ):
         return None
-    focus = reflection_focus(question, history)
+    help_text = REFLECTION_HELP if topic_id == "light-reflection" else CHEMISTRY_HELP
+    focus = (
+        reflection_focus(question, history)
+        if topic_id == "light-reflection"
+        else chemistry_focus(question, history)
+    )
     source = next(
         (
             s
             for s in evidence
             if s["id"] == f"pilot-prerequisites-{topic_id}-v1:{focus}"
-            and s["excerpt"] == REFLECTION_HELP[focus]["en"]
+            and s["excerpt"] == help_text[focus]["en"]
         ),
         None,
     )
     if not source:
         return None
-    return REFLECTION_HELP[focus][language], [source], "source_guided"
+    if topic_id == "reactions-balance" and focus == "coefficient":
+        calculated = checked_water_count(question, language)
+        if calculated:
+            return calculated, [source], "checked_calculation"
+    return help_text[focus][language], [source], "source_guided"
 
 
 def conversational_check(topic_id, language, question, history, reply, evidence, phase):
@@ -112,7 +139,7 @@ def conversational_check(topic_id, language, question, history, reply, evidence,
 
     These are narrow regression guards, not a general factual-accuracy guarantee.
     """
-    if topic_id != "light-reflection" or phase != 0:
+    if topic_id not in {"light-reflection", "reactions-balance"} or phase != 0:
         return reply
     fallback = beginner_fallback(topic_id, language, question, history, evidence)
     if not fallback:
@@ -130,6 +157,34 @@ def conversational_check(topic_id, language, question, history, reply, evidence,
         raise ValueError("Reply did not follow the teaching language")
     if language == "hi" and len(re.findall(r"[\u0900-\u097f]", reply)) < 6:
         raise ValueError("Reply did not follow the teaching language")
+    if topic_id == "reactions-balance":
+        # A computed count takes precedence; ordinary replies keep their natural
+        # question unless absent. Citation and repetition checks still apply.
+        if fallback[2] == "checked_calculation":
+            return fallback[0]
+        focus = chemistry_focus(question, history)
+        if focus == "formula" and re.match(r"\s*(yes\b|haan\b|ha\b|हाँ|हां|you can\b)", reply, re.I):
+            raise ValueError("Contradictory advice about changing formulas")
+        if focus == "intro" and re.search(
+            r"2\s*H[₂2]\s*\+\s*O[₂2]|coefficient|stoichiometr", reply, re.I
+        ):
+            raise ValueError("Skipped beginner prerequisites")
+        sentences = [s for s in re.split(r"(?<=[.!?।])\s+", reply.strip()) if "?" not in s]
+        body = " ".join(sentences)
+        anchors = {
+            "intro": (r"H[₂2]O|water|paani|पानी",),
+            "atom": (r"hydrogen|हाइड्रोजन", r"oxygen|ऑक्सीजन"),
+            "molecule": (r"water|paani|पानी|H[₂2]O", r"hydrogen|हाइड्रोजन|\bH\b"),
+            "symbols": (r"\bH\b", r"\bO\b"),
+            "subscript": (r"H[₂2]O", r"oxygen|ऑक्सीजन|\bO\b"),
+            "coefficient": (r"H[₂2]O", r"whole|entire|poore|poora|पूरे|पूरा"),
+            "count_retry": (r"\[H H O\]\s*\[H H O\]",),
+            "formula": (r"H[₂2]O", r"before|front|aage|AAGE|आगे"),
+            "sides": (r"left|बाईं", r"right|दाईं"),
+        }
+        if not body or any(not re.search(pattern, body, re.I) for pattern in anchors[focus]):
+            raise ValueError("Chemistry check did not match the explanation")
+        return body + "\n\n" + re.split(r"(?<=[.!।])\s+", fallback[0])[-1]
     focus = reflection_focus(question, history)
     if focus == "intro" and re.search(
         r"\b(image|wall|eyes|incidence|normal|degrees?)\b|प्रतिबिंब|दीवार|अभिलंब|आपतन", reply, re.I
