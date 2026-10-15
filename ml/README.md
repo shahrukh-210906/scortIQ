@@ -7,6 +7,7 @@ For a beginner-friendly path without paid API calls, see [the local AI and train
 1. Confirm a base model's license and benchmark its language and science performance.
 2. Produce teacher-reviewed, licensed multi-turn tutoring examples. Include misconceptions, graduated hints, valid JSON replies, and uncertainty responses.
 3. Create separate training/validation/test JSONL files split by chapter or question family. Keep test data out of both training and model-selection validation.
+   The frozen draft [42-case pilot benchmark](benchmarks/README.md) is now reserved. The training entry point checks it by default and rejects overlapping IDs, question families and exact normalized questions. Human review must also check paraphrases and source leakage. Initial local results and blank human ratings are in `evaluations/llama31-pilot-v1-run1/`.
 4. Each record needs `id`, `split_group`, `source_id`, `license`, `reviewer`, `reviewed: true` and `messages` with `{role, content}` entries. A metadata string does not itself prove rights: conduct the rights review separately.
 5. Validate first: `python ml/train.py --model MODEL_ID --revision COMMIT_SHA --train TRAIN.jsonl --validation VALIDATION.jsonl --validate-only`.
 6. On a compatible CUDA machine, install `ml/requirements.txt`, pin the tested ML environment, and run the same command without `--validate-only`. Review memory use and bfloat16 support before starting. The configuration is an initial experiment, not validated for every base model.

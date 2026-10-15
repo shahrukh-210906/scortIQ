@@ -116,3 +116,9 @@ ollama run scortiq-tutor
 These steps require an exported file; no such trained model exists yet. After it passes evaluation, change `HF_MODEL_ID` to `scortiq-tutor` in the backend configuration and restart the backend. Keep the prior model available for rollback. Reference: [Ollama model import](https://docs.ollama.com/import).
 
 The practical order is: local baseline → reviewed topic retrieval → frozen teaching benchmark → reviewed training examples → small fine-tuning experiment → export and re-test → app deployment. Subjective exam grading needs a separate reviewed rubric and evaluation; a working chat model is not an automatic reliable examiner.
+
+## First benchmark is available
+
+The frozen draft benchmark now has 42 cases across the seven Science pilot topics and three teaching languages. [Read the first report](ml/evaluations/llama31-pilot-v1-run1/report.md), [the runner instructions](ml/benchmarks/README.md), or the blank [human review sheet](ml/evaluations/llama31-pilot-v1-run1/human-review.csv). The local model produced 39 app-accepted replies and three rejected requests. Exactly one question mark appeared in only four replies; five Hindi replies missed the basic Devanagari signal. These counts are mechanical indicators, not factual accuracy or fluency grades.
+
+The next step is reviewing the expected facts and model replies, not training on these answers. The training entry point now rejects overlapping benchmark IDs, question families and exact question text. This protects the holdout but cannot detect all paraphrases or mislabeled examples. No fine-tuning has been performed.

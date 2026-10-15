@@ -1,0 +1,550 @@
+{
+  "version": "class10-pilot-v1",
+  "status": "original draft; educator review pending",
+  "reviewer": null,
+  "scope": "Seven existing Science pilot topics only; not the full NCERT curriculum or Maths.",
+  "input_language": "English for all cases, to test the selected teaching-language preference independently.",
+  "corpus": {
+    "reactions-signs": [
+      "A chemical reaction produces new substances. Clues can include a gas being released, a colour change, a temperature change, or a precipitate. A clue alone is not always proof: boiling water also produces bubbles but is a physical change.",
+      "When magnesium burns, it reacts with oxygen to form magnesium oxide. The bright light and new white solid are signs of a chemical reaction.",
+      "Why is melting ice a physical change? It remains water; no new substance forms."
+    ],
+    "reactions-balance": [
+      "Atoms are conserved during a chemical reaction. Balance an equation by changing coefficients in front of formulas, never the subscripts inside a formula.",
+      "2H₂ + O₂ → 2H₂O. Both sides contain four hydrogen atoms and two oxygen atoms.",
+      "Why must we not change H₂O to H₂O₂ to balance water formation? Changing subscripts changes the substance: H₂O₂ is hydrogen peroxide."
+    ],
+    "reactions-types": [
+      "In a combination reaction, two or more reactants form one product. In a decomposition reaction, one reactant breaks into two or more products. Displacement reactions involve a more reactive element replacing another.",
+      "CaO + H₂O → Ca(OH)₂ is a combination reaction.",
+      "Which type is a reaction with one reactant and multiple products? A decomposition reaction."
+    ],
+    "light-reflection": [
+      "The angle of incidence equals the angle of reflection. Both angles are measured from the normal, an imaginary line perpendicular to the surface. The incident ray, reflected ray and normal lie in the same plane.",
+      "A ray arriving at 30° to the normal leaves at 30° to the normal.",
+      "If a ray makes 20° with the mirror surface, what is its angle of incidence? 70°, because the normal is perpendicular to the surface."
+    ],
+    "light-images": [
+      "A plane mirror forms a virtual, upright image of the same size as the object. The image appears as far behind the mirror as the object is in front.",
+      "An object 2 m in front of a plane mirror has its image 2 m behind the mirror.",
+      "Can a plane mirror's virtual image be projected onto a screen? No. The rays only appear to come from behind the mirror."
+    ],
+    "life-nutrition": [
+      "Green plants use light energy to make carbohydrates from carbon dioxide and water during photosynthesis. Chlorophyll absorbs light, and oxygen is released.",
+      "A leaf takes in carbon dioxide through stomata. Roots absorb the water needed for photosynthesis.",
+      "What is the role of chlorophyll? It absorbs the light energy used in photosynthesis."
+    ],
+    "life-respiration": [
+      "Cells break down food to release usable energy. Aerobic respiration uses oxygen. Breathing moves air into and out of the body; cellular respiration is a chemical process inside cells.",
+      "During exercise, muscles need more energy, so breathing and heart rate usually increase.",
+      "Are breathing and cellular respiration the same process? No. Breathing exchanges air; respiration releases energy from food in cells."
+    ]
+  },
+  "cases": [
+    {
+      "id": "pilot-v1-melting-en",
+      "split_group": "pilot-v1-melting",
+      "topic_id": "reactions-signs",
+      "language": "en",
+      "kind": "basic",
+      "question": "Why is melting ice a physical change? Explain the reason and ask me one guiding question.",
+      "expected_facts": [
+        "It remains water; no new substance forms.",
+        "Only the physical state changes."
+      ]
+    },
+    {
+      "id": "pilot-v1-melting-hi",
+      "split_group": "pilot-v1-melting",
+      "topic_id": "reactions-signs",
+      "language": "hi",
+      "kind": "basic",
+      "question": "Why is melting ice a physical change? Explain the reason and ask me one guiding question.",
+      "expected_facts": [
+        "It remains water; no new substance forms.",
+        "Only the physical state changes."
+      ]
+    },
+    {
+      "id": "pilot-v1-melting-hinglish",
+      "split_group": "pilot-v1-melting",
+      "topic_id": "reactions-signs",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "Why is melting ice a physical change? Explain the reason and ask me one guiding question.",
+      "expected_facts": [
+        "It remains water; no new substance forms.",
+        "Only the physical state changes."
+      ]
+    },
+    {
+      "id": "pilot-v1-bubbles-en",
+      "split_group": "pilot-v1-bubbles",
+      "topic_id": "reactions-signs",
+      "language": "en",
+      "kind": "misconception",
+      "question": "I think every liquid that bubbles is undergoing a chemical reaction. Is that correct? Explain using boiling water.",
+      "expected_facts": [
+        "Bubbles alone do not prove a chemical reaction.",
+        "Boiling water is a physical state change; it remains water."
+      ]
+    },
+    {
+      "id": "pilot-v1-bubbles-hi",
+      "split_group": "pilot-v1-bubbles",
+      "topic_id": "reactions-signs",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "I think every liquid that bubbles is undergoing a chemical reaction. Is that correct? Explain using boiling water.",
+      "expected_facts": [
+        "Bubbles alone do not prove a chemical reaction.",
+        "Boiling water is a physical state change; it remains water."
+      ]
+    },
+    {
+      "id": "pilot-v1-bubbles-hinglish",
+      "split_group": "pilot-v1-bubbles",
+      "topic_id": "reactions-signs",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "I think every liquid that bubbles is undergoing a chemical reaction. Is that correct? Explain using boiling water.",
+      "expected_facts": [
+        "Bubbles alone do not prove a chemical reaction.",
+        "Boiling water is a physical state change; it remains water."
+      ]
+    },
+    {
+      "id": "pilot-v1-water-coefficients-en",
+      "split_group": "pilot-v1-water-coefficients",
+      "topic_id": "reactions-balance",
+      "language": "en",
+      "kind": "basic",
+      "question": "Balance H2 + O2 -> H2O and explain how the atoms match without changing formulas.",
+      "expected_facts": [
+        "2H2 + O2 -> 2H2O.",
+        "Both sides have four hydrogen atoms and two oxygen atoms; change coefficients only."
+      ]
+    },
+    {
+      "id": "pilot-v1-water-coefficients-hi",
+      "split_group": "pilot-v1-water-coefficients",
+      "topic_id": "reactions-balance",
+      "language": "hi",
+      "kind": "basic",
+      "question": "Balance H2 + O2 -> H2O and explain how the atoms match without changing formulas.",
+      "expected_facts": [
+        "2H2 + O2 -> 2H2O.",
+        "Both sides have four hydrogen atoms and two oxygen atoms; change coefficients only."
+      ]
+    },
+    {
+      "id": "pilot-v1-water-coefficients-hinglish",
+      "split_group": "pilot-v1-water-coefficients",
+      "topic_id": "reactions-balance",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "Balance H2 + O2 -> H2O and explain how the atoms match without changing formulas.",
+      "expected_facts": [
+        "2H2 + O2 -> 2H2O.",
+        "Both sides have four hydrogen atoms and two oxygen atoms; change coefficients only."
+      ]
+    },
+    {
+      "id": "pilot-v1-subscripts-en",
+      "split_group": "pilot-v1-subscripts",
+      "topic_id": "reactions-balance",
+      "language": "en",
+      "kind": "misconception",
+      "question": "Can I balance water formation by replacing H2O with H2O2? Explain why or why not.",
+      "expected_facts": [
+        "No; changing subscripts changes the substance.",
+        "H2O2 is hydrogen peroxide; use coefficients instead."
+      ]
+    },
+    {
+      "id": "pilot-v1-subscripts-hi",
+      "split_group": "pilot-v1-subscripts",
+      "topic_id": "reactions-balance",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "Can I balance water formation by replacing H2O with H2O2? Explain why or why not.",
+      "expected_facts": [
+        "No; changing subscripts changes the substance.",
+        "H2O2 is hydrogen peroxide; use coefficients instead."
+      ]
+    },
+    {
+      "id": "pilot-v1-subscripts-hinglish",
+      "split_group": "pilot-v1-subscripts",
+      "topic_id": "reactions-balance",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "Can I balance water formation by replacing H2O with H2O2? Explain why or why not.",
+      "expected_facts": [
+        "No; changing subscripts changes the substance.",
+        "H2O2 is hydrogen peroxide; use coefficients instead."
+      ]
+    },
+    {
+      "id": "pilot-v1-one-reactant-en",
+      "split_group": "pilot-v1-one-reactant",
+      "topic_id": "reactions-types",
+      "language": "en",
+      "kind": "basic",
+      "question": "What type of reaction has one reactant breaking into multiple products? Explain the pattern.",
+      "expected_facts": [
+        "Decomposition.",
+        "One reactant breaks into two or more products."
+      ]
+    },
+    {
+      "id": "pilot-v1-one-reactant-hi",
+      "split_group": "pilot-v1-one-reactant",
+      "topic_id": "reactions-types",
+      "language": "hi",
+      "kind": "basic",
+      "question": "What type of reaction has one reactant breaking into multiple products? Explain the pattern.",
+      "expected_facts": [
+        "Decomposition.",
+        "One reactant breaks into two or more products."
+      ]
+    },
+    {
+      "id": "pilot-v1-one-reactant-hinglish",
+      "split_group": "pilot-v1-one-reactant",
+      "topic_id": "reactions-types",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "What type of reaction has one reactant breaking into multiple products? Explain the pattern.",
+      "expected_facts": [
+        "Decomposition.",
+        "One reactant breaks into two or more products."
+      ]
+    },
+    {
+      "id": "pilot-v1-lime-water-en",
+      "split_group": "pilot-v1-lime-water",
+      "topic_id": "reactions-types",
+      "language": "en",
+      "kind": "misconception",
+      "question": "I think CaO + H2O -> Ca(OH)2 is decomposition because water is involved. Am I right? Explain.",
+      "expected_facts": [
+        "It is combination, not decomposition.",
+        "Two reactants combine into one product."
+      ]
+    },
+    {
+      "id": "pilot-v1-lime-water-hi",
+      "split_group": "pilot-v1-lime-water",
+      "topic_id": "reactions-types",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "I think CaO + H2O -> Ca(OH)2 is decomposition because water is involved. Am I right? Explain.",
+      "expected_facts": [
+        "It is combination, not decomposition.",
+        "Two reactants combine into one product."
+      ]
+    },
+    {
+      "id": "pilot-v1-lime-water-hinglish",
+      "split_group": "pilot-v1-lime-water",
+      "topic_id": "reactions-types",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "I think CaO + H2O -> Ca(OH)2 is decomposition because water is involved. Am I right? Explain.",
+      "expected_facts": [
+        "It is combination, not decomposition.",
+        "Two reactants combine into one product."
+      ]
+    },
+    {
+      "id": "pilot-v1-normal-angle-en",
+      "split_group": "pilot-v1-normal-angle",
+      "topic_id": "light-reflection",
+      "language": "en",
+      "kind": "basic",
+      "question": "A light ray arrives at 30 degrees to the normal. What is its angle of reflection, and why?",
+      "expected_facts": [
+        "30 degrees.",
+        "Incidence and reflection angles are equal and measured from the normal."
+      ]
+    },
+    {
+      "id": "pilot-v1-normal-angle-hi",
+      "split_group": "pilot-v1-normal-angle",
+      "topic_id": "light-reflection",
+      "language": "hi",
+      "kind": "basic",
+      "question": "A light ray arrives at 30 degrees to the normal. What is its angle of reflection, and why?",
+      "expected_facts": [
+        "30 degrees.",
+        "Incidence and reflection angles are equal and measured from the normal."
+      ]
+    },
+    {
+      "id": "pilot-v1-normal-angle-hinglish",
+      "split_group": "pilot-v1-normal-angle",
+      "topic_id": "light-reflection",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "A light ray arrives at 30 degrees to the normal. What is its angle of reflection, and why?",
+      "expected_facts": [
+        "30 degrees.",
+        "Incidence and reflection angles are equal and measured from the normal."
+      ]
+    },
+    {
+      "id": "pilot-v1-surface-angle-en",
+      "split_group": "pilot-v1-surface-angle",
+      "topic_id": "light-reflection",
+      "language": "en",
+      "kind": "misconception",
+      "question": "A light ray makes 20 degrees with the mirror surface. I say its angle of incidence is 20 degrees. Is that right? Explain the calculation.",
+      "expected_facts": [
+        "The angle of incidence is 70 degrees, not 20 degrees.",
+        "The normal is perpendicular to the surface, so 90 - 20 = 70."
+      ]
+    },
+    {
+      "id": "pilot-v1-surface-angle-hi",
+      "split_group": "pilot-v1-surface-angle",
+      "topic_id": "light-reflection",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "A light ray makes 20 degrees with the mirror surface. I say its angle of incidence is 20 degrees. Is that right? Explain the calculation.",
+      "expected_facts": [
+        "The angle of incidence is 70 degrees, not 20 degrees.",
+        "The normal is perpendicular to the surface, so 90 - 20 = 70."
+      ]
+    },
+    {
+      "id": "pilot-v1-surface-angle-hinglish",
+      "split_group": "pilot-v1-surface-angle",
+      "topic_id": "light-reflection",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "A light ray makes 20 degrees with the mirror surface. I say its angle of incidence is 20 degrees. Is that right? Explain the calculation.",
+      "expected_facts": [
+        "The angle of incidence is 70 degrees, not 20 degrees.",
+        "The normal is perpendicular to the surface, so 90 - 20 = 70."
+      ]
+    },
+    {
+      "id": "pilot-v1-mirror-distance-en",
+      "split_group": "pilot-v1-mirror-distance",
+      "topic_id": "light-images",
+      "language": "en",
+      "kind": "basic",
+      "question": "An object is 2 metres in front of a plane mirror. Where is its image, and is it upright?",
+      "expected_facts": [
+        "2 metres behind the mirror.",
+        "The image is virtual, upright and the same size as the object."
+      ]
+    },
+    {
+      "id": "pilot-v1-mirror-distance-hi",
+      "split_group": "pilot-v1-mirror-distance",
+      "topic_id": "light-images",
+      "language": "hi",
+      "kind": "basic",
+      "question": "An object is 2 metres in front of a plane mirror. Where is its image, and is it upright?",
+      "expected_facts": [
+        "2 metres behind the mirror.",
+        "The image is virtual, upright and the same size as the object."
+      ]
+    },
+    {
+      "id": "pilot-v1-mirror-distance-hinglish",
+      "split_group": "pilot-v1-mirror-distance",
+      "topic_id": "light-images",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "An object is 2 metres in front of a plane mirror. Where is its image, and is it upright?",
+      "expected_facts": [
+        "2 metres behind the mirror.",
+        "The image is virtual, upright and the same size as the object."
+      ]
+    },
+    {
+      "id": "pilot-v1-screen-en",
+      "split_group": "pilot-v1-screen",
+      "topic_id": "light-images",
+      "language": "en",
+      "kind": "misconception",
+      "question": "I think a plane mirror image can be caught on a screen because I can see it. Is this correct? Explain.",
+      "expected_facts": [
+        "No; a plane mirror forms a virtual image.",
+        "Rays only appear to meet behind the mirror rather than actually meeting there."
+      ]
+    },
+    {
+      "id": "pilot-v1-screen-hi",
+      "split_group": "pilot-v1-screen",
+      "topic_id": "light-images",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "I think a plane mirror image can be caught on a screen because I can see it. Is this correct? Explain.",
+      "expected_facts": [
+        "No; a plane mirror forms a virtual image.",
+        "Rays only appear to meet behind the mirror rather than actually meeting there."
+      ]
+    },
+    {
+      "id": "pilot-v1-screen-hinglish",
+      "split_group": "pilot-v1-screen",
+      "topic_id": "light-images",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "I think a plane mirror image can be caught on a screen because I can see it. Is this correct? Explain.",
+      "expected_facts": [
+        "No; a plane mirror forms a virtual image.",
+        "Rays only appear to meet behind the mirror rather than actually meeting there."
+      ]
+    },
+    {
+      "id": "pilot-v1-chlorophyll-en",
+      "split_group": "pilot-v1-chlorophyll",
+      "topic_id": "life-nutrition",
+      "language": "en",
+      "kind": "basic",
+      "question": "What does chlorophyll do during photosynthesis? Explain its role rather than only naming it.",
+      "expected_facts": [
+        "Chlorophyll absorbs light energy.",
+        "This energy is used to make carbohydrates from carbon dioxide and water."
+      ]
+    },
+    {
+      "id": "pilot-v1-chlorophyll-hi",
+      "split_group": "pilot-v1-chlorophyll",
+      "topic_id": "life-nutrition",
+      "language": "hi",
+      "kind": "basic",
+      "question": "What does chlorophyll do during photosynthesis? Explain its role rather than only naming it.",
+      "expected_facts": [
+        "Chlorophyll absorbs light energy.",
+        "This energy is used to make carbohydrates from carbon dioxide and water."
+      ]
+    },
+    {
+      "id": "pilot-v1-chlorophyll-hinglish",
+      "split_group": "pilot-v1-chlorophyll",
+      "topic_id": "life-nutrition",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "What does chlorophyll do during photosynthesis? Explain its role rather than only naming it.",
+      "expected_facts": [
+        "Chlorophyll absorbs light energy.",
+        "This energy is used to make carbohydrates from carbon dioxide and water."
+      ]
+    },
+    {
+      "id": "pilot-v1-gas-direction-en",
+      "split_group": "pilot-v1-gas-direction",
+      "topic_id": "life-nutrition",
+      "language": "en",
+      "kind": "misconception",
+      "question": "During photosynthesis, do green plants take in oxygen and release carbon dioxide? Explain the correct gas direction for photosynthesis.",
+      "expected_facts": [
+        "Photosynthesis uses carbon dioxide and releases oxygen.",
+        "Light energy and water are involved in carbohydrate production."
+      ]
+    },
+    {
+      "id": "pilot-v1-gas-direction-hi",
+      "split_group": "pilot-v1-gas-direction",
+      "topic_id": "life-nutrition",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "During photosynthesis, do green plants take in oxygen and release carbon dioxide? Explain the correct gas direction for photosynthesis.",
+      "expected_facts": [
+        "Photosynthesis uses carbon dioxide and releases oxygen.",
+        "Light energy and water are involved in carbohydrate production."
+      ]
+    },
+    {
+      "id": "pilot-v1-gas-direction-hinglish",
+      "split_group": "pilot-v1-gas-direction",
+      "topic_id": "life-nutrition",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "During photosynthesis, do green plants take in oxygen and release carbon dioxide? Explain the correct gas direction for photosynthesis.",
+      "expected_facts": [
+        "Photosynthesis uses carbon dioxide and releases oxygen.",
+        "Light energy and water are involved in carbohydrate production."
+      ]
+    },
+    {
+      "id": "pilot-v1-cell-energy-en",
+      "split_group": "pilot-v1-cell-energy",
+      "topic_id": "life-respiration",
+      "language": "en",
+      "kind": "basic",
+      "question": "What is cellular respiration, and how is it different from breathing?",
+      "expected_facts": [
+        "Respiration breaks down food inside cells to release usable energy.",
+        "Breathing moves air into and out of the body."
+      ]
+    },
+    {
+      "id": "pilot-v1-cell-energy-hi",
+      "split_group": "pilot-v1-cell-energy",
+      "topic_id": "life-respiration",
+      "language": "hi",
+      "kind": "basic",
+      "question": "What is cellular respiration, and how is it different from breathing?",
+      "expected_facts": [
+        "Respiration breaks down food inside cells to release usable energy.",
+        "Breathing moves air into and out of the body."
+      ]
+    },
+    {
+      "id": "pilot-v1-cell-energy-hinglish",
+      "split_group": "pilot-v1-cell-energy",
+      "topic_id": "life-respiration",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "What is cellular respiration, and how is it different from breathing?",
+      "expected_facts": [
+        "Respiration breaks down food inside cells to release usable energy.",
+        "Breathing moves air into and out of the body."
+      ]
+    },
+    {
+      "id": "pilot-v1-faster-breathing-en",
+      "split_group": "pilot-v1-faster-breathing",
+      "topic_id": "life-respiration",
+      "language": "en",
+      "kind": "misconception",
+      "question": "If I breathe faster, is the movement of air itself cellular respiration? Explain the distinction during exercise.",
+      "expected_facts": [
+        "No; air movement is breathing, not the chemical process of respiration.",
+        "Muscles need more energy during exercise; cellular respiration releases energy from food."
+      ]
+    },
+    {
+      "id": "pilot-v1-faster-breathing-hi",
+      "split_group": "pilot-v1-faster-breathing",
+      "topic_id": "life-respiration",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "If I breathe faster, is the movement of air itself cellular respiration? Explain the distinction during exercise.",
+      "expected_facts": [
+        "No; air movement is breathing, not the chemical process of respiration.",
+        "Muscles need more energy during exercise; cellular respiration releases energy from food."
+      ]
+    },
+    {
+      "id": "pilot-v1-faster-breathing-hinglish",
+      "split_group": "pilot-v1-faster-breathing",
+      "topic_id": "life-respiration",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "If I breathe faster, is the movement of air itself cellular respiration? Explain the distinction during exercise.",
+      "expected_facts": [
+        "No; air movement is breathing, not the chemical process of respiration.",
+        "Muscles need more energy during exercise; cellular respiration releases energy from food."
+      ]
+    }
+  ]
+}

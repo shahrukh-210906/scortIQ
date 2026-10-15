@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 
@@ -51,6 +52,10 @@ def read_dataset(path: str):
 
 
 def main():
+    # Support both `python ml/train.py` and importing the module for validation.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from ml.benchmark import DEFAULT_SUITE, load_suite, validate_holdout
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True)
     parser.add_argument("--revision", required=True, help="Pinned base model revision")
@@ -58,9 +63,12 @@ def main():
     parser.add_argument("--validation", required=True)
     parser.add_argument("--output", default="ml/output/scortiq-tutor")
     parser.add_argument("--validate-only", action="store_true")
+    parser.add_argument("--benchmark", type=Path, default=DEFAULT_SUITE)
     args = parser.parse_args()
     train = read_dataset(args.train)
     validation = read_dataset(args.validation)
+    benchmark, _ = load_suite(args.benchmark)
+    validate_holdout(train + validation, benchmark)
     if {r["split_group"] for r in train} & {r["split_group"] for r in validation}:
         raise ValueError("Training and validation contain overlapping question/chapter groups.")
     if {r["id"] for r in train} & {r["id"] for r in validation}:

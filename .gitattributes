@@ -1,0 +1,2 @@
+ml/benchmarks/*.json text eol=lf
+ml/benchmarks/*.sha256 text eol=lf

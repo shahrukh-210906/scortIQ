@@ -1,0 +1,2382 @@
+{
+  "metadata": {
+    "started_utc": "2026-10-15T05:35:00.301738+00:00",
+    "model": "llama3.1:latest",
+    "model_digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "runtime_version": "0.40.3",
+    "suite_sha256": "5e3ef7d59fbaecc13fa12bb325adafd3a943082d1754c9496508201746b9164c",
+    "suite_version": "class10-pilot-v1",
+    "review_status": "draft; human review pending",
+    "temperature": 0.3,
+    "max_tokens": 400,
+    "app_source_sha256": "519fc94a511be38df5e7b2c03b5ba106337b5888898ac9dcf2d25a62f3d24525",
+    "git_commit": "c592773f18e82fb03fd348e8f2e36d48ab085ac7",
+    "expected_cases": 42
+  },
+  "progress": {
+    "completed": 42,
+    "expected": 42,
+    "complete": true
+  },
+  "results": [
+    {
+      "id": "pilot-v1-melting-en",
+      "split_group": "pilot-v1-melting",
+      "topic_id": "reactions-signs",
+      "language": "en",
+      "kind": "basic",
+      "question": "Why is melting ice a physical change? Explain the reason and ask me one guiding question.",
+      "expected_facts": [
+        "It remains water; no new substance forms.",
+        "Only the physical state changes."
+      ],
+      "status": 200,
+      "seconds": 1.8,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-signs-v1:2",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why is melting ice a physical change? It remains water; no new substance forms."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:0",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A chemical reaction produces new substances. Clues can include a gas being released, a colour change, a temperature change, or a precipitate. A clue alone is not always proof: boiling water also produces bubbles but is a physical change."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:1",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "When magnesium burns, it reacts with oxygen to form magnesium oxide. The bright light and new white solid are signs of a chemical reaction."
+        }
+      ],
+      "human_review": null,
+      "reply": "Melting ice is a physical change because it remains water; no new substance forms.",
+      "citations": [
+        "pilot-reactions-signs-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-melting-hi",
+      "split_group": "pilot-v1-melting",
+      "topic_id": "reactions-signs",
+      "language": "hi",
+      "kind": "basic",
+      "question": "Why is melting ice a physical change? Explain the reason and ask me one guiding question.",
+      "expected_facts": [
+        "It remains water; no new substance forms.",
+        "Only the physical state changes."
+      ],
+      "status": 200,
+      "seconds": 1.59,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-signs-v1:2",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why is melting ice a physical change? It remains water; no new substance forms."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:0",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A chemical reaction produces new substances. Clues can include a gas being released, a colour change, a temperature change, or a precipitate. A clue alone is not always proof: boiling water also produces bubbles but is a physical change."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:1",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "When magnesium burns, it reacts with oxygen to form magnesium oxide. The bright light and new white solid are signs of a chemical reaction."
+        }
+      ],
+      "human_review": null,
+      "reply": "Melting ice ek bhautik parivartan hai kyunki yeh paani ban jaata hai, naya dravya nahin utpann hota hai.",
+      "citations": [
+        "pilot-reactions-signs-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": false,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "hota",
+          "kyunki",
+          "yeh"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-melting-hinglish",
+      "split_group": "pilot-v1-melting",
+      "topic_id": "reactions-signs",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "Why is melting ice a physical change? Explain the reason and ask me one guiding question.",
+      "expected_facts": [
+        "It remains water; no new substance forms.",
+        "Only the physical state changes."
+      ],
+      "status": 200,
+      "seconds": 2.41,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-signs-v1:2",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why is melting ice a physical change? It remains water; no new substance forms."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:0",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A chemical reaction produces new substances. Clues can include a gas being released, a colour change, a temperature change, or a precipitate. A clue alone is not always proof: boiling water also produces bubbles but is a physical change."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:1",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "When magnesium burns, it reacts with oxygen to form magnesium oxide. The bright light and new white solid are signs of a chemical reaction."
+        }
+      ],
+      "human_review": null,
+      "reply": "Melting ice hai ek physical change kyun, kyonki yeh ice pani mein badal jaata hai, lekin koi naya substance nahin banata hai. Iski wajah yeh hai ki ice ke atom pani ke atom mein badal jaate hain, lekin unke gat hain ek hi rehte hain.",
+      "citations": [
+        "pilot-reactions-signs-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "hain",
+          "kyun",
+          "mein",
+          "yeh"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-bubbles-en",
+      "split_group": "pilot-v1-bubbles",
+      "topic_id": "reactions-signs",
+      "language": "en",
+      "kind": "misconception",
+      "question": "I think every liquid that bubbles is undergoing a chemical reaction. Is that correct? Explain using boiling water.",
+      "expected_facts": [
+        "Bubbles alone do not prove a chemical reaction.",
+        "Boiling water is a physical state change; it remains water."
+      ],
+      "status": 200,
+      "seconds": 1.39,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-signs-v1:0",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A chemical reaction produces new substances. Clues can include a gas being released, a colour change, a temperature change, or a precipitate. A clue alone is not always proof: boiling water also produces bubbles but is a physical change."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:1",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "When magnesium burns, it reacts with oxygen to form magnesium oxide. The bright light and new white solid are signs of a chemical reaction."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:2",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why is melting ice a physical change? It remains water; no new substance forms."
+        }
+      ],
+      "human_review": null,
+      "reply": "No, that's not correct. Boiling water produces bubbles, but it's a physical change.",
+      "citations": [
+        "pilot-reactions-signs-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-bubbles-hi",
+      "split_group": "pilot-v1-bubbles",
+      "topic_id": "reactions-signs",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "I think every liquid that bubbles is undergoing a chemical reaction. Is that correct? Explain using boiling water.",
+      "expected_facts": [
+        "Bubbles alone do not prove a chemical reaction.",
+        "Boiling water is a physical state change; it remains water."
+      ],
+      "status": 200,
+      "seconds": 1.02,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-signs-v1:0",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A chemical reaction produces new substances. Clues can include a gas being released, a colour change, a temperature change, or a precipitate. A clue alone is not always proof: boiling water also produces bubbles but is a physical change."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:1",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "When magnesium burns, it reacts with oxygen to form magnesium oxide. The bright light and new white solid are signs of a chemical reaction."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:2",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why is melting ice a physical change? It remains water; no new substance forms."
+        }
+      ],
+      "human_review": null,
+      "reply": "नहीं, यह सही नहीं है.",
+      "citations": [
+        "pilot-reactions-signs-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 1.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-bubbles-hinglish",
+      "split_group": "pilot-v1-bubbles",
+      "topic_id": "reactions-signs",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "I think every liquid that bubbles is undergoing a chemical reaction. Is that correct? Explain using boiling water.",
+      "expected_facts": [
+        "Bubbles alone do not prove a chemical reaction.",
+        "Boiling water is a physical state change; it remains water."
+      ],
+      "status": 200,
+      "seconds": 2.47,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-signs-v1:0",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A chemical reaction produces new substances. Clues can include a gas being released, a colour change, a temperature change, or a precipitate. A clue alone is not always proof: boiling water also produces bubbles but is a physical change."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:1",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "When magnesium burns, it reacts with oxygen to form magnesium oxide. The bright light and new white solid are signs of a chemical reaction."
+        },
+        {
+          "id": "pilot-reactions-signs-v1:2",
+          "title": "Recognising a chemical reaction",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why is melting ice a physical change? It remains water; no new substance forms."
+        }
+      ],
+      "human_review": null,
+      "reply": "Kya hai, bhai? (What's up, buddy?) Bubbles in a liquid don't always mean a chemical reaction. Dekho (look) at boiling water. It produces bubbles, but it's a physical change, na (right?). No new substance forms, it's still water, paani (water). So, bubbles alone are not proof of a chemical reaction.",
+      "citations": [
+        "pilot-reactions-signs-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "kya"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-water-coefficients-en",
+      "split_group": "pilot-v1-water-coefficients",
+      "topic_id": "reactions-balance",
+      "language": "en",
+      "kind": "basic",
+      "question": "Balance H2 + O2 -> H2O and explain how the atoms match without changing formulas.",
+      "expected_facts": [
+        "2H2 + O2 -> 2H2O.",
+        "Both sides have four hydrogen atoms and two oxygen atoms; change coefficients only."
+      ],
+      "status": 200,
+      "seconds": 2.78,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-balance-v1:0",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Atoms are conserved during a chemical reaction. Balance an equation by changing coefficients in front of formulas, never the subscripts inside a formula."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:2",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why must we not change H₂O to H₂O₂ to balance water formation? Changing subscripts changes the substance: H₂O₂ is hydrogen peroxide."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:1",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "2H₂ + O₂ → 2H₂O. Both sides contain four hydrogen atoms and two oxygen atoms."
+        }
+      ],
+      "human_review": null,
+      "reply": "To balance the equation H2 + O2 -> H2O, we need to make sure the number of atoms of each element is the same on both sides of the equation. Let's start by looking at the hydrogen atoms. We have 2 hydrogen atoms on the left side (H2) and 2 hydrogen atoms on the right side (H2O). The number of hydrogen atoms is already balanced.",
+      "citations": [
+        "pilot-reactions-balance-v1:1"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-water-coefficients-hi",
+      "split_group": "pilot-v1-water-coefficients",
+      "topic_id": "reactions-balance",
+      "language": "hi",
+      "kind": "basic",
+      "question": "Balance H2 + O2 -> H2O and explain how the atoms match without changing formulas.",
+      "expected_facts": [
+        "2H2 + O2 -> 2H2O.",
+        "Both sides have four hydrogen atoms and two oxygen atoms; change coefficients only."
+      ],
+      "status": 200,
+      "seconds": 1.5,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-balance-v1:0",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Atoms are conserved during a chemical reaction. Balance an equation by changing coefficients in front of formulas, never the subscripts inside a formula."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:2",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why must we not change H₂O to H₂O₂ to balance water formation? Changing subscripts changes the substance: H₂O₂ is hydrogen peroxide."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:1",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "2H₂ + O₂ → 2H₂O. Both sides contain four hydrogen atoms and two oxygen atoms."
+        }
+      ],
+      "human_review": null,
+      "reply": "H2 + O2 -> 2H2O, kyunki dono taraf 2 hydrogen atoms aur 2 oxygen atoms hain.",
+      "citations": [
+        "pilot-reactions-balance-v1:1"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": false,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hain",
+          "kyunki"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-water-coefficients-hinglish",
+      "split_group": "pilot-v1-water-coefficients",
+      "topic_id": "reactions-balance",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "Balance H2 + O2 -> H2O and explain how the atoms match without changing formulas.",
+      "expected_facts": [
+        "2H2 + O2 -> 2H2O.",
+        "Both sides have four hydrogen atoms and two oxygen atoms; change coefficients only."
+      ],
+      "status": 200,
+      "seconds": 1.67,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-balance-v1:0",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Atoms are conserved during a chemical reaction. Balance an equation by changing coefficients in front of formulas, never the subscripts inside a formula."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:2",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why must we not change H₂O to H₂O₂ to balance water formation? Changing subscripts changes the substance: H₂O₂ is hydrogen peroxide."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:1",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "2H₂ + O₂ → 2H₂O. Both sides contain four hydrogen atoms and two oxygen atoms."
+        }
+      ],
+      "human_review": null,
+      "reply": "Kyun, humein H2 + O2 -> H2O ka sambalans karna hai. Kaise humein iska sambalans karna hai?",
+      "citations": [
+        "pilot-reactions-balance-v1:1"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": true,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "kaise",
+          "karna",
+          "kyun"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-subscripts-en",
+      "split_group": "pilot-v1-subscripts",
+      "topic_id": "reactions-balance",
+      "language": "en",
+      "kind": "misconception",
+      "question": "Can I balance water formation by replacing H2O with H2O2? Explain why or why not.",
+      "expected_facts": [
+        "No; changing subscripts changes the substance.",
+        "H2O2 is hydrogen peroxide; use coefficients instead."
+      ],
+      "status": 200,
+      "seconds": 1.33,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-balance-v1:2",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why must we not change H₂O to H₂O₂ to balance water formation? Changing subscripts changes the substance: H₂O₂ is hydrogen peroxide."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:0",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Atoms are conserved during a chemical reaction. Balance an equation by changing coefficients in front of formulas, never the subscripts inside a formula."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:1",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "2H₂ + O₂ → 2H₂O. Both sides contain four hydrogen atoms and two oxygen atoms."
+        }
+      ],
+      "human_review": null,
+      "reply": "No, you cannot balance water formation by replacing H2O with H2O2.",
+      "citations": [
+        "pilot-reactions-balance-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-subscripts-hi",
+      "split_group": "pilot-v1-subscripts",
+      "topic_id": "reactions-balance",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "Can I balance water formation by replacing H2O with H2O2? Explain why or why not.",
+      "expected_facts": [
+        "No; changing subscripts changes the substance.",
+        "H2O2 is hydrogen peroxide; use coefficients instead."
+      ],
+      "status": 200,
+      "seconds": 1.64,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-balance-v1:2",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why must we not change H₂O to H₂O₂ to balance water formation? Changing subscripts changes the substance: H₂O₂ is hydrogen peroxide."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:0",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Atoms are conserved during a chemical reaction. Balance an equation by changing coefficients in front of formulas, never the subscripts inside a formula."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:1",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "2H₂ + O₂ → 2H₂O. Both sides contain four hydrogen atoms and two oxygen atoms."
+        }
+      ],
+      "human_review": null,
+      "reply": "नहीं, आप पानी के गठन को संतुलित करने के लिए H2O को H2O2 में बदल नहीं सकते हैं।",
+      "citations": [
+        "pilot-reactions-balance-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.889,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-subscripts-hinglish",
+      "split_group": "pilot-v1-subscripts",
+      "topic_id": "reactions-balance",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "Can I balance water formation by replacing H2O with H2O2? Explain why or why not.",
+      "expected_facts": [
+        "No; changing subscripts changes the substance.",
+        "H2O2 is hydrogen peroxide; use coefficients instead."
+      ],
+      "status": 200,
+      "seconds": 1.3,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-balance-v1:2",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Why must we not change H₂O to H₂O₂ to balance water formation? Changing subscripts changes the substance: H₂O₂ is hydrogen peroxide."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:0",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Atoms are conserved during a chemical reaction. Balance an equation by changing coefficients in front of formulas, never the subscripts inside a formula."
+        },
+        {
+          "id": "pilot-reactions-balance-v1:1",
+          "title": "Balancing equations",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "2H₂ + O₂ → 2H₂O. Both sides contain four hydrogen atoms and two oxygen atoms."
+        }
+      ],
+      "human_review": null,
+      "reply": "Nahin, kyun ki H2O2 hydrogen peroxide hai, jo water nahin hai.",
+      "citations": [
+        "pilot-reactions-balance-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "kyun"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-one-reactant-en",
+      "split_group": "pilot-v1-one-reactant",
+      "topic_id": "reactions-types",
+      "language": "en",
+      "kind": "basic",
+      "question": "What type of reaction has one reactant breaking into multiple products? Explain the pattern.",
+      "expected_facts": [
+        "Decomposition.",
+        "One reactant breaks into two or more products."
+      ],
+      "status": 200,
+      "seconds": 1.17,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-types-v1:2",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Which type is a reaction with one reactant and multiple products? A decomposition reaction."
+        },
+        {
+          "id": "pilot-reactions-types-v1:0",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "In a combination reaction, two or more reactants form one product. In a decomposition reaction, one reactant breaks into two or more products. Displacement reactions involve a more reactive element replacing another."
+        },
+        {
+          "id": "pilot-reactions-types-v1:1",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "CaO + H₂O → Ca(OH)₂ is a combination reaction."
+        }
+      ],
+      "human_review": null,
+      "reply": "A decomposition reaction has one reactant breaking into multiple products.",
+      "citations": [
+        "pilot-reactions-types-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-one-reactant-hi",
+      "split_group": "pilot-v1-one-reactant",
+      "topic_id": "reactions-types",
+      "language": "hi",
+      "kind": "basic",
+      "question": "What type of reaction has one reactant breaking into multiple products? Explain the pattern.",
+      "expected_facts": [
+        "Decomposition.",
+        "One reactant breaks into two or more products."
+      ],
+      "status": 200,
+      "seconds": 1.78,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-types-v1:2",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Which type is a reaction with one reactant and multiple products? A decomposition reaction."
+        },
+        {
+          "id": "pilot-reactions-types-v1:0",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "In a combination reaction, two or more reactants form one product. In a decomposition reaction, one reactant breaks into two or more products. Displacement reactions involve a more reactive element replacing another."
+        },
+        {
+          "id": "pilot-reactions-types-v1:1",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "CaO + H₂O → Ca(OH)₂ is a combination reaction."
+        }
+      ],
+      "human_review": null,
+      "reply": "एक प्रतिक्रिया जिसमें एक प्रतिक्रियक कई उत्पादों में टूट जाता है, वह विखंडन प्रतिक्रिया है।",
+      "citations": [
+        "pilot-reactions-types-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 1.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-one-reactant-hinglish",
+      "split_group": "pilot-v1-one-reactant",
+      "topic_id": "reactions-types",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "What type of reaction has one reactant breaking into multiple products? Explain the pattern.",
+      "expected_facts": [
+        "Decomposition.",
+        "One reactant breaks into two or more products."
+      ],
+      "status": 200,
+      "seconds": 1.39,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-types-v1:2",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Which type is a reaction with one reactant and multiple products? A decomposition reaction."
+        },
+        {
+          "id": "pilot-reactions-types-v1:0",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "In a combination reaction, two or more reactants form one product. In a decomposition reaction, one reactant breaks into two or more products. Displacement reactions involve a more reactive element replacing another."
+        },
+        {
+          "id": "pilot-reactions-types-v1:1",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "CaO + H₂O → Ca(OH)₂ is a combination reaction."
+        }
+      ],
+      "human_review": null,
+      "reply": "Kya hai yeh reaction type? Hota hai yeh decomposition reaction.",
+      "citations": [
+        "pilot-reactions-types-v1:0",
+        "pilot-reactions-types-v1:1"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": true,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "hota",
+          "kya",
+          "yeh"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-lime-water-en",
+      "split_group": "pilot-v1-lime-water",
+      "topic_id": "reactions-types",
+      "language": "en",
+      "kind": "misconception",
+      "question": "I think CaO + H2O -> Ca(OH)2 is decomposition because water is involved. Am I right? Explain.",
+      "expected_facts": [
+        "It is combination, not decomposition.",
+        "Two reactants combine into one product."
+      ],
+      "status": 200,
+      "seconds": 1.42,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-types-v1:1",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "CaO + H₂O → Ca(OH)₂ is a combination reaction."
+        },
+        {
+          "id": "pilot-reactions-types-v1:2",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Which type is a reaction with one reactant and multiple products? A decomposition reaction."
+        },
+        {
+          "id": "pilot-reactions-types-v1:0",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "In a combination reaction, two or more reactants form one product. In a decomposition reaction, one reactant breaks into two or more products. Displacement reactions involve a more reactive element replacing another."
+        }
+      ],
+      "human_review": null,
+      "reply": "No, that's not correct.",
+      "citations": [
+        "pilot-reactions-types-v1:0",
+        "pilot-reactions-types-v1:1"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-lime-water-hi",
+      "split_group": "pilot-v1-lime-water",
+      "topic_id": "reactions-types",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "I think CaO + H2O -> Ca(OH)2 is decomposition because water is involved. Am I right? Explain.",
+      "expected_facts": [
+        "It is combination, not decomposition.",
+        "Two reactants combine into one product."
+      ],
+      "status": 200,
+      "seconds": 1.12,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-types-v1:1",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "CaO + H₂O → Ca(OH)₂ is a combination reaction."
+        },
+        {
+          "id": "pilot-reactions-types-v1:2",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Which type is a reaction with one reactant and multiple products? A decomposition reaction."
+        },
+        {
+          "id": "pilot-reactions-types-v1:0",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "In a combination reaction, two or more reactants form one product. In a decomposition reaction, one reactant breaks into two or more products. Displacement reactions involve a more reactive element replacing another."
+        }
+      ],
+      "human_review": null,
+      "reply": "नहीं, यह एक संयोजन प्रतिक्रिया है।",
+      "citations": [
+        "pilot-reactions-types-v1:1"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 1.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-lime-water-hinglish",
+      "split_group": "pilot-v1-lime-water",
+      "topic_id": "reactions-types",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "I think CaO + H2O -> Ca(OH)2 is decomposition because water is involved. Am I right? Explain.",
+      "expected_facts": [
+        "It is combination, not decomposition.",
+        "Two reactants combine into one product."
+      ],
+      "status": 200,
+      "seconds": 1.41,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-reactions-types-v1:1",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "CaO + H₂O → Ca(OH)₂ is a combination reaction."
+        },
+        {
+          "id": "pilot-reactions-types-v1:2",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Which type is a reaction with one reactant and multiple products? A decomposition reaction."
+        },
+        {
+          "id": "pilot-reactions-types-v1:0",
+          "title": "Types of reactions",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "In a combination reaction, two or more reactants form one product. In a decomposition reaction, one reactant breaks into two or more products. Displacement reactions involve a more reactive element replacing another."
+        }
+      ],
+      "human_review": null,
+      "reply": "Kyun nahin, yeh combination reaction hai. Dekho, ek hi product ban raha hai, Ca(OH)2.",
+      "citations": [
+        "pilot-reactions-types-v1:1"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "kyun",
+          "yeh"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-normal-angle-en",
+      "split_group": "pilot-v1-normal-angle",
+      "topic_id": "light-reflection",
+      "language": "en",
+      "kind": "basic",
+      "question": "A light ray arrives at 30 degrees to the normal. What is its angle of reflection, and why?",
+      "expected_facts": [
+        "30 degrees.",
+        "Incidence and reflection angles are equal and measured from the normal."
+      ],
+      "status": 200,
+      "seconds": 1.62,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-reflection-v1:2",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "If a ray makes 20° with the mirror surface, what is its angle of incidence? 70°, because the normal is perpendicular to the surface."
+        },
+        {
+          "id": "pilot-light-reflection-v1:0",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "The angle of incidence equals the angle of reflection. Both angles are measured from the normal, an imaginary line perpendicular to the surface. The incident ray, reflected ray and normal lie in the same plane."
+        },
+        {
+          "id": "pilot-light-reflection-v1:1",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A ray arriving at 30° to the normal leaves at 30° to the normal."
+        }
+      ],
+      "human_review": null,
+      "reply": "The angle of reflection is 30 degrees. This is because the angle of incidence equals the angle of reflection, as stated in the laws of reflection.",
+      "citations": [
+        "pilot-light-reflection-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-normal-angle-hi",
+      "split_group": "pilot-v1-normal-angle",
+      "topic_id": "light-reflection",
+      "language": "hi",
+      "kind": "basic",
+      "question": "A light ray arrives at 30 degrees to the normal. What is its angle of reflection, and why?",
+      "expected_facts": [
+        "30 degrees.",
+        "Incidence and reflection angles are equal and measured from the normal."
+      ],
+      "status": 200,
+      "seconds": 1.47,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-reflection-v1:2",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "If a ray makes 20° with the mirror surface, what is its angle of incidence? 70°, because the normal is perpendicular to the surface."
+        },
+        {
+          "id": "pilot-light-reflection-v1:0",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "The angle of incidence equals the angle of reflection. Both angles are measured from the normal, an imaginary line perpendicular to the surface. The incident ray, reflected ray and normal lie in the same plane."
+        },
+        {
+          "id": "pilot-light-reflection-v1:1",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A ray arriving at 30° to the normal leaves at 30° to the normal."
+        }
+      ],
+      "human_review": null,
+      "reply": "Pratibimba ki kshamta ka niyam hai ki pratikiran kee koon hai aakarshak kee koon. ",
+      "citations": [
+        "pilot-light-reflection-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": false,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-normal-angle-hinglish",
+      "split_group": "pilot-v1-normal-angle",
+      "topic_id": "light-reflection",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "A light ray arrives at 30 degrees to the normal. What is its angle of reflection, and why?",
+      "expected_facts": [
+        "30 degrees.",
+        "Incidence and reflection angles are equal and measured from the normal."
+      ],
+      "status": 200,
+      "seconds": 1.64,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-reflection-v1:2",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "If a ray makes 20° with the mirror surface, what is its angle of incidence? 70°, because the normal is perpendicular to the surface."
+        },
+        {
+          "id": "pilot-light-reflection-v1:0",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "The angle of incidence equals the angle of reflection. Both angles are measured from the normal, an imaginary line perpendicular to the surface. The incident ray, reflected ray and normal lie in the same plane."
+        },
+        {
+          "id": "pilot-light-reflection-v1:1",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A ray arriving at 30° to the normal leaves at 30° to the normal."
+        }
+      ],
+      "human_review": null,
+      "reply": "Kyun, angle of reflection hoga 30 degree, kyonki angle of incidence aur angle of reflection ek hi hota hai.",
+      "citations": [
+        "pilot-light-reflection-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "hota",
+          "kyun"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-surface-angle-en",
+      "split_group": "pilot-v1-surface-angle",
+      "topic_id": "light-reflection",
+      "language": "en",
+      "kind": "misconception",
+      "question": "A light ray makes 20 degrees with the mirror surface. I say its angle of incidence is 20 degrees. Is that right? Explain the calculation.",
+      "expected_facts": [
+        "The angle of incidence is 70 degrees, not 20 degrees.",
+        "The normal is perpendicular to the surface, so 90 - 20 = 70."
+      ],
+      "status": 200,
+      "seconds": 1.11,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-reflection-v1:2",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "If a ray makes 20° with the mirror surface, what is its angle of incidence? 70°, because the normal is perpendicular to the surface."
+        },
+        {
+          "id": "pilot-light-reflection-v1:0",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "The angle of incidence equals the angle of reflection. Both angles are measured from the normal, an imaginary line perpendicular to the surface. The incident ray, reflected ray and normal lie in the same plane."
+        },
+        {
+          "id": "pilot-light-reflection-v1:1",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A ray arriving at 30° to the normal leaves at 30° to the normal."
+        }
+      ],
+      "human_review": null,
+      "reply": "No, that's not correct.",
+      "citations": [
+        "pilot-light-reflection-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-surface-angle-hi",
+      "split_group": "pilot-v1-surface-angle",
+      "topic_id": "light-reflection",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "A light ray makes 20 degrees with the mirror surface. I say its angle of incidence is 20 degrees. Is that right? Explain the calculation.",
+      "expected_facts": [
+        "The angle of incidence is 70 degrees, not 20 degrees.",
+        "The normal is perpendicular to the surface, so 90 - 20 = 70."
+      ],
+      "status": 200,
+      "seconds": 1.19,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-reflection-v1:2",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "If a ray makes 20° with the mirror surface, what is its angle of incidence? 70°, because the normal is perpendicular to the surface."
+        },
+        {
+          "id": "pilot-light-reflection-v1:0",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "The angle of incidence equals the angle of reflection. Both angles are measured from the normal, an imaginary line perpendicular to the surface. The incident ray, reflected ray and normal lie in the same plane."
+        },
+        {
+          "id": "pilot-light-reflection-v1:1",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A ray arriving at 30° to the normal leaves at 30° to the normal."
+        }
+      ],
+      "human_review": null,
+      "reply": "नहीं, यह सही नहीं है।",
+      "citations": [
+        "pilot-light-reflection-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 1.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-surface-angle-hinglish",
+      "split_group": "pilot-v1-surface-angle",
+      "topic_id": "light-reflection",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "A light ray makes 20 degrees with the mirror surface. I say its angle of incidence is 20 degrees. Is that right? Explain the calculation.",
+      "expected_facts": [
+        "The angle of incidence is 70 degrees, not 20 degrees.",
+        "The normal is perpendicular to the surface, so 90 - 20 = 70."
+      ],
+      "status": 200,
+      "seconds": 1.49,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-reflection-v1:2",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "If a ray makes 20° with the mirror surface, what is its angle of incidence? 70°, because the normal is perpendicular to the surface."
+        },
+        {
+          "id": "pilot-light-reflection-v1:0",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "The angle of incidence equals the angle of reflection. Both angles are measured from the normal, an imaginary line perpendicular to the surface. The incident ray, reflected ray and normal lie in the same plane."
+        },
+        {
+          "id": "pilot-light-reflection-v1:1",
+          "title": "Laws of reflection",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A ray arriving at 30° to the normal leaves at 30° to the normal."
+        }
+      ],
+      "human_review": null,
+      "reply": "Kya aapko pata hai kaise angle of incidence ka calculation hota hai?",
+      "citations": [
+        "pilot-light-reflection-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": true,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "hota",
+          "kaise",
+          "kya"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-mirror-distance-en",
+      "split_group": "pilot-v1-mirror-distance",
+      "topic_id": "light-images",
+      "language": "en",
+      "kind": "basic",
+      "question": "An object is 2 metres in front of a plane mirror. Where is its image, and is it upright?",
+      "expected_facts": [
+        "2 metres behind the mirror.",
+        "The image is virtual, upright and the same size as the object."
+      ],
+      "status": 200,
+      "seconds": 1.52,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-images-v1:1",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "An object 2 m in front of a plane mirror has its image 2 m behind the mirror."
+        },
+        {
+          "id": "pilot-light-images-v1:0",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A plane mirror forms a virtual, upright image of the same size as the object. The image appears as far behind the mirror as the object is in front."
+        },
+        {
+          "id": "pilot-light-images-v1:2",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Can a plane mirror's virtual image be projected onto a screen? No. The rays only appear to come from behind the mirror."
+        }
+      ],
+      "human_review": null,
+      "reply": "The image is 2 metres behind the mirror, and it is upright.",
+      "citations": [
+        "pilot-light-images-v1:0",
+        "pilot-light-images-v1:1"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-mirror-distance-hi",
+      "split_group": "pilot-v1-mirror-distance",
+      "topic_id": "light-images",
+      "language": "hi",
+      "kind": "basic",
+      "question": "An object is 2 metres in front of a plane mirror. Where is its image, and is it upright?",
+      "expected_facts": [
+        "2 metres behind the mirror.",
+        "The image is virtual, upright and the same size as the object."
+      ],
+      "status": 200,
+      "seconds": 1.67,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-images-v1:1",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "An object 2 m in front of a plane mirror has its image 2 m behind the mirror."
+        },
+        {
+          "id": "pilot-light-images-v1:0",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A plane mirror forms a virtual, upright image of the same size as the object. The image appears as far behind the mirror as the object is in front."
+        },
+        {
+          "id": "pilot-light-images-v1:2",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Can a plane mirror's virtual image be projected onto a screen? No. The rays only appear to come from behind the mirror."
+        }
+      ],
+      "human_review": null,
+      "reply": "Aapke prateek ka pratibimba 2 metre peeche hai, aur yeh uddharak hai.",
+      "citations": [
+        "pilot-light-images-v1:0",
+        "pilot-light-images-v1:1"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": false,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "yeh"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-mirror-distance-hinglish",
+      "split_group": "pilot-v1-mirror-distance",
+      "topic_id": "light-images",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "An object is 2 metres in front of a plane mirror. Where is its image, and is it upright?",
+      "expected_facts": [
+        "2 metres behind the mirror.",
+        "The image is virtual, upright and the same size as the object."
+      ],
+      "status": 503,
+      "seconds": 1.7,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-images-v1:1",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "An object 2 m in front of a plane mirror has its image 2 m behind the mirror."
+        },
+        {
+          "id": "pilot-light-images-v1:0",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A plane mirror forms a virtual, upright image of the same size as the object. The image appears as far behind the mirror as the object is in front."
+        },
+        {
+          "id": "pilot-light-images-v1:2",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Can a plane mirror's virtual image be projected onto a screen? No. The rays only appear to come from behind the mirror."
+        }
+      ],
+      "human_review": null,
+      "error": "The tutor could not respond reliably. Your lesson is saved; try again shortly."
+    },
+    {
+      "id": "pilot-v1-screen-en",
+      "split_group": "pilot-v1-screen",
+      "topic_id": "light-images",
+      "language": "en",
+      "kind": "misconception",
+      "question": "I think a plane mirror image can be caught on a screen because I can see it. Is this correct? Explain.",
+      "expected_facts": [
+        "No; a plane mirror forms a virtual image.",
+        "Rays only appear to meet behind the mirror rather than actually meeting there."
+      ],
+      "status": 200,
+      "seconds": 1.81,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-images-v1:2",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Can a plane mirror's virtual image be projected onto a screen? No. The rays only appear to come from behind the mirror."
+        },
+        {
+          "id": "pilot-light-images-v1:0",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A plane mirror forms a virtual, upright image of the same size as the object. The image appears as far behind the mirror as the object is in front."
+        },
+        {
+          "id": "pilot-light-images-v1:1",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "An object 2 m in front of a plane mirror has its image 2 m behind the mirror."
+        }
+      ],
+      "human_review": null,
+      "reply": "Not exactly. The rays of light from the object only appear to come from behind the mirror, but they don't actually exist there. This means you can't project the virtual image onto a screen.",
+      "citations": [
+        "pilot-light-images-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-screen-hi",
+      "split_group": "pilot-v1-screen",
+      "topic_id": "light-images",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "I think a plane mirror image can be caught on a screen because I can see it. Is this correct? Explain.",
+      "expected_facts": [
+        "No; a plane mirror forms a virtual image.",
+        "Rays only appear to meet behind the mirror rather than actually meeting there."
+      ],
+      "status": 200,
+      "seconds": 1.05,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-images-v1:2",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Can a plane mirror's virtual image be projected onto a screen? No. The rays only appear to come from behind the mirror."
+        },
+        {
+          "id": "pilot-light-images-v1:0",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A plane mirror forms a virtual, upright image of the same size as the object. The image appears as far behind the mirror as the object is in front."
+        },
+        {
+          "id": "pilot-light-images-v1:1",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "An object 2 m in front of a plane mirror has its image 2 m behind the mirror."
+        }
+      ],
+      "human_review": null,
+      "reply": "नहीं, यह सही नहीं है।",
+      "citations": [
+        "pilot-light-images-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 1.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-screen-hinglish",
+      "split_group": "pilot-v1-screen",
+      "topic_id": "light-images",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "I think a plane mirror image can be caught on a screen because I can see it. Is this correct? Explain.",
+      "expected_facts": [
+        "No; a plane mirror forms a virtual image.",
+        "Rays only appear to meet behind the mirror rather than actually meeting there."
+      ],
+      "status": 503,
+      "seconds": 4.83,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-light-images-v1:2",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Can a plane mirror's virtual image be projected onto a screen? No. The rays only appear to come from behind the mirror."
+        },
+        {
+          "id": "pilot-light-images-v1:0",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A plane mirror forms a virtual, upright image of the same size as the object. The image appears as far behind the mirror as the object is in front."
+        },
+        {
+          "id": "pilot-light-images-v1:1",
+          "title": "Plane mirror images",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "An object 2 m in front of a plane mirror has its image 2 m behind the mirror."
+        }
+      ],
+      "human_review": null,
+      "error": "The tutor could not respond reliably. Your lesson is saved; try again shortly."
+    },
+    {
+      "id": "pilot-v1-chlorophyll-en",
+      "split_group": "pilot-v1-chlorophyll",
+      "topic_id": "life-nutrition",
+      "language": "en",
+      "kind": "basic",
+      "question": "What does chlorophyll do during photosynthesis? Explain its role rather than only naming it.",
+      "expected_facts": [
+        "Chlorophyll absorbs light energy.",
+        "This energy is used to make carbohydrates from carbon dioxide and water."
+      ],
+      "status": 200,
+      "seconds": 1.45,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-nutrition-v1:2",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "What is the role of chlorophyll? It absorbs the light energy used in photosynthesis."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:0",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Green plants use light energy to make carbohydrates from carbon dioxide and water during photosynthesis. Chlorophyll absorbs light, and oxygen is released."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:1",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A leaf takes in carbon dioxide through stomata. Roots absorb the water needed for photosynthesis."
+        }
+      ],
+      "human_review": null,
+      "reply": "Chlorophyll absorbs the light energy used in photosynthesis.",
+      "citations": [
+        "pilot-life-nutrition-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-chlorophyll-hi",
+      "split_group": "pilot-v1-chlorophyll",
+      "topic_id": "life-nutrition",
+      "language": "hi",
+      "kind": "basic",
+      "question": "What does chlorophyll do during photosynthesis? Explain its role rather than only naming it.",
+      "expected_facts": [
+        "Chlorophyll absorbs light energy.",
+        "This energy is used to make carbohydrates from carbon dioxide and water."
+      ],
+      "status": 200,
+      "seconds": 2.27,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-nutrition-v1:2",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "What is the role of chlorophyll? It absorbs the light energy used in photosynthesis."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:0",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Green plants use light energy to make carbohydrates from carbon dioxide and water during photosynthesis. Chlorophyll absorbs light, and oxygen is released."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:1",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A leaf takes in carbon dioxide through stomata. Roots absorb the water needed for photosynthesis."
+        }
+      ],
+      "human_review": null,
+      "reply": "च्लोरोफिल का कार्य है कि वह प्रकाश ऊर्जा को अवशोषित करता है और फिर इस ऊर्जा का उपयोग श्वसन प्रक्रिया में किया जाता है।",
+      "citations": [
+        "pilot-life-nutrition-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 1.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-chlorophyll-hinglish",
+      "split_group": "pilot-v1-chlorophyll",
+      "topic_id": "life-nutrition",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "What does chlorophyll do during photosynthesis? Explain its role rather than only naming it.",
+      "expected_facts": [
+        "Chlorophyll absorbs light energy.",
+        "This energy is used to make carbohydrates from carbon dioxide and water."
+      ],
+      "status": 200,
+      "seconds": 1.58,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-nutrition-v1:2",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "What is the role of chlorophyll? It absorbs the light energy used in photosynthesis."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:0",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Green plants use light energy to make carbohydrates from carbon dioxide and water during photosynthesis. Chlorophyll absorbs light, and oxygen is released."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:1",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A leaf takes in carbon dioxide through stomata. Roots absorb the water needed for photosynthesis."
+        }
+      ],
+      "human_review": null,
+      "reply": "Chlorophyll ka kaam photosynthesis mein kya hota hai?",
+      "citations": [
+        "pilot-life-nutrition-v1:0",
+        "pilot-life-nutrition-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": true,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "hota",
+          "kya",
+          "mein"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-gas-direction-en",
+      "split_group": "pilot-v1-gas-direction",
+      "topic_id": "life-nutrition",
+      "language": "en",
+      "kind": "misconception",
+      "question": "During photosynthesis, do green plants take in oxygen and release carbon dioxide? Explain the correct gas direction for photosynthesis.",
+      "expected_facts": [
+        "Photosynthesis uses carbon dioxide and releases oxygen.",
+        "Light energy and water are involved in carbohydrate production."
+      ],
+      "status": 200,
+      "seconds": 1.36,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-nutrition-v1:0",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Green plants use light energy to make carbohydrates from carbon dioxide and water during photosynthesis. Chlorophyll absorbs light, and oxygen is released."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:1",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A leaf takes in carbon dioxide through stomata. Roots absorb the water needed for photosynthesis."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:2",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "What is the role of chlorophyll? It absorbs the light energy used in photosynthesis."
+        }
+      ],
+      "human_review": null,
+      "reply": "No, green plants do not take in oxygen and release carbon dioxide during photosynthesis.",
+      "citations": [
+        "pilot-life-nutrition-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-gas-direction-hi",
+      "split_group": "pilot-v1-gas-direction",
+      "topic_id": "life-nutrition",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "During photosynthesis, do green plants take in oxygen and release carbon dioxide? Explain the correct gas direction for photosynthesis.",
+      "expected_facts": [
+        "Photosynthesis uses carbon dioxide and releases oxygen.",
+        "Light energy and water are involved in carbohydrate production."
+      ],
+      "status": 200,
+      "seconds": 1.45,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-nutrition-v1:0",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Green plants use light energy to make carbohydrates from carbon dioxide and water during photosynthesis. Chlorophyll absorbs light, and oxygen is released."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:1",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A leaf takes in carbon dioxide through stomata. Roots absorb the water needed for photosynthesis."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:2",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "What is the role of chlorophyll? It absorbs the light energy used in photosynthesis."
+        }
+      ],
+      "human_review": null,
+      "reply": "चलो देखें कि फोटोसिंथेसिस में क्या होता है।",
+      "citations": [
+        "pilot-life-nutrition-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 1.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-gas-direction-hinglish",
+      "split_group": "pilot-v1-gas-direction",
+      "topic_id": "life-nutrition",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "During photosynthesis, do green plants take in oxygen and release carbon dioxide? Explain the correct gas direction for photosynthesis.",
+      "expected_facts": [
+        "Photosynthesis uses carbon dioxide and releases oxygen.",
+        "Light energy and water are involved in carbohydrate production."
+      ],
+      "status": 200,
+      "seconds": 1.69,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-nutrition-v1:0",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Green plants use light energy to make carbohydrates from carbon dioxide and water during photosynthesis. Chlorophyll absorbs light, and oxygen is released."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:1",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "A leaf takes in carbon dioxide through stomata. Roots absorb the water needed for photosynthesis."
+        },
+        {
+          "id": "pilot-life-nutrition-v1:2",
+          "title": "Nutrition in plants",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "What is the role of chlorophyll? It absorbs the light energy used in photosynthesis."
+        }
+      ],
+      "human_review": null,
+      "reply": "Photosynthesis mein, green plants oxygen nahi lete hain aur carbon dioxide nahi dete hain. Kyun? Kaise photosynthesis hota hai?",
+      "citations": [
+        "pilot-life-nutrition-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "hain",
+          "hota",
+          "kaise",
+          "kyun",
+          "mein",
+          "nahi"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-cell-energy-en",
+      "split_group": "pilot-v1-cell-energy",
+      "topic_id": "life-respiration",
+      "language": "en",
+      "kind": "basic",
+      "question": "What is cellular respiration, and how is it different from breathing?",
+      "expected_facts": [
+        "Respiration breaks down food inside cells to release usable energy.",
+        "Breathing moves air into and out of the body."
+      ],
+      "status": 200,
+      "seconds": 2.03,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-respiration-v1:2",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Are breathing and cellular respiration the same process? No. Breathing exchanges air; respiration releases energy from food in cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:0",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Cells break down food to release usable energy. Aerobic respiration uses oxygen. Breathing moves air into and out of the body; cellular respiration is a chemical process inside cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:1",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "During exercise, muscles need more energy, so breathing and heart rate usually increase."
+        }
+      ],
+      "human_review": null,
+      "reply": "Cellular respiration is a chemical process inside cells that breaks down food to release usable energy. It's different from breathing, which is the exchange of air in and out of the body.",
+      "citations": [
+        "pilot-life-respiration-v1:0",
+        "pilot-life-respiration-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-cell-energy-hi",
+      "split_group": "pilot-v1-cell-energy",
+      "topic_id": "life-respiration",
+      "language": "hi",
+      "kind": "basic",
+      "question": "What is cellular respiration, and how is it different from breathing?",
+      "expected_facts": [
+        "Respiration breaks down food inside cells to release usable energy.",
+        "Breathing moves air into and out of the body."
+      ],
+      "status": 200,
+      "seconds": 3.14,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-respiration-v1:2",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Are breathing and cellular respiration the same process? No. Breathing exchanges air; respiration releases energy from food in cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:0",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Cells break down food to release usable energy. Aerobic respiration uses oxygen. Breathing moves air into and out of the body; cellular respiration is a chemical process inside cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:1",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "During exercise, muscles need more energy, so breathing and heart rate usually increase."
+        }
+      ],
+      "human_review": null,
+      "reply": "cellular respiration hai, jo khaane kee avashyaktaa kee urja ko uthaataa hai. Yah prakriya keval cellon mein hoti hai. Haalanki, pranaaamanaa (breathing) kee prakriya se alag hai, jahaan hamaare shareer kee aaspaas kee aavaz kee pranaaamanaa hoti hai.",
+      "citations": [
+        "pilot-life-respiration-v1:2",
+        "pilot-life-respiration-v1:0"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": false,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "hoti",
+          "mein"
+        ]
+      }
+    },
+    {
+      "id": "pilot-v1-cell-energy-hinglish",
+      "split_group": "pilot-v1-cell-energy",
+      "topic_id": "life-respiration",
+      "language": "hinglish",
+      "kind": "basic",
+      "question": "What is cellular respiration, and how is it different from breathing?",
+      "expected_facts": [
+        "Respiration breaks down food inside cells to release usable energy.",
+        "Breathing moves air into and out of the body."
+      ],
+      "status": 503,
+      "seconds": 2.17,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-respiration-v1:2",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Are breathing and cellular respiration the same process? No. Breathing exchanges air; respiration releases energy from food in cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:0",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Cells break down food to release usable energy. Aerobic respiration uses oxygen. Breathing moves air into and out of the body; cellular respiration is a chemical process inside cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:1",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "During exercise, muscles need more energy, so breathing and heart rate usually increase."
+        }
+      ],
+      "human_review": null,
+      "error": "The tutor could not respond reliably. Your lesson is saved; try again shortly."
+    },
+    {
+      "id": "pilot-v1-faster-breathing-en",
+      "split_group": "pilot-v1-faster-breathing",
+      "topic_id": "life-respiration",
+      "language": "en",
+      "kind": "misconception",
+      "question": "If I breathe faster, is the movement of air itself cellular respiration? Explain the distinction during exercise.",
+      "expected_facts": [
+        "No; air movement is breathing, not the chemical process of respiration.",
+        "Muscles need more energy during exercise; cellular respiration releases energy from food."
+      ],
+      "status": 200,
+      "seconds": 1.78,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-respiration-v1:0",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Cells break down food to release usable energy. Aerobic respiration uses oxygen. Breathing moves air into and out of the body; cellular respiration is a chemical process inside cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:2",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Are breathing and cellular respiration the same process? No. Breathing exchanges air; respiration releases energy from food in cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:1",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "During exercise, muscles need more energy, so breathing and heart rate usually increase."
+        }
+      ],
+      "human_review": null,
+      "reply": "No, breathing faster is not cellular respiration. Cellular respiration is a chemical process inside cells that releases energy from food.",
+      "citations": [
+        "pilot-life-respiration-v1:2",
+        "pilot-life-respiration-v1:1"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-faster-breathing-hi",
+      "split_group": "pilot-v1-faster-breathing",
+      "topic_id": "life-respiration",
+      "language": "hi",
+      "kind": "misconception",
+      "question": "If I breathe faster, is the movement of air itself cellular respiration? Explain the distinction during exercise.",
+      "expected_facts": [
+        "No; air movement is breathing, not the chemical process of respiration.",
+        "Muscles need more energy during exercise; cellular respiration releases energy from food."
+      ],
+      "status": 200,
+      "seconds": 1.33,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-respiration-v1:0",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Cells break down food to release usable energy. Aerobic respiration uses oxygen. Breathing moves air into and out of the body; cellular respiration is a chemical process inside cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:2",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Are breathing and cellular respiration the same process? No. Breathing exchanges air; respiration releases energy from food in cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:1",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "During exercise, muscles need more energy, so breathing and heart rate usually increase."
+        }
+      ],
+      "human_review": null,
+      "reply": "नहीं, श्वसन और कोशिकीय श्वसन अलग-अलग प्रक्रियाएं हैं।",
+      "citations": [
+        "pilot-life-respiration-v1:2"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 1.0,
+        "roman_hindi_markers": []
+      }
+    },
+    {
+      "id": "pilot-v1-faster-breathing-hinglish",
+      "split_group": "pilot-v1-faster-breathing",
+      "topic_id": "life-respiration",
+      "language": "hinglish",
+      "kind": "misconception",
+      "question": "If I breathe faster, is the movement of air itself cellular respiration? Explain the distinction during exercise.",
+      "expected_facts": [
+        "No; air movement is breathing, not the chemical process of respiration.",
+        "Muscles need more energy during exercise; cellular respiration releases energy from food."
+      ],
+      "status": 200,
+      "seconds": 2.25,
+      "retrieved_evidence": [
+        {
+          "id": "pilot-life-respiration-v1:0",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Cells break down food to release usable energy. Aerobic respiration uses oxygen. Breathing moves air into and out of the body; cellular respiration is a chemical process inside cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:2",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "Are breathing and cellular respiration the same process? No. Breathing exchanges air; respiration releases energy from food in cells."
+        },
+        {
+          "id": "pilot-life-respiration-v1:1",
+          "title": "Cellular respiration",
+          "version": "pilot-1",
+          "review_status": "draft",
+          "reviewer": null,
+          "rights": "Original ScortIQ project notes; internal pilot only",
+          "excerpt": "During exercise, muscles need more energy, so breathing and heart rate usually increase."
+        }
+      ],
+      "human_review": null,
+      "reply": "Nahin, hamaare shareer mein aane wala oxygen aur nikalne wala carbon dioxide, yehi hai breathing. Cellular respiration hai yeh process jismein hume energy milti hai, jo ki food se hoti hai.",
+      "citations": [
+        "pilot-life-respiration-v1:2",
+        "pilot-life-respiration-v1:1"
+      ],
+      "checks": {
+        "citation_ids_valid": true,
+        "language_signal": true,
+        "one_question_mark": false,
+        "devanagari_letter_ratio": 0.0,
+        "roman_hindi_markers": [
+          "hai",
+          "hoti",
+          "mein",
+          "yeh"
+        ]
+      }
+    }
+  ]
+}

@@ -34,7 +34,8 @@ See `CLASS10_PRODUCT_PLAN.md` and `CLASS10_CURRICULUM.md`. This direction supers
 - [ ] Add quiz attempt history and a way to reopen previous answer explanations.
 - [ ] Add authorized staff report triage and curriculum review tools.
 - [ ] Add reviewed content versions and richer retrieval with factual-support evaluation.
-- [ ] Build a frozen tutor benchmark and a reviewed training dataset.
+- [x] Build a frozen draft tutor benchmark and run an initial local evaluation (42 cases across seven topics and three languages).
+- [ ] Obtain educator review of benchmark facts/replies and prepare a separate reviewed training dataset without holdout leakage.
 - [x] Connect existing local Ollama inference and document a no-paid-API training path.
 
 ## External setup and release work
