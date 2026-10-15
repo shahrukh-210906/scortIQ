@@ -1,0 +1,23 @@
+{
+  "status": "unreviewed qualitative samples, not benchmark scores",
+  "samples": [
+    {
+      "id": "behavior-validation-double-2-en",
+      "reference": "{\"reply\": \"Let's use one small step. Double means multiply by 2. Double of 2 is 4. Which operation helps us here?\", \"citations\": [\"original-double-2:0\"]}",
+      "base": "To double 2, you simply need to multiply it by 2. The result will be 4.\n\nGuiding Question:\nWhat does it mean when we say something is doubled or multiplied by 2?",
+      "adapter": "{\"reply\": \"Double means multiply by 2. Double of 2 is 4.\", \"citations\": [\"original-double-2:0\"]}"
+    },
+    {
+      "id": "behavior-validation-double-2-hi",
+      "reference": "{\"reply\": \"इसे एक छोटे चरण में समझें। गणना है: दोगुना करने के लिए 2 से गुणा करें। 2 का दोगुना 4 है। यहाँ कौन-सी गणितीय क्रिया काम आती है?\", \"citations\": [\"original-double-2:0\"]}",
+      "base": "To double 2, you simply need to multiply it by 2. The result will be 4.\n\nQuestion: How do you find double of a number?",
+      "adapter": "{\"reply\": \"Double means multiply by 2. Double of 2 is 4.\", \"citations\": [\"original-double-2:0\"]}"
+    },
+    {
+      "id": "behavior-validation-double-2-hinglish",
+      "reference": "{\"reply\": \"Chalo ek chhote step se samjhte hain. Double means multiply by 2. Double of 2 is 4. Yahan kaunsi operation kaam aati hai?\", \"citations\": [\"original-double-2:0\"]}",
+      "base": "To double 2, you simply need to multiply it by 2. The result will be 4.\n\nGuiding Question:\nWhat does it mean when we say something is doubled or multiplied by 2?",
+      "adapter": "{\"reply\": \"Double means multiply by 2. Double of 2 is 4.\", \"citations\": [\"original-double-2:0\"]}"
+    }
+  ]
+}

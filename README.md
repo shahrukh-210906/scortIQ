@@ -175,3 +175,7 @@ The next development step added a [frozen draft benchmark](ml/benchmarks/README.
 ## Adaptive tutoring
 
 Opt-in per-student/topic feedback now adapts explanation styles through a private bandit policy. Enable it in Settings; students can disable or forget saved feedback. Teacher support remains in force. See [adaptive tutoring](ADAPTIVE_TUTORING.md). This changes the teaching policy, not shared model weights.
+
+## First local fine-tuning experiment
+
+A real 12-step QLoRA experiment on Qwen2.5 1.5B saved a local adapter using original synthetic arithmetic/format examples, separate from the live Llama tutor. Validation loss decreased from 3.09 to 1.22, but inspection samples still failed Hindi/Hinglish and guiding-question instructions. The adapter is not deployed or approved for teaching. [Results, raw samples and reproduction](ml/evaluations/behavior-experiment-v1/report.md) are recorded; weights remain local and no student data was used. The complete NCERT training corpus and educator evaluation remain pending.

@@ -4,6 +4,9 @@ dist/
 .env.*
 !.env.example
 .venv/
+.venv-ml/
+ml/output/
+ml/cache/
 __pycache__/
 *.pyc
 *.db

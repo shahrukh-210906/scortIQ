@@ -16,6 +16,20 @@ from ml.benchmark import (
 
 
 class BenchmarkTests(unittest.TestCase):
+    def test_behavior_experiment_requires_explicit_unreviewed_opt_in(self):
+        from ml.train import read_dataset
+
+        root = Path(__file__).resolve().parents[2] / "ml/data/behavior-experiment-v1"
+        with self.assertRaisesRegex(ValueError, "review and provenance"):
+            read_dataset(str(root / "train.jsonl"))
+        train = read_dataset(str(root / "train.jsonl"), allow_unreviewed=True)
+        validation = read_dataset(str(root / "validation.jsonl"), allow_unreviewed=True)
+        self.assertEqual((len(train), len(validation)), (72, 24))
+        self.assertFalse({r["split_group"] for r in train} & {r["split_group"] for r in validation})
+        self.assertTrue(all(row["reviewed"] is False for row in train + validation))
+        suite, _ = load_suite()
+        validate_holdout(train + validation, suite)
+
     def test_frozen_coverage_and_tamper_detection(self):
         suite, digest = load_suite()
         self.assertEqual(len(suite["cases"]), 42)

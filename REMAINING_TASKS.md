@@ -50,3 +50,8 @@ Commit and push each completed task separately after relevant validation. Report
 ## Student adaptation — 15 October 2026
 - [x] Opt-in private per-student/topic explanation feedback, bandit selection, teacher overrides and reset controls.
 - [ ] Evaluate learning gains with educator-defined outcomes; current rewards are reported helpfulness only.
+
+## Fine-tuning experiment — 15 October 2026
+- [x] Prepare a separate GPU training environment and run an original synthetic QLoRA behavior experiment; save the local adapter, package versions, metrics and sample comparisons.
+- [ ] Produce educator-reviewed, licensed Class 10 examples; improve Hindi/Hinglish and guiding-question behavior before considering deployment.
+- [ ] Independently evaluate factual accuracy and the actual serving artifact. Current synthetic validation loss does not certify teaching quality.

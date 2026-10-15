@@ -1,12 +1,13 @@
 """Supervised LoRA training entry point. Requires reviewed, licensed data and a GPU."""
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
 
 
-def read_dataset(path: str):
+def read_dataset(path: str, allow_unreviewed=False):
     records = [
         json.loads(line)
         for line in Path(path).read_text(encoding="utf-8").splitlines()
@@ -27,8 +28,10 @@ def read_dataset(path: str):
         ]:
             if key not in record:
                 raise ValueError(f"Missing required field: {key}")
-        if record["reviewed"] is not True or not all(
-            record[key] for key in ["id", "split_group", "source_id", "license", "reviewer"]
+        if (
+            not all(record[key] for key in ["id", "split_group", "source_id", "license"])
+            or (record["reviewed"] is not True and not allow_unreviewed)
+            or (record["reviewed"] is True and not record["reviewer"])
         ):
             raise ValueError("Every record must have review and provenance metadata.")
         if record["id"] in ids:
@@ -64,9 +67,21 @@ def main():
     parser.add_argument("--output", default="ml/output/scortiq-tutor")
     parser.add_argument("--validate-only", action="store_true")
     parser.add_argument("--benchmark", type=Path, default=DEFAULT_SUITE)
+    parser.add_argument(
+        "--experimental-unreviewed",
+        action="store_true",
+        help="Experimental local adapter only; never approved for deployment.",
+    )
+    parser.add_argument("--epochs", type=float, default=2)
+    parser.add_argument("--max-length", type=int, default=2048)
+    parser.add_argument("--max-steps", type=int, default=-1)
     args = parser.parse_args()
-    train = read_dataset(args.train)
-    validation = read_dataset(args.validation)
+    if args.epochs <= 0 or args.max_length < 128 or args.max_steps == 0 or args.max_steps < -1:
+        parser.error(
+            "Use positive epochs, max-length >=128, and max-steps -1 or a positive integer."
+        )
+    train = read_dataset(args.train, args.experimental_unreviewed)
+    validation = read_dataset(args.validation, args.experimental_unreviewed)
     benchmark, _ = load_suite(args.benchmark)
     validate_holdout(train + validation, benchmark)
     if {r["split_group"] for r in train} & {r["split_group"] for r in validation}:
@@ -76,6 +91,10 @@ def main():
     print(f"Validated {len(train)} training examples and {len(validation)} validation examples.")
     if args.validate_only:
         return
+    if Path(args.output).exists():
+        raise ValueError(
+            "Output already exists; preserve the previous adapter and use a new directory."
+        )
     import torch
     from datasets import Dataset
     from peft import LoraConfig
@@ -95,13 +114,16 @@ def main():
         ),
         device_map={"": 0},
     )
+    model.config.use_cache = False
     config = SFTConfig(
         output_dir=args.output,
-        num_train_epochs=2,
+        num_train_epochs=args.epochs,
+        max_steps=args.max_steps,
         per_device_train_batch_size=1,
+        per_device_eval_batch_size=1,
         gradient_accumulation_steps=16,
         learning_rate=2e-4,
-        max_length=2048,
+        max_length=args.max_length,
         gradient_checkpointing=True,
         logging_steps=10,
         eval_strategy="epoch",
@@ -109,6 +131,9 @@ def main():
         report_to="none",
         seed=42,
         bf16=True,
+        dataloader_num_workers=0,
+        dataset_num_proc=1,
+        gradient_checkpointing_kwargs={"use_reentrant": False},
     )
     trainer = SFTTrainer(
         model=model,
@@ -117,14 +142,16 @@ def main():
         train_dataset=Dataset.from_list([{"messages": r["messages"]} for r in train]),
         eval_dataset=Dataset.from_list([{"messages": r["messages"]} for r in validation]),
         peft_config=LoraConfig(
-            r=16,
-            lora_alpha=32,
+            r=8,
+            lora_alpha=16,
             lora_dropout=0.05,
             target_modules="all-linear",
             task_type="CAUSAL_LM",
         ),
     )
-    trainer.train()
+    baseline_metrics = trainer.evaluate()
+    training_result = trainer.train()
+    adapter_metrics = trainer.evaluate()
     trainer.save_model(args.output)
     tokenizer.save_pretrained(args.output)
     Path(args.output, "training_metadata.json").write_text(
@@ -135,6 +162,21 @@ def main():
                 "train_count": len(train),
                 "validation_count": len(validation),
                 "status": "requires independent evaluation",
+                "method": "QLoRA supervised fine-tuning; not reinforcement learning",
+                "approved_for_app": False,
+                "experimental_unreviewed": args.experimental_unreviewed,
+                "train_sha256": hashlib.sha256(Path(args.train).read_bytes()).hexdigest(),
+                "validation_sha256": hashlib.sha256(Path(args.validation).read_bytes()).hexdigest(),
+                "baseline_validation": baseline_metrics,
+                "adapter_validation": adapter_metrics,
+                "training_metrics": training_result.metrics,
+                "max_length": args.max_length,
+                "epochs": args.epochs,
+                "max_steps": args.max_steps,
+                "completed_steps": trainer.state.global_step,
+                "completed_epochs": trainer.state.epoch,
+                "seed": config.seed,
+                "gpu": torch.cuda.get_device_name(0),
             },
             indent=2,
         ),

@@ -1,0 +1,9 @@
+{
+  "completed_steps": 12,
+  "completed_epochs": 2.4444444444444446,
+  "max_steps": 12,
+  "seed": 42,
+  "adapter_sha256": "d7643505d6cbb271fecc405dc4b833756ea0e752e413a4552fad88440d256b2a",
+  "adapter_bytes": 36981072,
+  "command": "python ml/train.py --model Qwen/Qwen2.5-1.5B-Instruct --revision 989aa7980e4cf806f80c7fef2b1adb7bc71aa306 --train ml/data/behavior-experiment-v1/train.jsonl --validation ml/data/behavior-experiment-v1/validation.jsonl --experimental-unreviewed --max-length 384 --max-steps 12 --output ml/output/behavior-experiment-v1"
+}
