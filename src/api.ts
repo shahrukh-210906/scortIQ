@@ -50,6 +50,7 @@ export type Message = {
   teaching_style?: string;
   helpful_feedback?: boolean;
   response_mode?: 'model' | 'source_guided' | 'checked_calculation';
+  provider_unavailable?: boolean;
 };
 export type Lesson = {
   socratic: SocraticProgress;

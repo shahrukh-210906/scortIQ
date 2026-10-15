@@ -40,3 +40,9 @@ Current milestone: configure and live-verify Supabase sign-in and recovery. Sour
 
 Gemma 3 4B QLoRA training completed locally and is connected in development. Four saved Socratic steps require correct server-checked answers. Pilot explanations use exact sources and authored language renderings because raw tuned model replies still made factual errors. Reflection calculations use checked arithmetic. Validation: 54 backend tests, 14 browser journeys and production build passed. Final inference run accepted 41/42 requests; human factual review remains pending. Full details: `ml/evaluations/gemma-tutor-v1/REPORT.md`.
 
+# Deployment preparation — 15 October 2026
+
+Prepared a private ZeroGPU Space with the actual Gemma adapter, allowlisted upload tooling and authenticated Gradio queue transport. Added a single project container with SPA routing and production defaults. Model failures now continue with exact pilot source guidance and a visible recovery label; unknown/changed sources still fail safely. Verified 58 backend tests, 14 browser journeys, production frontend build and a live `reactions-balance` response. The preview backend is restarted with this fix.
+
+Cloud deployment is pending: the detected Hugging Face account `shahrukh2196` currently has a read-only local token. A write-scoped login and eligible ZeroGPU account are needed to create/upload the private Space. Hosted GPU compatibility and Docker build remain unverified; Docker is not installed locally. No cloud URL has been created. Instructions: `deploy/README.md`.
+

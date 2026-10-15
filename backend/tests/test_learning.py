@@ -1216,6 +1216,7 @@ class LearningTests(unittest.TestCase):
         with (
             patch.object(main, "HF_URL", "https://test.endpoint"),
             patch.object(main, "HF_TOKEN", "test-only-token"),
+            patch.object(main, "source_guidance", return_value=None),
             patch.object(main.httpx, "AsyncClient") as factory,
         ):
             factory.return_value.__aenter__.return_value = provider
@@ -1224,6 +1225,32 @@ class LearningTests(unittest.TestCase):
             )
             self.assertEqual(response.status_code, 503)
         self.assertEqual(self.client.post("/api/lessons/reactions-signs").json()["messages"], [])
+
+    def test_pilot_model_failure_uses_labelled_sources_and_keeps_checkpoint(self):
+        lesson = self.client.post("/api/lessons/reactions-signs").json()
+        provider = AsyncMock()
+        provider.post.side_effect = main.httpx.ReadTimeout("Test timeout")
+        with (
+            patch.object(main, "HF_URL", "https://test.endpoint"),
+            patch.object(main, "HF_TOKEN", "test-only-token"),
+            patch.object(main.httpx, "AsyncClient") as factory,
+        ):
+            factory.return_value.__aenter__.return_value = provider
+            response = self.client.post(
+                f"/api/lessons/{lesson['id']}/turn", json={"message": "Explain this"}
+            )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data["messages"][-1]["provider_unavailable"])
+        self.assertEqual(data["messages"][-1]["response_mode"], "source_guided")
+        self.assertNotIn("Hello", data["reply"])
+        self.assertEqual(data["socratic"]["phase"], 0)
+        self.assertTrue(data["socratic"]["ready"])
+        wrong = self.client.post(
+            f"/api/lessons/{lesson['id']}/checkpoint", json={"phase": 0, "answer": 1}
+        ).json()
+        self.assertEqual(wrong["socratic"]["phase"], 0)
+        self.assertFalse(wrong["socratic"]["ready"])
 
     def test_progress_checklist_is_ordered_idempotent_and_saved(self):
         lesson = self.client.post("/api/lessons/reactions-signs").json()
@@ -1267,6 +1294,7 @@ class LearningTests(unittest.TestCase):
         with (
             patch.object(main, "HF_URL", "https://test.endpoint"),
             patch.object(main, "HF_TOKEN", "test-only-token"),
+            patch.object(main, "source_guidance", return_value=None),
             patch.object(main.httpx, "AsyncClient") as factory,
         ):
             factory.return_value.__aenter__.return_value = provider

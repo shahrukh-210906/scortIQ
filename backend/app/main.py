@@ -54,6 +54,7 @@ from .socratic import CHECKPOINTS
 from .socratic import instruction as socratic_instruction
 from .socratic import payload as socratic_payload
 from .source_guidance import source_guidance
+from .tutor_provider import gradio_reply
 
 ENV = os.getenv("APP_ENV", "development")
 if ENV not in {"development", "test", "production"}:
@@ -67,6 +68,9 @@ if SUPABASE_URL and (
     raise RuntimeError("Supabase URL must use HTTPS.")
 HF_URL = os.getenv("HF_ENDPOINT_URL", "").rstrip("/")
 HF_TOKEN = os.getenv("HF_TOKEN", "")
+HF_API_MODE = os.getenv("HF_API_MODE", "openai")
+if HF_API_MODE not in {"openai", "gradio"}:
+    raise RuntimeError("HF_API_MODE must be openai or gradio.")
 DAILY_TUTOR_LIMIT = int(os.getenv("DAILY_TUTOR_LIMIT", "30"))
 if not 1 <= DAILY_TUTOR_LIMIT <= 1000:
     raise RuntimeError("DAILY_TUTOR_LIMIT must be between 1 and 1000.")
@@ -1661,36 +1665,8 @@ async def tutor_turn(
         {"role": "user", "content": body.message.strip()},
     ]
     reserve_inference_request(db, user.id)
-    try:
-        async with httpx.AsyncClient(timeout=45) as client:
-            result = await client.post(
-                HF_URL + "/v1/chat/completions",
-                headers={"Authorization": f"Bearer {HF_TOKEN}"},
-                json={
-                    "model": os.getenv("HF_MODEL_ID", "scortiq-tutor"),
-                    "messages": messages,
-                    "max_tokens": 600,
-                    "temperature": 0.3,
-                    "response_format": {"type": "json_object"},
-                },
-            )
-            result.raise_for_status()
-            validated = TutorReply.model_validate_json(
-                result.json()["choices"][0]["message"]["content"]
-            )
-            reply = validated.reply
-            if not reply.strip():
-                raise ValueError("Invalid tutor response")
-            allowed = {source["id"]: source for source in evidence}
-            if len(set(validated.citations)) != len(validated.citations) or any(
-                citation not in allowed for citation in validated.citations
-            ):
-                raise ValueError("Invalid source references")
-            cited_sources = [allowed[citation] for citation in validated.citations]
-    except (httpx.HTTPError, ValidationError, ValueError, KeyError, IndexError, TypeError):
-        raise HTTPException(
-            503, "The tutor could not respond reliably. Your lesson is saved; try again shortly."
-        )
+    provider_unavailable = False
+    preferred_ids = []
     guided = source_guidance(
         lesson.topic_id,
         teaching_language,
@@ -1699,7 +1675,60 @@ async def tutor_turn(
         teaching_style,
         body.message,
         state.last_wrong,
-        validated.citations,
+    )
+    try:
+        if HF_API_MODE == "gradio":
+            output = await gradio_reply(HF_URL, HF_TOKEN, messages)
+        else:
+            async with httpx.AsyncClient(timeout=45) as client:
+                result = await client.post(
+                    HF_URL + "/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {HF_TOKEN}"},
+                    json={
+                        "model": os.getenv("HF_MODEL_ID", "scortiq-tutor"),
+                        "messages": messages,
+                        "max_tokens": 600,
+                        "temperature": 0.3,
+                        "response_format": {"type": "json_object"},
+                    },
+                )
+                result.raise_for_status()
+                output = result.json()["choices"][0]["message"]["content"]
+        validated = TutorReply.model_validate_json(output)
+        reply = validated.reply
+        if not reply.strip():
+            raise ValueError("Invalid tutor response")
+        allowed = {source["id"]: source for source in evidence}
+        if len(set(validated.citations)) != len(validated.citations) or any(
+            citation not in allowed for citation in validated.citations
+        ):
+            raise ValueError("Invalid source references")
+        cited_sources = [allowed[citation] for citation in validated.citations]
+        preferred_ids = validated.citations
+    except (
+        httpx.HTTPError,
+        TimeoutError,
+        ValidationError,
+        ValueError,
+        KeyError,
+        IndexError,
+        TypeError,
+    ):
+        if not guided:
+            raise HTTPException(
+                503,
+                "The tutor could not respond reliably. Your lesson is saved; try again shortly.",
+            )
+        provider_unavailable = True
+    guided = source_guidance(
+        lesson.topic_id,
+        teaching_language,
+        evidence,
+        state.phase,
+        teaching_style,
+        body.message,
+        state.last_wrong,
+        preferred_ids,
     )
     response_mode = "model"
     if guided:
@@ -1711,6 +1740,7 @@ async def tutor_turn(
             "content": reply,
             "sources": cited_sources,
             "response_mode": response_mode,
+            "provider_unavailable": provider_unavailable,
             **({"teaching_style": teaching_style} if teaching_style else {}),
         },
     ]
@@ -1889,3 +1919,10 @@ def progress(user: User = Depends(require_user), db: DBSession = Depends(get_db)
             for lesson in lessons
         },
     }
+
+
+# Mounted last so API handlers take precedence. Development Vite remains separate.
+if os.getenv("STATIC_DIR"):
+    from .frontend import FrontendFiles
+
+    app.mount("/", FrontendFiles(directory=os.environ["STATIC_DIR"], html=True))

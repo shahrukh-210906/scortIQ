@@ -1,0 +1,16 @@
+.git
+.env
+**/.env
+**/.env.*
+node_modules
+dist
+.venv
+.venv-ml
+.tmp
+ml
+backend/.data
+**/__pycache__
+**/*.db
+**/*.db-*
+test-results
+playwright-report

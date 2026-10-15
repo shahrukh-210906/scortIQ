@@ -1233,6 +1233,9 @@ function LessonPage() {
               <div className={`chat-message ${m.role}`} key={i}>
                 <small>{m.role === 'user' ? 'You' : 'ScortIQ'}</small>
                 {m.response_mode === 'source_guided' && <small>From your lesson sources</small>}
+                {m.provider_unavailable && (
+                  <small>Model unavailable · continuing with lesson sources</small>
+                )}
                 {m.response_mode === 'checked_calculation' && <small>Checked calculation</small>}
                 <p>{m.content}</p>
                 {m.sources && <SourceList sources={m.sources} />}

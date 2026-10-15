@@ -62,3 +62,12 @@ Completed: local Gemma QLoRA training, private local runtime connection, four sa
 
 Remaining: educator review of the seven pilot topics and public training examples; full reviewed CBSE 2026–27 topic content; broader unseen factual and language evaluation; improved provider reliability (final pilot run accepted 41/42 requests). Fine-tuning alone remains insufficient for factual accuracy. See `ml/LOCAL_TUTOR.md`.
 
+# Deployment next steps — 15 October 2026
+
+- Sign in locally to Hugging Face with a write-scoped token; verify free ZeroGPU eligibility and upload the prepared private Space.
+- Validate cloud GPU startup and English/Hindi/Hinglish responses before switching the existing local endpoint.
+- Supply the Supabase PostgreSQL connection string, apply migrations and import genuinely reviewed lesson sources before production release.
+- Build and smoke-test the prepared application Docker image on a Docker-capable host, then connect HTTPS hosting and Supabase authentication settings.
+
+Prepared code and tested model-failure recovery are complete; actual cloud publishing is pending credentials and hosting eligibility. See `deploy/README.md`.
+
