@@ -46,3 +46,7 @@ See `CLASS10_PRODUCT_PLAN.md` and `CLASS10_CURRICULUM.md`. This direction supers
 - [ ] Complete privacy, account deletion, accessibility and load checks.
 
 Commit and push each completed task separately after relevant validation. Reports are currently stored for future staff review; no notification or staff review interface is implemented yet.
+
+## Student adaptation — 15 October 2026
+- [x] Opt-in private per-student/topic explanation feedback, bandit selection, teacher overrides and reset controls.
+- [ ] Evaluate learning gains with educator-defined outcomes; current rewards are reported helpfulness only.

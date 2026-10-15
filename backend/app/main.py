@@ -16,6 +16,7 @@ from sqlalchemy import delete, func, select, text, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session as DBSession
 
+from .adaptation import STYLES, choose_style, memory_enabled
 from .content import CHAPTERS, QUESTIONS, topic_by_id
 from .database import (
     Assignment,
@@ -26,6 +27,7 @@ from .database import (
     Classroom,
     Feedback,
     Journey,
+    LearnerMemory,
     Lesson,
     LessonStep,
     Membership,
@@ -36,6 +38,8 @@ from .database import (
     SessionLocal,
     SupportSetting,
     Teacher,
+    TeachingArm,
+    TutorRating,
     Usage,
     User,
     WritingExam,
@@ -74,7 +78,7 @@ async def lifespan(app: FastAPI):
         ):
             raise RuntimeError("Production identity and inference URLs must use HTTPS.")
         with engine.connect() as connection:
-            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0012":
+            if connection.scalar(text("SELECT version_num FROM alembic_version")) != "0013":
                 raise RuntimeError(
                     "Apply the supported database migration before starting production."
                 )
@@ -311,6 +315,119 @@ class SupportInput(BaseModel):
     simple_language: StrictBool
     more_detail: StrictBool
     extra_practice: StrictBool
+
+
+class MemoryInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    enabled: StrictBool
+
+
+class TutorRatingInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    turn_index: StrictInt = Field(ge=0, le=39)
+    helpful: StrictBool
+
+
+@app.get("/api/me/adaptation")
+def learner_adaptation(user: User = Depends(require_user), db: DBSession = Depends(get_db)):
+    rows = db.scalars(
+        select(TeachingArm)
+        .where(TeachingArm.user_id == user.id)
+        .order_by(TeachingArm.topic_id, TeachingArm.style)
+    )
+    return {
+        "enabled": memory_enabled(db, user.id),
+        "styles": [
+            {
+                "topic_id": row.topic_id,
+                "style": row.style,
+                "helpful": row.helpful,
+                "unhelpful": row.unhelpful,
+            }
+            for row in rows
+        ],
+    }
+
+
+@app.put("/api/me/adaptation", dependencies=[Depends(require_same_origin)])
+def toggle_adaptation(
+    body: MemoryInput, user: User = Depends(require_user), db: DBSession = Depends(get_db)
+):
+    memory = db.get(LearnerMemory, user.id)
+    if not memory:
+        memory = LearnerMemory(user_id=user.id)
+        db.add(memory)
+    memory.enabled = int(body.enabled)
+    db.commit()
+    return learner_adaptation(user, db)
+
+
+@app.delete("/api/me/adaptation", dependencies=[Depends(require_same_origin)])
+def forget_adaptation(user: User = Depends(require_user), db: DBSession = Depends(get_db)):
+    for table in [TutorRating, TeachingArm, LearnerMemory]:
+        db.execute(delete(table).where(table.user_id == user.id))
+    db.commit()
+    return {"enabled": False, "styles": []}
+
+
+@app.post("/api/lessons/{lesson_id}/tutor-feedback", dependencies=[Depends(require_same_origin)])
+def rate_tutor(
+    lesson_id: str,
+    body: TutorRatingInput,
+    user: User = Depends(require_user),
+    db: DBSession = Depends(get_db),
+):
+    lesson = owned_lesson(db, user, lesson_id)
+    if not memory_enabled(db, user.id):
+        raise HTTPException(403, "Enable adaptive tutoring in Settings before saving feedback.")
+    messages = json.loads(lesson.messages)
+    message = messages[body.turn_index] if body.turn_index < len(messages) else {}
+    style = message.get("teaching_style")
+    if message.get("role") != "assistant" or style not in STYLES:
+        raise HTTPException(422, "Choose an adaptive tutor reply.")
+    existing = db.get(TutorRating, (lesson_id, body.turn_index))
+    if existing:
+        if bool(existing.helpful) != body.helpful:
+            raise HTTPException(409, "Feedback for this reply is already saved.")
+        return {"helpful": body.helpful}
+    db.add(
+        TutorRating(
+            lesson_id=lesson_id,
+            turn_index=body.turn_index,
+            user_id=user.id,
+            style=style,
+            helpful=int(body.helpful),
+        )
+    )
+    try:
+        db.flush()
+        arm = db.get(TeachingArm, (user.id, lesson.topic_id, style))
+        if not arm:
+            db.add(
+                TeachingArm(
+                    user_id=user.id,
+                    topic_id=lesson.topic_id,
+                    style=style,
+                    helpful=int(body.helpful),
+                    unhelpful=int(not body.helpful),
+                )
+            )
+        else:
+            field = TeachingArm.helpful if body.helpful else TeachingArm.unhelpful
+            db.execute(
+                update(TeachingArm)
+                .where(
+                    TeachingArm.user_id == user.id,
+                    TeachingArm.topic_id == lesson.topic_id,
+                    TeachingArm.style == style,
+                )
+                .values({field: field + 1})
+            )
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(409, "Feedback changed in another window. Please retry.")
+    return {"helpful": body.helpful}
 
 
 SUPPORT_FIELDS = ("simple_language", "more_detail", "extra_practice")
@@ -772,10 +889,15 @@ def lesson_payload(db: DBSession, lesson: Lesson):
     saved = set(db.scalars(select(LessonStep.step).where(LessonStep.lesson_id == lesson.id)))
     reflection = db.get(Reflection, lesson.id)
     journey = db.get(Journey, lesson.id)
+    messages = json.loads(lesson.messages)
+    for rating in db.scalars(select(TutorRating).where(TutorRating.lesson_id == lesson.id)):
+        if rating.turn_index < len(messages):
+            messages[rating.turn_index]["helpful_feedback"] = bool(rating.helpful)
     return {
         "id": lesson.id,
         "topic_id": lesson.topic_id,
-        "messages": json.loads(lesson.messages),
+        "messages": messages,
+        "adaptation_enabled": memory_enabled(db, lesson.user_id),
         "completed_steps": [step for step in LESSON_STEPS if step in saved],
         "reflection": reflection.answer if reflection else "",
         "active_stage": journey.active_stage if journey else "understand",
@@ -1444,6 +1566,11 @@ async def tutor_turn(
         "hinglish": " Teach in simple conversational Hinglish using Roman Hindi and English scientific terms. Write the JSON reply in a natural mix of Roman Hindi and English, even when earlier replies and the question are English. Use Roman Hindi sentence structure, such as 'kyun', 'kaise' and 'hota hai', with appropriate English scientific terms. Explain the supplied evidence and ask one short guiding question in Hinglish. Preserve equations, units and source IDs exactly.",
     }[teaching_language]
     support = effective_support(db, user.id, lesson.topic_id)
+    teaching_style = choose_style(
+        db, user.id, lesson.topic_id, detailed=support["more_detail"] or support["simple_language"]
+    )
+    if teaching_style:
+        system += " Personalised explanation style: " + STYLES[teaching_style]
     if support["simple_language"]:
         system += " Teacher support for this topic: use simple vocabulary and short sentences; explain each scientific term."
     if support["more_detail"]:
@@ -1488,7 +1615,12 @@ async def tutor_turn(
         )
     new_history = history + [
         {"role": "user", "content": body.message.strip()},
-        {"role": "assistant", "content": reply, "sources": cited_sources},
+        {
+            "role": "assistant",
+            "content": reply,
+            "sources": cited_sources,
+            **({"teaching_style": teaching_style} if teaching_style else {}),
+        },
     ]
     # Optimistic update prevents concurrent turns from overwriting each other.
     result = db.execute(
@@ -1502,7 +1634,12 @@ async def tutor_turn(
             409, "Another response was saved. Reload the lesson before sending again."
         )
     db.commit()
-    return {"reply": reply, "sources": cited_sources, "messages": new_history}
+    return {
+        "reply": reply,
+        "sources": cited_sources,
+        "messages": new_history,
+        "adaptation_enabled": memory_enabled(db, user.id),
+    }
 
 
 @app.post("/api/quizzes/{chapter_id}", dependencies=[Depends(require_same_origin)])

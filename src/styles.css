@@ -2811,3 +2811,35 @@ textarea:focus {
 .writing-page h1 {
   overflow-wrap: anywhere;
 }
+.adaptation-panel {
+  margin-bottom: 24px;
+}
+.adaptation-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  margin: 16px 0;
+  font-weight: 600;
+}
+.adaptation-option input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.adaptation-panel li {
+  overflow-wrap: anywhere;
+}
+.tutor-feedback {
+  border-top: 1px solid var(--line);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.tutor-feedback fieldset {
+  border: 0;
+  padding: 0;
+}
+.tutor-feedback .text-button {
+  min-height: 44px;
+  margin-right: 12px;
+}

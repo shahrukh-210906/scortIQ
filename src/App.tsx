@@ -12,6 +12,7 @@ import Classrooms from './Classrooms';
 import { AssignmentBoard } from './Assignments';
 import { StudentSupport } from './TeacherSupport';
 import WritingPractice, { WritingExamRoute } from './WritingPractice';
+import AdaptiveTutoring, { TutorFeedback } from './AdaptiveTutoring';
 import LanguageFields from './LanguageFields';
 import CurriculumCatalogue from './CurriculumCatalogue';
 import BookmarkButton from './BookmarkButton';
@@ -994,10 +995,17 @@ function LessonPage() {
     setSending(true);
     setTurnError('');
     try {
-      const result = await post<{ messages: Lesson['messages'] }>(`/lessons/${lesson.id}/turn`, {
-        message,
-      });
-      setLesson((current) => (current ? { ...current, messages: result.messages } : null));
+      const result = await post<{ messages: Lesson['messages']; adaptation_enabled: boolean }>(
+        `/lessons/${lesson.id}/turn`,
+        {
+          message,
+        },
+      );
+      setLesson((current) =>
+        current
+          ? { ...current, messages: result.messages, adaptation_enabled: result.adaptation_enabled }
+          : null,
+      );
       setMessage('');
     } catch (e) {
       setTurnError((e as Error).message);
@@ -1195,6 +1203,14 @@ function LessonPage() {
                 <small>{m.role === 'user' ? 'You' : 'ScortIQ'}</small>
                 <p>{m.content}</p>
                 {m.sources && <SourceList sources={m.sources} />}
+                {lesson.adaptation_enabled && m.role === 'assistant' && m.teaching_style && (
+                  <TutorFeedback
+                    lessonId={lesson.id}
+                    turnIndex={i}
+                    style={m.teaching_style}
+                    initial={m.helpful_feedback}
+                  />
+                )}
               </div>
             ))}
             {sending && <p role="status">Thinking through your question…</p>}
@@ -1566,6 +1582,7 @@ function SettingsPage() {
         title="Your preferences"
         description="Keep the little details up to date."
       />
+      <AdaptiveTutoring />
       <section className="panel settings-panel">
         <h2>Your learning profile</h2>
         <form onSubmit={submit}>

@@ -35,6 +35,86 @@ class LearningTests(unittest.TestCase):
         self.client.cookies.clear()
         self.client.cookies.set("scortiq_session", token, domain="testserver.local", path="/")
 
+    def test_adaptation_opt_in_feedback_ownership_and_reset(self):
+        import json
+
+        from backend.app.database import Lesson
+
+        endpoint = "/api/me/adaptation"
+        self.assertEqual(self.client.get(endpoint).json(), {"enabled": False, "styles": []})
+        self.assertEqual(self.client.put(endpoint, json={"enabled": "true"}).status_code, 422)
+        lesson = self.client.post("/api/lessons/reactions-signs").json()
+        with SessionLocal() as db:
+            row = db.get(Lesson, lesson["id"])
+            row.messages = json.dumps(
+                [
+                    {"role": "user", "content": "Explain"},
+                    {"role": "assistant", "content": "Example", "teaching_style": "worked_example"},
+                ]
+            )
+            db.commit()
+        rating = f"/api/lessons/{lesson['id']}/tutor-feedback"
+        body = {"turn_index": 1, "helpful": True}
+        self.assertEqual(self.client.post(rating, json=body).status_code, 403)
+        self.assertTrue(self.client.put(endpoint, json={"enabled": True}).json()["enabled"])
+        self.assertEqual(
+            self.client.post(rating, json={"turn_index": 0, "helpful": True}).status_code, 422
+        )
+        for _ in range(2):
+            self.assertEqual(self.client.post(rating, json=body).status_code, 200)
+        self.assertEqual(self.client.get(endpoint).json()["styles"][0]["helpful"], 1)
+        self.assertEqual(
+            self.client.post(rating, json={"turn_index": 1, "helpful": False}).status_code, 409
+        )
+        resumed = self.client.post("/api/lessons/reactions-signs").json()
+        self.assertTrue(resumed["messages"][1]["helpful_feedback"])
+        own_cookie = self.client.cookies.get("scortiq_session")
+        self.client.post("/api/auth/local", json={"name": "Another learner"})
+        self.assertEqual(self.client.get(endpoint).json()["styles"], [])
+        self.assertEqual(self.client.post(rating, json=body).status_code, 404)
+        self.use_session(own_cookie)
+        self.assertEqual(self.client.delete(endpoint).json(), {"enabled": False, "styles": []})
+        self.assertEqual(self.client.post("/api/lessons/reactions-signs").status_code, 200)
+        self.assertNotIn(
+            "helpful_feedback",
+            self.client.post("/api/lessons/reactions-signs").json()["messages"][1],
+        )
+
+    def test_adaptation_bandit_scope_and_teacher_priority(self):
+        import random
+
+        from backend.app.adaptation import choose_style
+        from backend.app.database import LearnerMemory, TeachingArm
+
+        with SessionLocal() as db:
+            self.assertIsNone(choose_style(db, self.user_id, "reactions-signs"))
+            db.add(LearnerMemory(user_id=self.user_id, enabled=1))
+            db.add(
+                TeachingArm(
+                    user_id=self.user_id,
+                    topic_id="reactions-signs",
+                    style="short_explanation",
+                    helpful=100,
+                    unhelpful=0,
+                )
+            )
+            db.commit()
+            self.assertEqual(choose_style(db, self.user_id, "other-topic"), "step_by_step")
+            self.assertEqual(
+                choose_style(db, self.user_id, "reactions-signs", rng=random.Random(42)),
+                "short_explanation",
+            )
+            for seed in range(20):
+                self.assertNotEqual(
+                    choose_style(
+                        db, self.user_id, "reactions-signs", detailed=True, rng=random.Random(seed)
+                    ),
+                    "short_explanation",
+                )
+            db.get(LearnerMemory, self.user_id).enabled = 0
+            db.commit()
+            self.assertIsNone(choose_style(db, self.user_id, "reactions-signs"))
+
     def quiz(self):
         response = self.client.post("/api/quizzes/chemical-reactions")
         self.assertEqual(response.status_code, 200)
@@ -1007,6 +1087,7 @@ class LearningTests(unittest.TestCase):
         self.assertEqual(self.client.get("/api/me").json()["name"], "Asha Rao")
 
     def test_valid_tutor_reply_persists_and_quota_is_enforced(self):
+        self.client.put("/api/me/adaptation", json={"enabled": True})
         self.client.patch(
             "/api/me", json={"name": "Asha", "teaching_language": "hinglish", "exam_language": "hi"}
         )
@@ -1043,6 +1124,8 @@ class LearningTests(unittest.TestCase):
             self.assertEqual(provider.post.await_count, 1)
             prompt = provider.post.call_args.kwargs["json"]["messages"][0]["content"]
             self.assertIn("Teach in simple conversational Hinglish", prompt)
+            self.assertIn("Personalised explanation style:", prompt)
+            self.assertEqual(response.json()["messages"][1]["teaching_style"], "step_by_step")
         resumed = self.client.post("/api/lessons/reactions-signs").json()
         self.assertEqual(
             resumed["messages"][1]["content"], "What new substance do you think forms?"

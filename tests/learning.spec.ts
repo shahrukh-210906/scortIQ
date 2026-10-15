@@ -1,6 +1,39 @@
 import { test, expect } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 
+test('adaptive explanation preferences persist and can be forgotten', async ({ page }) => {
+  await page.goto('/');
+  await page.request.post('/api/auth/local', { data: { name: 'Adaptive learner' } });
+  await page.goto('/settings');
+  const option = page.getByRole('checkbox', { name: 'Remember which explanations help me' });
+  await expect(option).not.toBeChecked();
+  await option.check();
+  await expect(
+    page.getByText('Adaptive tutoring enabled for your account.', { exact: true }),
+  ).toBeVisible();
+  await page.reload();
+  await expect(option).toBeChecked();
+  const lesson = await (await page.request.post('/api/lessons/reactions-signs')).json();
+  // Store a deterministic tutor fixture; feedback itself uses the real authenticated API.
+  execFileSync(process.platform === 'win32' ? '.venv/Scripts/python.exe' : 'python', [
+    '-c',
+    'import sys,json; from backend.app.database import SessionLocal,Lesson; db=SessionLocal(); row=db.get(Lesson,sys.argv[1]); row.messages=json.dumps([{"role":"user","content":"Explain"},{"role":"assistant","content":"A new substance indicates a chemical change. What might you observe?","teaching_style":"worked_example"}]); db.commit(); db.close()',
+    lesson.id,
+  ]);
+  await page.goto('/lesson/reactions-signs');
+  await page.getByRole('button', { name: 'This explanation helped', exact: true }).click();
+  await expect(page.getByText('Saved: this explanation helped.', { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('Saved: this explanation helped.', { exact: true })).toBeVisible();
+  await page.goto('/settings');
+  await expect(page.getByText(/reactions-signs · Worked example: 1 helpful/)).toBeVisible();
+  await page.getByRole('button', { name: 'Forget explanation preferences', exact: true }).click();
+  await expect(option).not.toBeChecked();
+  await expect(page.getByText(/Explanation preferences forgotten/)).toBeVisible();
+  await page.reload();
+  await expect(option).not.toBeChecked();
+});
+
 test('written exams restore failed autosaves and keep submitted answers read-only on mobile', async ({
   page,
 }) => {

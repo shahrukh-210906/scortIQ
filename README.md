@@ -77,7 +77,7 @@ Apply migrations before import, then run `python -m backend.import_sources path/
 
 Each JSONL record requires `id`, `title`, `topic_id`, `class_level: 10`, `language: "en"`, `version`, `rights`, `rights_confirmed: true`, `review_status: "draft"` or `"reviewed"`, and `passages` (1–100 strings, each at most 2000 characters). Reviewed material also requires a named `reviewer`. These metadata fields document the approval process; they do not replace an actual educator/rights review.
 
-The current database migration is `0012`. Upgrading adds the learning, source, preference, classroom, assignment, support and written-exam tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
+The current database migration is `0013`. Upgrading adds the learning, source, preference, classroom, assignment, support and written-exam tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
 
 ## Supabase email sign-in and recovery
 
@@ -91,7 +91,7 @@ The current database migration is `0012`. Upgrading adds the learning, source, p
 
 Learners can expand "Report an issue with this lesson", choose a category and submit a 10–2,000 character description. Reports are stored against the authenticated account and topic; invalid topics, blank messages and cross-site writes are rejected. The UI preserves failed submissions for retry and confirms saved reports. A per-account limit allows ten reports per hour; stronger concurrent/global abuse enforcement remains release work. Reports are saved locally in the configured database; staff triage and notifications are not implemented yet.
 
-Run migration `0012` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; local Supabase authentication is configured and live verification remains pending.
+Run migration `0013` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; local Supabase authentication is configured and live verification remains pending.
 
 ## Saved reflections — 10 October 2026
 
@@ -170,3 +170,8 @@ Migration `0012` adds writing exams with question snapshots, saved revisions and
 See [the beginner guide](FREE_AI_GUIDE.md) for local inference, source retrieval, training-data preparation, QLoRA experiments and model export. The development app can point its compatible inference URL to local Ollama; the current machine's existing Llama 3.1 model is connected in ignored environment configuration. No fine-tuning or paid API purchase occurred. All five app-level smoke requests returned valid JSON and accepted source IDs, but one Physics response was incorrect and Hindi quality was uneven. [Initial observations](ml/local_baseline_smoke.md) record the limitations. The 37 backend checks, 12 browser journeys and linter/formatter checks pass after making reply-language instructions more explicit and testing both configured/offline tutor UI states; these checks do not certify live teaching quality. Production deployment and subjective AI grading remain separate work.
 
 The next development step added a [frozen draft benchmark](ml/benchmarks/README.md): 42 basic/misconception cases covering all seven Science pilot topics in English, Hindi and Hinglish, with checksummed source snapshots. [The first local evaluation](ml/evaluations/llama31-pilot-v1-run1/report.md) recorded 39 accepted replies and three rejected requests. Mechanical language/question-mark checks are review aids; factual scores remain empty for human review. The real app is evaluated in an isolated temporary database, leaving the preview and demo account unchanged. The training command rejects benchmark ID/family/exact-question overlaps. All 42 automated checks (37 app, five benchmark/training checks), suite validation and lint/format checks pass. No frontend or schema changes were needed.
+
+
+## Adaptive tutoring
+
+Opt-in per-student/topic feedback now adapts explanation styles through a private bandit policy. Enable it in Settings; students can disable or forget saved feedback. Teacher support remains in force. See [adaptive tutoring](ADAPTIVE_TUTORING.md). This changes the teaching policy, not shared model weights.

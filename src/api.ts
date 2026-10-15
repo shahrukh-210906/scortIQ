@@ -43,8 +43,15 @@ export type SourceRef = {
   rights: string;
   excerpt?: string;
 };
-export type Message = { role: 'user' | 'assistant'; content: string; sources?: SourceRef[] };
+export type Message = {
+  role: 'user' | 'assistant';
+  content: string;
+  sources?: SourceRef[];
+  teaching_style?: string;
+  helpful_feedback?: boolean;
+};
 export type Lesson = {
+  adaptation_enabled: boolean;
   id: string;
   topic_id: string;
   messages: Message[];

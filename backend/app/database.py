@@ -74,6 +74,30 @@ class Membership(Base):
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
 
 
+class LearnerMemory(Base):
+    __tablename__ = "learner_memory"
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    enabled: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class TeachingArm(Base):
+    __tablename__ = "teaching_arms"
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    topic_id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    style: Mapped[str] = mapped_column(String(30), primary_key=True)
+    helpful: Mapped[int] = mapped_column(Integer, default=0)
+    unhelpful: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class TutorRating(Base):
+    __tablename__ = "tutor_ratings"
+    lesson_id: Mapped[str] = mapped_column(ForeignKey("lessons.id"), primary_key=True)
+    turn_index: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    style: Mapped[str] = mapped_column(String(30))
+    helpful: Mapped[int] = mapped_column(Integer)
+
+
 class Preferences(Base):
     __tablename__ = "preferences"
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
