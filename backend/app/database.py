@@ -80,6 +80,14 @@ class LearnerMemory(Base):
     enabled: Mapped[int] = mapped_column(Integer, default=0)
 
 
+class SocraticState(Base):
+    __tablename__ = "socratic_states"
+    lesson_id: Mapped[str] = mapped_column(ForeignKey("lessons.id"), primary_key=True)
+    phase: Mapped[int] = mapped_column(Integer, default=0)
+    taught_phase: Mapped[int] = mapped_column(Integer, default=-1)
+    last_wrong: Mapped[int | None] = mapped_column(Integer, nullable=True)
+
+
 class TeachingArm(Base):
     __tablename__ = "teaching_arms"
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)

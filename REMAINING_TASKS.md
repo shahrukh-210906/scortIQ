@@ -55,3 +55,4 @@ Commit and push each completed task separately after relevant validation. Report
 - [x] Prepare a separate GPU training environment and run an original synthetic QLoRA behavior experiment; save the local adapter, package versions, metrics and sample comparisons.
 - [ ] Produce educator-reviewed, licensed Class 10 examples; improve Hindi/Hinglish and guiding-question behavior before considering deployment.
 - [ ] Independently evaluate factual accuracy and the actual serving artifact. Current synthetic validation loss does not certify teaching quality.
+- [x] Add the requested four-step Socratic sequence with explanation-before-check, failed-answer retry, persistence and server-enforced progression.

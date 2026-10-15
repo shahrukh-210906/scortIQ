@@ -1,5 +1,70 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
+
+async function finishGuidedFixture(page: Page, topicId: string) {
+  const lesson = await (await page.request.post(`/api/lessons/${topicId}`)).json();
+  execFileSync(process.platform === 'win32' ? '.venv/Scripts/python.exe' : 'python', [
+    '-c',
+    'import sys; from backend.app.database import SessionLocal,SocraticState; db=SessionLocal(); db.merge(SocraticState(lesson_id=sys.argv[1],phase=4,taught_phase=-1)); db.commit(); db.close()',
+    lesson.id,
+  ]);
+  await page.reload();
+}
+
+test('Socratic checks keep a wrong answer on the same step and unlock notes after all four', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/');
+  await page.request.post('/api/auth/local', {
+    data: { name: 'Guided learner', teaching_language: 'hinglish' },
+  });
+  await page.goto('/lesson/reactions-signs');
+  const notes = page.getByRole('button', { name: 'Continue to exam notes', exact: true });
+  await expect(notes).toBeDisabled();
+  // Deterministic inference fixture; the progress, attempt validation and navigation use real APIs.
+  await page.route('**/api/lessons/*/turn', async (route) => {
+    const lessonId = route.request().url().split('/').at(-2)!;
+    execFileSync(process.platform === 'win32' ? '.venv/Scripts/python.exe' : 'python', [
+      '-c',
+      'import sys,json; from backend.app.database import SessionLocal,Lesson,SocraticState; db=SessionLocal(); s=db.get(SocraticState,sys.argv[1]); s=s or SocraticState(lesson_id=sys.argv[1],phase=0,taught_phase=-1); s.taught_phase=s.phase; db.add(s); l=db.get(Lesson,sys.argv[1]); h=json.loads(l.messages); h.extend([{"role":"user","content":"Explain this step"},{"role":"assistant","content":"Nayi substance banne par chemical change hota hai. Tum kya observe karoge?"}]); l.messages=json.dumps(h); db.commit(); db.close()',
+      lessonId,
+    ]);
+    const lesson = await (await page.request.post('/api/lessons/reactions-signs')).json();
+    await route.fulfill({ json: { ...lesson, reply: lesson.messages.at(-1).content } });
+  });
+  await page.getByRole('button', { name: 'Explain this step', exact: true }).click();
+  await page.getByLabel('Any movement', { exact: true }).check();
+  await page.getByRole('button', { name: 'Check understanding', exact: true }).click();
+  await expect(page.getByRole('heading', { name: /Step 1 of 4/ })).toBeVisible();
+  await expect(
+    page.getByRole('status').filter({ hasText: 'Ask the tutor to explain' }),
+  ).toBeVisible();
+  await expect(notes).toBeDisabled();
+  const answers = [
+    'A new substance',
+    'The new white solid',
+    'No; boiling also produces bubbles',
+    'Water changes state without forming a new substance',
+  ];
+  for (const [phase, answer] of answers.entries()) {
+    await page.getByRole('button', { name: 'Explain this step', exact: true }).click();
+    await page.getByLabel(answer, { exact: true }).check();
+    await page.getByRole('button', { name: 'Check understanding', exact: true }).click();
+    if (phase < 3)
+      await expect(
+        page.getByRole('heading', { name: new RegExp(`Step ${phase + 2} of 4`) }),
+      ).toBeVisible();
+  }
+  await expect(notes).toBeEnabled();
+  await page.reload();
+  await expect(
+    page.getByRole('heading', { name: 'Guided practice complete', exact: true }),
+  ).toBeVisible();
+  await page.screenshot({ path: 'test-results/socratic-mobile.png', fullPage: true });
+  await notes.click();
+  await expect(page.getByRole('heading', { name: 'Write it clearly in an exam' })).toBeVisible();
+});
 
 test('adaptive explanation preferences persist and can be forgotten', async ({ page }) => {
   await page.goto('/');
@@ -438,6 +503,7 @@ test('topic stages resume with exam notes, checked equations and saved recall re
     'aria-current',
     'step',
   );
+  await finishGuidedFixture(page, 'reactions-signs');
   await page.getByRole('button', { name: 'Continue to exam notes', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Write it clearly in an exam' })).toBeVisible();
   await expect(
@@ -643,6 +709,7 @@ test('student can study, submit a quiz, reload progress and rename their profile
     page.getByRole('heading', { name: 'Recognising a chemical reaction' }),
   ).toBeVisible();
   await expect(page.getByRole('heading', { name: 'AI tutoring is on its way.' })).toBeVisible();
+  await finishGuidedFixture(page, 'reactions-signs');
   await page.getByRole('button', { name: 'Continue to exam notes', exact: true }).click();
   const lessonProgress = page.getByRole('progressbar', { name: 'Lesson steps completed' });
   await expect(lessonProgress).toHaveAttribute('value', '0');
@@ -722,6 +789,7 @@ test('mobile library navigation fits and filters correctly', async ({ page }) =>
     'value',
     '0',
   );
+  await finishGuidedFixture(page, 'reactions-signs');
   await page.getByRole('button', { name: 'Continue to exam notes', exact: true }).click();
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),

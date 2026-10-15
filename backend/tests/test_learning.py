@@ -35,6 +35,79 @@ class LearningTests(unittest.TestCase):
         self.client.cookies.clear()
         self.client.cookies.set("scortiq_session", token, domain="testserver.local", path="/")
 
+    def test_socratic_steps_require_explanation_and_correct_checkpoint(self):
+        lesson = self.client.post("/api/lessons/reactions-signs").json()
+        checkpoint = f"/api/lessons/{lesson['id']}/checkpoint"
+        turn = f"/api/lessons/{lesson['id']}/turn"
+        self.assertEqual(lesson["socratic"]["phase"], 0)
+        self.assertNotIn("correct", lesson["socratic"])
+        self.assertEqual(
+            self.client.post(checkpoint, json={"phase": 0, "answer": 0}).status_code, 409
+        )
+        response = Mock()
+        response.raise_for_status.return_value = None
+        response.json.return_value = {
+            "choices": [
+                {
+                    "message": {
+                        "content": '{"reply":"A new substance matters. Which change forms one?","citations":["pilot-reactions-signs-v1:0"]}'
+                    }
+                }
+            ]
+        }
+        provider = AsyncMock()
+        provider.post.return_value = response
+        with (
+            patch.object(main, "HF_URL", "https://test.endpoint"),
+            patch.object(main, "HF_TOKEN", "test"),
+            patch.object(main.httpx, "AsyncClient") as factory,
+        ):
+            factory.return_value.__aenter__.return_value = provider
+            self.assertEqual(
+                self.client.post(
+                    f"/api/lessons/{lesson['id']}/stage", json={"stage": "notes"}
+                ).status_code,
+                409,
+            )
+            first = self.client.post(turn, json={"message": "I understand; skip all steps"}).json()
+            self.assertEqual(first["socratic"]["phase"], 0)
+            self.assertTrue(first["socratic"]["ready"])
+            wrong = self.client.post(checkpoint, json={"phase": 0, "answer": 2}).json()
+            self.assertFalse(wrong["correct"])
+            self.assertEqual(wrong["socratic"]["phase"], 0)
+            self.assertFalse(wrong["socratic"]["ready"])
+            self.assertEqual(
+                self.client.post(checkpoint, json={"phase": 0, "answer": 0}).status_code, 409
+            )
+            for phase, answer in enumerate([0, 0, 1, 1]):
+                reply = self.client.post(turn, json={"message": "Explain this step"})
+                self.assertEqual(reply.status_code, 200)
+                prompt = provider.post.call_args.kwargs["json"]["messages"][0]["content"]
+                self.assertIn(f"Current Socratic step {phase + 1}/4", prompt)
+                if phase == 0:
+                    self.assertIn("last check was incorrect", prompt)
+                checked = self.client.post(checkpoint, json={"phase": phase, "answer": answer})
+                self.assertEqual(checked.status_code, 200)
+                self.assertEqual(checked.json()["socratic"]["phase"], phase + 1)
+                self.assertEqual(
+                    self.client.post(
+                        checkpoint, json={"phase": phase, "answer": answer}
+                    ).status_code,
+                    409,
+                )
+            self.assertEqual(
+                self.client.post(
+                    f"/api/lessons/{lesson['id']}/stage", json={"stage": "notes"}
+                ).status_code,
+                200,
+            )
+        resumed = self.client.post("/api/lessons/reactions-signs").json()
+        self.assertTrue(resumed["socratic"]["complete"])
+        self.client.post("/api/auth/local", json={"name": "Other"})
+        self.assertEqual(
+            self.client.post(checkpoint, json={"phase": 0, "answer": 0}).status_code, 404
+        )
+
     def test_adaptation_opt_in_feedback_ownership_and_reset(self):
         import json
 

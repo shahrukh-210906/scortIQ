@@ -77,7 +77,7 @@ Apply migrations before import, then run `python -m backend.import_sources path/
 
 Each JSONL record requires `id`, `title`, `topic_id`, `class_level: 10`, `language: "en"`, `version`, `rights`, `rights_confirmed: true`, `review_status: "draft"` or `"reviewed"`, and `passages` (1–100 strings, each at most 2000 characters). Reviewed material also requires a named `reviewer`. These metadata fields document the approval process; they do not replace an actual educator/rights review.
 
-The current database migration is `0013`. Upgrading adds the learning, source, preference, classroom, assignment, support and written-exam tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
+The current database migration is `0014`. Upgrading adds the learning, source, preference, classroom, assignment, support and written-exam tables without deleting existing learning records. Development startup creates missing tables for its existing local database; use Alembic for managed/staging/production databases.
 
 ## Supabase email sign-in and recovery
 
@@ -91,7 +91,7 @@ The current database migration is `0013`. Upgrading adds the learning, source, p
 
 Learners can expand "Report an issue with this lesson", choose a category and submit a 10–2,000 character description. Reports are stored against the authenticated account and topic; invalid topics, blank messages and cross-site writes are rejected. The UI preserves failed submissions for retry and confirms saved reports. A per-account limit allows ten reports per hour; stronger concurrent/global abuse enforcement remains release work. Reports are saved locally in the configured database; staff triage and notifications are not implemented yet.
 
-Run migration `0013` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; local Supabase authentication is configured and live verification remains pending.
+Run migration `0014` on managed databases before starting this version. See `REMAINING_TASKS.md` for the current feature queue; local Supabase authentication is configured and live verification remains pending.
 
 ## Saved reflections — 10 October 2026
 
@@ -179,3 +179,7 @@ Opt-in per-student/topic feedback now adapts explanation styles through a privat
 ## First local fine-tuning experiment
 
 A real 12-step QLoRA experiment on Qwen2.5 1.5B saved a local adapter using original synthetic arithmetic/format examples, separate from the live Llama tutor. Validation loss decreased from 3.09 to 1.22, but inspection samples still failed Hindi/Hinglish and guiding-question instructions. The adapter is not deployed or approved for teaching. [Results, raw samples and reproduction](ml/evaluations/behavior-experiment-v1/report.md) are recorded; weights remain local and no student data was used. The complete NCERT training corpus and educator evaluation remain pending.
+
+## Socratic learning sequence
+
+The connected tutor now follows problem → solution → topic → application, with saved server-checked comprehension gates. Wrong answers require another explanation and cannot advance; all four checks unlock notes and practice. See [the guided tutoring behavior and its limits](SOCRATIC_TUTORING.md).

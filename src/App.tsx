@@ -13,6 +13,7 @@ import { AssignmentBoard } from './Assignments';
 import { StudentSupport } from './TeacherSupport';
 import WritingPractice, { WritingExamRoute } from './WritingPractice';
 import AdaptiveTutoring, { TutorFeedback } from './AdaptiveTutoring';
+import SocraticGuide from './SocraticGuide';
 import LanguageFields from './LanguageFields';
 import CurriculumCatalogue from './CurriculumCatalogue';
 import BookmarkButton from './BookmarkButton';
@@ -991,19 +992,28 @@ function LessonPage() {
   }, [topicId]);
   async function send(e: FormEvent) {
     e.preventDefault();
+    await sendMessage(message);
+  }
+  async function sendMessage(text: string) {
     if (!lesson) return;
     setSending(true);
     setTurnError('');
     try {
-      const result = await post<{ messages: Lesson['messages']; adaptation_enabled: boolean }>(
-        `/lessons/${lesson.id}/turn`,
-        {
-          message,
-        },
-      );
+      const result = await post<{
+        messages: Lesson['messages'];
+        adaptation_enabled: boolean;
+        socratic: Lesson['socratic'];
+      }>(`/lessons/${lesson.id}/turn`, {
+        message: text,
+      });
       setLesson((current) =>
         current
-          ? { ...current, messages: result.messages, adaptation_enabled: result.adaptation_enabled }
+          ? {
+              ...current,
+              messages: result.messages,
+              adaptation_enabled: result.adaptation_enabled,
+              socratic: result.socratic,
+            }
           : null,
       );
       setMessage('');
@@ -1068,7 +1078,12 @@ function LessonPage() {
             key={stage.id}
             className={lesson.active_stage === stage.id ? 'selected' : ''}
             aria-current={lesson.active_stage === stage.id ? 'step' : undefined}
-            disabled={stageBusy}
+            disabled={
+              stageBusy ||
+              (stage.id !== 'understand' &&
+                config.inference_configured &&
+                !lesson.socratic?.complete)
+            }
             onClick={() => void changeStage(stage.id)}
           >
             {stage.label}
@@ -1182,6 +1197,22 @@ function LessonPage() {
             />
           </div>
           <StudentSupport lessonId={lesson.id} connected={config.inference_configured} />
+          {lesson.socratic && (
+            <SocraticGuide
+              lessonId={lesson.id}
+              progress={lesson.socratic}
+              busy={sending}
+              connected={config.inference_configured}
+              explain={() =>
+                void sendMessage(
+                  'Please explain the current guided step in my teaching language, then help me understand its checkpoint.',
+                )
+              }
+              onChange={(socratic) =>
+                setLesson((current) => (current ? { ...current, socratic } : null))
+              }
+            />
+          )}
           <div className="chat-messages" aria-live="polite">
             {!lesson.messages.length && (
               <div className="chat-intro">
@@ -1244,7 +1275,7 @@ function LessonPage() {
           </p>
           <button
             className="button primary"
-            disabled={stageBusy}
+            disabled={stageBusy || (config.inference_configured && !lesson.socratic?.complete)}
             onClick={() => void changeStage('notes')}
           >
             Continue to exam notes <ArrowRight size={17} />

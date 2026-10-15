@@ -51,6 +51,7 @@ export type Message = {
   helpful_feedback?: boolean;
 };
 export type Lesson = {
+  socratic: SocraticProgress;
   adaptation_enabled: boolean;
   id: string;
   topic_id: string;
@@ -59,6 +60,16 @@ export type Lesson = {
   reflection: string;
   active_stage: 'understand' | 'notes' | 'activity' | 'recall';
   activity_completed: boolean;
+};
+export type SocraticProgress = {
+  phase: number;
+  label: string;
+  phases: string[];
+  complete: boolean;
+  ready: boolean;
+  question: string | null;
+  options: string[];
+  checkpoint_language: string;
 };
 export type JourneyContent = {
   notes: {

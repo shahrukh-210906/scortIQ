@@ -2835,6 +2835,41 @@ textarea:focus {
   margin-top: 12px;
   padding-top: 12px;
 }
+
+.socratic-guide {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.socratic-guide ol {
+  padding-left: 22px;
+}
+.socratic-guide [aria-current='step'] {
+  font-weight: 700;
+}
+.socratic-guide fieldset {
+  margin-top: 16px;
+  border: 0;
+  padding: 0;
+}
+.socratic-guide legend {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.socratic-option {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 0;
+  cursor: pointer;
+}
+.socratic-option input {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+}
 .tutor-feedback fieldset {
   border: 0;
   padding: 0;
